@@ -1,0 +1,15 @@
+{
+  "name": "decktube",
+  "version": "0.0.3",
+  "description": "simple electron app to run Youtube TV on the Steam Deck with ad block and controller support",
+  "main": "index.js",
+  "scripts": {
+    "build-release": "electron-builder --linux appimage"
+  },
+  "keywords": [],
+  "author": "shy",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.1.4"
+  }
+}
