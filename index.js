@@ -6,7 +6,7 @@ const { app, BrowserWindow } = electron
 //code
 const chromeVersion = process.versions.chrome.split('.')[0]
 const userAgent = `Mozilla/5.0 (Linux; Smart TV) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion}.0.0.0 Safari/537.36`
-const runningOnDeck = process.env.SteamOS === '1' && process.env.SteamGamepadUI === '1'
+const runningOnDeck = process.env.SteamOS == '1' && process.env.SteamGamepadUI == '1'
 
 let mainWindow;
 

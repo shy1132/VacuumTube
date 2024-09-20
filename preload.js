@@ -12,26 +12,46 @@ let gamepadKeyCodeMap = {
 let pressedButtons = {}
 let keyRepeatInterval = 100;
 let keyRepeatTimeout;
-let keyRepeatDelay = 500;
+let keyRepeatDelay = 500;   
 
 window.addEventListener('DOMContentLoaded', () => {
-    waitForElement('.html5-video-player', (el) => {
-        el.setPlaybackQualityRange('highres') //allow high res video playback
+    //adblock and player modifications
+    let style = document.createElement('style')
+    style.textContent = '.ad-interrupting { display: none; }\n.ad-showing { display: none; }'
+    document.head.appendChild(style)
 
-        function adBlock() {
-            let isAd = el?.classList.contains('ad-interrupting') || el?.classList.contains('ad-showing')
-            if (isAd) {
-                let videoPlayer = document.querySelector('.video-stream')
-                if (!videoPlayer || !videoPlayer.currentTime) return;
-                videoPlayer.currentTime = videoPlayer.duration;
+    function adBlock() { //modified from ublock
+        let moviePlayer = document.querySelector('.html5-video-player')
+        if (!moviePlayer) return;
 
-                console.log('ad skipped')
-            }
+        let isAd = moviePlayer?.classList?.contains('ad-interrupting') || moviePlayer?.classList?.contains('ad-showing')
+        if (!isAd) return;
+
+        let video = moviePlayer?.querySelector('video')
+        if (!video) return;
+
+        video.volume = 0; //so you hopefully don't hear it
+
+        let progressState = moviePlayer?.getProgressState()
+        if (progressState && progressState.duration > 0 && progressState.loaded < progressState.duration) {
+            video.currentTime = progressState.duration;
+            video.volume = 1;
         }
+    }
 
-        setInterval(adBlock)
-    })
+    function setHighRes() {
+        let moviePlayer = document.querySelector('.html5-video-player')
+        if (!moviePlayer) return;
 
+        moviePlayer.setPlaybackQualityRange('highres')
+    }
+
+    new MutationObserver(() => {
+        adBlock()
+        setHighRes()
+    }).observe(document, { childList: true, subtree: true })
+
+    //gamepad
     window.addEventListener('gamepadconnected', (event) => {
         requestAnimationFrame(() => checkControllerInput(event.gamepad.index))
     })

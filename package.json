@@ -1,9 +1,10 @@
 {
   "name": "decktube",
-  "version": "0.0.3",
-  "description": "simple electron app to run Youtube TV on the Steam Deck with ad block and controller support",
+  "version": "0.0.4",
+  "description": "simple electron app to run Youtube TV on the Steam Deck with adblock and controller support",
   "main": "index.js",
   "scripts": {
+    "start": "unset CHROME_DESKTOP; electron .",
     "build-release": "electron-builder --linux appimage"
   },
   "keywords": [],
