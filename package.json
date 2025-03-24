@@ -7,10 +7,6 @@
         "start": "electron .",
         "build": "electron-builder -wl"
     },
-    "repository": {
-        "type" : "git",
-        "url" : "https://github.com/shy1132/VacuumTube.git"
-      },
     "keywords": [],
     "author": "shy",
     "license": "MIT",
@@ -81,6 +77,11 @@
             "allowToChangeInstallationDirectory": true,
             "allowElevation": true,
             "perMachine": false
+        },
+        "publish": {
+            "provider": "github",
+            "owner": "shy1132",
+            "repo": "VacuumTube"
         }
     },
     "devDependencies": {
