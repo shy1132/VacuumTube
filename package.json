@@ -1,16 +1,98 @@
 {
-  "name": "decktube",
-  "version": "0.0.4",
-  "description": "simple electron app to run Youtube TV on the Steam Deck with adblock and controller support",
-  "main": "index.js",
-  "scripts": {
-    "start": "unset CHROME_DESKTOP; electron .",
-    "build-release": "electron-builder --linux appimage"
-  },
-  "keywords": [],
-  "author": "shy",
-  "license": "ISC",
-  "devDependencies": {
-    "electron": "^32.1.1"
-  }
+    "name": "vacuumtube",
+    "version": "1.0.0",
+    "description": "YouTube TV interface on the desktop",
+    "main": "index.js",
+    "scripts": {
+        "start": "electron .",
+        "build-release": "electron-builder -wl"
+    },
+    "keywords": [],
+    "author": "shy",
+    "license": "MIT",
+    "build": {
+        "appId": "rocks.shy.VacuumTube",
+        "productName": "VacuumTube",
+        "linux": {
+            "icon": "./assets/icon.png",
+            "synopsis": "YouTube TV interface on the desktop",
+            "category": "AudioVideo",
+            "desktop": {
+                "Name": "VacuumTube",
+                "GenericName": "YouTube",
+                "Type": "Application",
+                "Categories": "AudioVideo;",
+                "Keywords": "youtube;yt;"
+            },
+            "maintainer": "shy+vt@shy.rocks",
+            "target": [
+                {
+                    "target": "deb",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "rpm",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "tar.gz",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "AppImage",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                }
+            ]
+        },
+        "win": {
+            "icon": "./assets/icon.ico",
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "zip",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                }
+            ]
+        },
+        "nsis": {
+            "artifactName": "VacuumTube-${version}-Setup.${ext}",
+            "uninstallDisplayName": "VacuumTube",
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true,
+            "allowElevation": true,
+            "perMachine": false
+        },
+        "flatpak": {
+            "baseVersion": "24.08",
+            "runtimeVersion": "24.08"
+        }
+    },
+    "devDependencies": {
+        "electron": "^35.0.3",
+        "electron-builder": "^25.1.8"
+    },
+    "dependencies": {
+        "@ghostery/adblocker-electron": "^2.5.0"
+    }
 }

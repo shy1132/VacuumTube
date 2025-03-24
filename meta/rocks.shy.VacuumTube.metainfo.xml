@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component type="desktop-application">
+  <!--Created with jdAppStreamEdit 9.2-->
+  <id>rocks.shy.VacuumTube</id>
+  <name>VacuumTube</name>
+  <summary>YouTube TV interface on the desktop</summary>
+  <developer>
+    <name>shy</name>
+  </developer>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <update_contact>shy+vt@shy.rocks</update_contact>
+  <description>
+    <p>VacuumTube is an unofficial open source "port" of YouTube Leanback (the TV version of YouTube) to the desktop, with a built-in adblocker. It is the best way to experience the TV interface on your computer or Steam Deck.</p>
+    <p>Note: This is not YouTube TV, the YouTube service for streaming television, but rather YouTube <em>for</em> the TV.</p>
+  </description>
+  <url type="homepage">https://github.com/shy1132/VacuumTube</url>
+  <url type="bugtracker">https://github.com/shy1132/VacuumTube/issues</url>
+  <url type="vcs-browser">https://github.com/shy1132/VacuumTube</url>
+  <url type="contribute">https://github.com/shy1132/VacuumTube</url>
+  <requires>
+    <internet>always</internet>
+  </requires>
+  <recommends>
+    <control>gamepad</control>
+    <control>tv-remote</control>
+    <internet>always</internet>
+  </recommends>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>tablet</control>
+    <control>touch</control>
+    <internet>always</internet>
+  </supports>
+  <content_rating type="oars-1.1"/>
+  <keywords>
+    <keyword>youtube</keyword>
+    <keyword>yt</keyword>
+    <keyword>leanback</keyword>
+  </keywords>
+</component>

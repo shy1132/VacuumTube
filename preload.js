@@ -12,46 +12,11 @@ let gamepadKeyCodeMap = {
 let pressedButtons = {}
 let keyRepeatInterval = 100;
 let keyRepeatTimeout;
-let keyRepeatDelay = 500;   
+let keyRepeatDelay = 500;
 
 window.addEventListener('DOMContentLoaded', () => {
-    //adblock and player modifications
-    let style = document.createElement('style')
-    style.textContent = '.ad-interrupting { display: none; }\n.ad-showing { display: none; }'
-    document.head.appendChild(style)
+    //controller support (normal leanback doesnt have this for some reason, not sure how the console apps do it...)
 
-    function adBlock() { //modified from ublock
-        let moviePlayer = document.querySelector('.html5-video-player')
-        if (!moviePlayer) return;
-
-        let isAd = moviePlayer?.classList?.contains('ad-interrupting') || moviePlayer?.classList?.contains('ad-showing')
-        if (!isAd) return;
-
-        let video = moviePlayer?.querySelector('video')
-        if (!video) return;
-
-        video.volume = 0; //so you hopefully don't hear it
-
-        let progressState = moviePlayer?.getProgressState()
-        if (progressState && progressState.duration > 0 && progressState.loaded < progressState.duration) {
-            video.currentTime = progressState.duration;
-            video.volume = 1;
-        }
-    }
-
-    function setHighRes() {
-        let moviePlayer = document.querySelector('.html5-video-player')
-        if (!moviePlayer) return;
-
-        moviePlayer.setPlaybackQualityRange('highres')
-    }
-
-    new MutationObserver(() => {
-        adBlock()
-        setHighRes()
-    }).observe(document, { childList: true, subtree: true })
-
-    //gamepad
     window.addEventListener('gamepadconnected', (event) => {
         requestAnimationFrame(() => checkControllerInput(event.gamepad.index))
     })
@@ -89,7 +54,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 let axisIndex = i + gamepad.buttons.length; //this is kind of hacky but i dont mind
 
                 let axisWasPressed = pressedButtons[axisIndex];
-            
+
                 if (i === 0) {
                     if (axisValue > 0.5) {
                         keyCode = 39; //right arrow
@@ -126,13 +91,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function simulateKeyDown(keyCode) {
         let event = new Event('keydown')
-        event.keyCode = keyCode
+        event.keyCode = keyCode;
         document.dispatchEvent(event)
     }
 
     function simulateKeyUp(keyCode) {
         let event = new Event('keyup')
-        event.keyCode = keyCode
+        event.keyCode = keyCode;
         document.dispatchEvent(event)
     }
 
@@ -146,15 +111,3 @@ window.addEventListener('DOMContentLoaded', () => {
         clearInterval(keyRepeatTimeout)
     }
 })
-
-function waitForElement(selector, callback) {
-    function checkElement() {
-        if (document.querySelector(selector)) {
-            callback(document.querySelector(selector))
-        } else {
-            setTimeout(checkElement, 50)
-        }
-    }
-
-    checkElement()
-}
