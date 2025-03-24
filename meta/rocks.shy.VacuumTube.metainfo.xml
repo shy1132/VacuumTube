@@ -7,7 +7,6 @@
   <developer id="rocks.shy">
     <name>shy</name>
   </developer>
-  <launchable type="desktop-id">rocks.shy.VacuumTube.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
   <update_contact>shy+vt@shy.rocks</update_contact>
@@ -33,16 +32,15 @@
   <recommends>
     <control>gamepad</control>
     <control>tv-remote</control>
-    <internet>always</internet>
   </recommends>
   <supports>
     <control>pointing</control>
     <control>keyboard</control>
     <control>tablet</control>
     <control>touch</control>
-    <internet>always</internet>
   </supports>
   <content_rating type="oars-1.1"/>
+  <launchable type="desktop-id">rocks.shy.VacuumTube.desktop</launchable>
   <keywords>
     <keyword>youtube</keyword>
     <keyword>yt</keyword>
