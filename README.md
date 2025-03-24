@@ -8,10 +8,10 @@ VacuumTube is an unofficial "port" of YouTube Leanback (the TV version of YouTub
 
 If you don't know the difference, pick the Installer.
 
-- [Installer](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-Setup.exe)
+- [Installer](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-Setup.exe)
 - Portable:
-  - [x64 / amd64](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-x64-Portable.zip)
-  - [Arm® 64](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-arm64-Portable.zip)
+  - [x64 / amd64](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-x64-Portable.zip)
+  - [Arm® 64](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64-Portable.zip)
 
 ### Mac
 No macOS builds available yet.
@@ -21,13 +21,13 @@ No macOS builds available yet.
 If you don't know the difference, you likely want amd64.
 
 - amd64 / x86_64
-  - [AppImage](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-x86_64.AppImage)
-  - [Ubuntu/Debian/Mint (.deb)](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-amd64.deb)
+  - [AppImage](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-x86_64.AppImage)
+  - [Ubuntu/Debian/Mint (.deb)](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-amd64.deb)
   - [tarball](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-x64.tar.gz)
 - Arm® 64 / aarch64
-  - [AppImage](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-arm64.AppImage)
-  - [Ubuntu/Debian/Mint (.deb)](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-arm64.deb)
-  - [tarball](https://github.com/shy1132/VacuumTube/releases/latest/VacuumTube-arm64.tar.gz)
+  - [AppImage](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.AppImage)
+  - [Ubuntu/Debian/Mint (.deb)](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.deb)
+  - [tarball](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.tar.gz)
 
 ## Building from Source
 
