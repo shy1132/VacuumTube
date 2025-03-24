@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "start": "electron .",
-        "build": "electron-builder -wl"
+        "build": "electron-builder -wl",
+        "flatpak:build-unpacked": "electron-builder --linux --dir"
     },
     "keywords": [],
     "author": "shy",
