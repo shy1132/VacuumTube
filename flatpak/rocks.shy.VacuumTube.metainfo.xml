@@ -17,11 +17,11 @@
   <screenshots>
     <screenshot>
       <caption>Searching</caption>
-      <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/meta/screenshots/search.png</image>
+      <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/flatpak/screenshots/search.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Watching a video</caption>
-      <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/meta/screenshots/video.png</image>
+      <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/flatpak/screenshots/video.png</image>
     </screenshot>
   </screenshots>
   <releases>
