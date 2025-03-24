@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "electron .",
-        "build-release": "electron-builder -wl"
+        "build-release": "electron-builder"
     },
     "keywords": [],
     "author": "shy",
@@ -77,6 +77,11 @@
             "allowToChangeInstallationDirectory": true,
             "allowElevation": true,
             "perMachine": false
+        },
+        "publish": {
+            "provider": "github",
+            "owner": "shy1132",
+            "repo": "VacuumTube"
         }
     },
     "devDependencies": {
@@ -84,6 +89,7 @@
         "electron-builder": "^25.1.8"
     },
     "dependencies": {
-        "@ghostery/adblocker-electron": "^2.5.0"
+        "@ghostery/adblocker-electron": "^2.5.0",
+        "electron-updater": "^6.3.9"
     }
 }

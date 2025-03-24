@@ -1,5 +1,6 @@
 //initialization
 const electron = require('electron')
+const { autoUpdater } = require('electron-updater')
 const { ElectronBlocker } = require('@ghostery/adblocker-electron')
 const path = require('path')
 const stateManager = require('./state.js')
@@ -84,6 +85,10 @@ async function createWindow() {
         mainWindow = null;
     })
 }
+
+app.on('ready', function()  {
+    autoUpdater.checkForUpdatesAndNotify()
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
