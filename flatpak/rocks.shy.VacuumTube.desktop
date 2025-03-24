@@ -1,0 +1,10 @@
+[Desktop Entry]
+
+Name=VacuumTube
+Exec=vacuumtube %U
+Type=Application
+Icon=rocks.shy.VacuumTube
+Comment=YouTube TV interface on the desktop
+Keywords=YouTube;YT;
+Categories=AudioVideo;
+StartupWMClass=VacuumTube
