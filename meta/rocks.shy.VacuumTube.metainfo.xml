@@ -4,7 +4,7 @@
   <id>rocks.shy.VacuumTube</id>
   <name>VacuumTube</name>
   <summary>YouTube TV interface on the desktop</summary>
-  <developer>
+  <developer id="shy1132">
     <name>shy</name>
   </developer>
   <metadata_license>CC0-1.0</metadata_license>
@@ -14,6 +14,14 @@
     <p>VacuumTube is an unofficial open source "port" of YouTube Leanback (the TV version of YouTube) to the desktop, with a built-in adblocker. It is the best way to experience the TV interface on your computer or Steam Deck.</p>
     <p>Note: This is not YouTube TV, the YouTube service for streaming television, but rather YouTube <em>for</em> the TV.</p>
   </description>
+  <releases>
+    <release version="1.0.0" date="2025-03-23" type="stable">
+      <url>https://github.com/shy1132/VacuumTube/releases/tag/v1.0.0</url>
+      <description>
+        <p>Initial release</p>
+      </description>
+    </release>
+  </releases>
   <url type="homepage">https://github.com/shy1132/VacuumTube</url>
   <url type="bugtracker">https://github.com/shy1132/VacuumTube/issues</url>
   <url type="vcs-browser">https://github.com/shy1132/VacuumTube</url>
