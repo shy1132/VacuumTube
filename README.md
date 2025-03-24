@@ -44,5 +44,5 @@ npm i
 npm run start
 
 # Or package release builds
-npm run build-release
+npm run build
 ```
