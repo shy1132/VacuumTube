@@ -13,6 +13,7 @@
     "build": {
         "appId": "rocks.shy.VacuumTube",
         "productName": "VacuumTube",
+        "artifactName": "VacuumTube-${arch}.${ext}",
         "linux": {
             "icon": "./assets/icon.png",
             "synopsis": "YouTube TV interface on the desktop",
@@ -28,13 +29,6 @@
             "target": [
                 {
                     "target": "deb",
-                    "arch": [
-                        "x64",
-                        "arm64"
-                    ]
-                },
-                {
-                    "target": "rpm",
                     "arch": [
                         "x64",
                         "arm64"
@@ -58,6 +52,7 @@
         },
         "win": {
             "icon": "./assets/icon.ico",
+            "artifactName": "VacuumTube-${arch}-Portable.zip",
             "target": [
                 {
                     "target": "nsis",
@@ -76,16 +71,12 @@
             ]
         },
         "nsis": {
-            "artifactName": "VacuumTube-${version}-Setup.${ext}",
+            "artifactName": "VacuumTube-Setup.${ext}",
             "uninstallDisplayName": "VacuumTube",
             "oneClick": false,
             "allowToChangeInstallationDirectory": true,
             "allowElevation": true,
             "perMachine": false
-        },
-        "flatpak": {
-            "baseVersion": "24.08",
-            "runtimeVersion": "24.08"
         }
     },
     "devDependencies": {
