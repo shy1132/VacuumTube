@@ -18,7 +18,9 @@ No macOS builds available yet.
 
 ### Linux
 
-If you don't know the difference, you likely want amd64.
+In most cases, you very likely want to use the [Flatpak](https://flathub.org/apps/rocks.shy.VacuumTube), which works across all distributions and architectures.
+
+Otherwise, you can use a distribution package or a portable one. If you don't know the difference, you likely want amd64.
 
 - amd64 / x86_64
   - [AppImage](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-x86_64.AppImage)
