@@ -25,6 +25,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0.1" date="2025-03-29" type="stable">
+      <url>https://github.com/shy1132/VacuumTube/releases/tag/v1.0.1</url>
+      <description>
+        <p>v1.0.1</p>
+        <ol>
+          <li>Fixed hardware acceleration (now defaults to X11)</li>
+          <li>Added --debug-gpu flag</li>
+        </ol>
+      </description>
+    </release>
     <release version="1.0.0" date="2025-03-23" type="stable">
       <url>https://github.com/shy1132/VacuumTube/releases/tag/v1.0.0</url>
       <description>
