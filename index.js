@@ -55,7 +55,11 @@ async function createWindow() {
         }
     })
 
-    mainWindow.loadURL('https://www.youtube.com/tv/', { userAgent })
+    if (process.argv.includes('--debug-gpu')) {
+        mainWindow.loadURL('chrome://gpu', { userAgent })
+    } else {
+        mainWindow.loadURL('https://www.youtube.com/tv/', { userAgent })
+    }
 
     //keep window title as VacuumTube
     mainWindow.webContents.on('page-title-updated', () => {
@@ -79,10 +83,6 @@ async function createWindow() {
     mainWindow.on('leave-full-screen', async () => {
         state.fullscreen = false;
         await stateManager.update(state)
-    })
-
-    mainWindow.on('closed', () => {
-        mainWindow = null;
     })
 }
 
