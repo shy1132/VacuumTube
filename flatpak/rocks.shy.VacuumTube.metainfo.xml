@@ -25,6 +25,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0.2" date="2025-04-21" type="stable">
+      <url>https://github.com/shy1132/VacuumTube/releases/tag/v1.0.2</url>
+      <description>
+        <p>v1.0.2</p>
+        <ul>
+          <li>Cursor now disappears after a few seconds</li>
+          <li>Playback no longer stops when pressing minimize</li>
+          <li>Fixed screensaver not being inhibited (Flatpak only)</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.1" date="2025-03-29" type="stable">
       <url>https://github.com/shy1132/VacuumTube/releases/tag/v1.0.1</url>
       <description>
