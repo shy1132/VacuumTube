@@ -1,7 +1,8 @@
 let modules = [
     controllerSupport,
     mouseDisappear,
-    preventVisibilityChange
+    preventVisibilityChange,
+    overrideF11
 ]
 
 for (let module of modules) {
@@ -157,6 +158,7 @@ async function mouseDisappear() {
 }
 
 async function preventVisibilityChange() {
+    //don't tell youtube when application is minimized, otherwise it'll stop playback inconsistently
     document.addEventListener('visibilitychange', (event) => {
         event.stopImmediatePropagation()
     })
@@ -164,4 +166,13 @@ async function preventVisibilityChange() {
     document.addEventListener('webkitvisibilitychange', (event) => {
         event.stopImmediatePropagation()
     })
+}
+
+async function overrideF11() {
+    //block youtube from seeing f11 being pressed so it doesn't impede the user trying to toggle fullscreen
+    document.addEventListener('keydown', (e) => {
+        if (e.key == 'F11') {
+            e.stopImmediatePropagation()
+        }
+    }, true)
 }
