@@ -5,8 +5,10 @@ let modules = [
     overrideF11
 ]
 
-for (let module of modules) {
-    module()
+if (location.host === 'www.youtube.com') {
+    for (let module of modules) {
+        module()
+    }
 }
 
 async function controllerSupport() {

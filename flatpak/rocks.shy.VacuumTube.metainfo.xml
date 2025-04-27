@@ -25,6 +25,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0.4" date="2025-04-26" type="stable">
+      <description>
+        <p>v1.0.4</p>
+        <ul>
+          <li>Fixed MPRIS support in Flatpak</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.3" date="2025-04-26" type="stable">
       <description>
         <p>v1.0.3</p>
