@@ -11,8 +11,7 @@
   <project_license>MIT</project_license>
   <update_contact>shy+vt@shy.rocks</update_contact>
   <description>
-    <p>VacuumTube is an unofficial open source "port" of YouTube Leanback (the TV version of YouTube) to the desktop, with a built-in adblocker. It is the best way to experience the TV interface on your computer or Steam Deck.</p>
-    <p>Note: This is not YouTube TV, the YouTube service for streaming television, but rather YouTube <em>for</em> the TV.</p>
+    <p>VacuumTube is an unofficial open source wrapper of YouTube Leanback (the console and Smart TV version of YouTube) for the desktop, with a built-in adblocker and minor enhancements. It is the best way to experience the TV interface on your computer, media center, or Steam Deck.</p>
   </description>
   <screenshots>
     <screenshot>
@@ -25,6 +24,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0.5" date="2025-04-27" type="stable">
+      <description>
+        <p>v1.0.5 (Flatpak only)</p>
+        <ul>
+          <li>Updated Flatpak description</li>
+          <li>Fixed controllers sometimes not working in the Flatpak</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.4" date="2025-04-26" type="stable">
       <description>
         <p>v1.0.4</p>
