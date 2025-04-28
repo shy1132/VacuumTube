@@ -1,6 +1,8 @@
 # VacuumTube
 
-VacuumTube is an unofficial "port" of YouTube Leanback (the TV version of YouTube) to the desktop, with a built-in adblocker.
+VacuumTube is an unofficial wrapper of YouTube Leanback (the console and Smart TV version of YouTube) for the desktop, with a built-in adblocker and minor enhancements.
+
+It is **not** a custom client, YouTube Leanback is an official interface. This project simply encompasses it and makes it usable as a standalone desktop application.
 
 ## Installing
 
