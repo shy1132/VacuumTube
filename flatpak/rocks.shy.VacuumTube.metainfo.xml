@@ -29,8 +29,8 @@
         <p>v1.0.5</p>
         <ul>
           <li>Added full controller parity with console version of YouTube</li>
-          <li>Updated Flatpak description</li>
           <li>Fixed controllers sometimes not working in the Flatpak</li>
+          <li>Updated Flatpak description to more accurately describe the project</li>
         </ul>
       </description>
     </release>
