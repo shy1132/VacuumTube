@@ -14,10 +14,15 @@ if (location.host === 'www.youtube.com') {
 async function controllerSupport() {
     //controller support (normal leanback doesnt have this for some reason, not sure how the console apps do it...)
     window.addEventListener('DOMContentLoaded', () => {
-        let gamepadKeyCodeMap = {
+        const gamepadKeyCodeMap = { //aiming to maintain parity with the console versions of leanback
             0: 13, //a -> enter
-            1: 8, //b -> backspace
-            8: 27, //select -> escape
+            1: 27, //b -> escape
+            2: 83, //x -> s (search)
+            4: 115, //left bumper -> f4 (back)
+            5: 116, //right bumper -> f5 (forward)
+            6: 113, //left trigger -> f2 (seek backwards)
+            7: 114, //right trigger -> f3 (seek forwards)
+            8: 13, //select -> enter
             9: 13, //start -> enter
             12: 38, //dpad up -> arrow key up
             13: 40, //dpad down -> arrow key down
@@ -25,10 +30,12 @@ async function controllerSupport() {
             15: 39 //dpad right -> arrow key right
         }
 
+        const fallbackKeyCode = 135; //f24, key isn't used by youtube but is picked up and brings up the menu thing (which all buttons do if they dont do anything else)
+        const keyRepeatInterval = 100;
+        const keyRepeatDelay = 500;
+
         let pressedButtons = {}
-        let keyRepeatInterval = 100;
         let keyRepeatTimeout;
-        let keyRepeatDelay = 500;
 
         window.addEventListener('gamepadconnected', (event) => {
             requestAnimationFrame(() => checkControllerInput(event.gamepad.index))
@@ -44,7 +51,7 @@ async function controllerSupport() {
             if (gamepad) {
                 for (let i = 0; i < gamepad.buttons.length; i++) {
                     let keyCode = gamepadKeyCodeMap[i]
-                    if (!keyCode) continue;
+                    if (!keyCode) keyCode = fallbackKeyCode; //f24, key isn't used by youtube but is picked up and brings up the menu thing (which all buttons do if they dont do anything else)
 
                     let button = gamepad.buttons[i]
                     let buttonWasPressed = pressedButtons[i]
@@ -79,6 +86,10 @@ async function controllerSupport() {
                             keyCode = 40; //down arrow
                         } else if (axisValue < -0.5) {
                             keyCode = 38; //up arrow
+                        }
+                    } else if (i === 2 || i === 3) {
+                        if (axisValue > 0.5 || axisValue < -0.5) {
+                            keyCode = fallbackKeyCode; //f24, fallback
                         }
                     }
 

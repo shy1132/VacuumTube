@@ -26,8 +26,9 @@
   <releases>
     <release version="1.0.5" date="2025-04-27" type="stable">
       <description>
-        <p>v1.0.5 (Flatpak only)</p>
+        <p>v1.0.5</p>
         <ul>
+          <li>Added full controller parity with console version of YouTube</li>
           <li>Updated Flatpak description</li>
           <li>Fixed controllers sometimes not working in the Flatpak</li>
         </ul>
