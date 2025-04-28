@@ -51,7 +51,7 @@ async function controllerSupport() {
             if (gamepad) {
                 for (let i = 0; i < gamepad.buttons.length; i++) {
                     let keyCode = gamepadKeyCodeMap[i]
-                    if (!keyCode) keyCode = fallbackKeyCode; //f24, key isn't used by youtube but is picked up and brings up the menu thing (which all buttons do if they dont do anything else)
+                    if (!keyCode) keyCode = fallbackKeyCode;
 
                     let button = gamepad.buttons[i]
                     let buttonWasPressed = pressedButtons[i]
