@@ -89,7 +89,7 @@ async function controllerSupport() {
                         }
                     } else if (i === 2 || i === 3) {
                         if (axisValue > 0.5 || axisValue < -0.5) {
-                            keyCode = fallbackKeyCode; //f24, fallback
+                            keyCode = fallbackKeyCode;
                         }
                     }
 
