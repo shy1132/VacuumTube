@@ -20,7 +20,7 @@ No macOS builds available yet.
 
 ### Linux
 
-In most cases, you very likely want to use the [Flatpak](https://flathub.org/apps/rocks.shy.VacuumTube), which works across all distributions and architectures.
+In most cases, you very likely want to use the [Flatpak](https://flathub.org/apps/rocks.shy.VacuumTube), which works across all distributions and common architectures.
 
 Otherwise, you can use a distribution package or a portable one. If you don't know the difference, you likely want amd64.
 
