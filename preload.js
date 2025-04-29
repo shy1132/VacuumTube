@@ -1,3 +1,5 @@
+const { ipcRenderer } = require('electron')
+
 let modules = [
     controllerSupport,
     mouseDisappear,
@@ -13,128 +15,140 @@ if (location.host === 'www.youtube.com') {
 
 async function controllerSupport() {
     //controller support (normal leanback doesnt have this for some reason, not sure how the console apps do it...)
-    window.addEventListener('DOMContentLoaded', () => {
-        const gamepadKeyCodeMap = { //aiming to maintain parity with the console versions of leanback
-            0: 13, //a -> enter
-            1: 27, //b -> escape
-            2: 83, //x -> s (search)
-            4: 115, //left bumper -> f4 (back)
-            5: 116, //right bumper -> f5 (forward)
-            6: 113, //left trigger -> f2 (seek backwards)
-            7: 114, //right trigger -> f3 (seek forwards)
-            8: 13, //select -> enter
-            9: 13, //start -> enter
-            12: 38, //dpad up -> arrow key up
-            13: 40, //dpad down -> arrow key down
-            14: 37, //dpad left -> arrow key left
-            15: 39 //dpad right -> arrow key right
-        }
+    const gamepadKeyCodeMap = { //aiming to maintain parity with the console versions of leanback
+        0: 13, //a -> enter
+        1: 27, //b -> escape
+        2: 83, //x -> s (search)
+        4: 115, //left bumper -> f4 (back)
+        5: 116, //right bumper -> f5 (forward)
+        6: 113, //left trigger -> f2 (seek backwards)
+        7: 114, //right trigger -> f3 (seek forwards)
+        8: 13, //select -> enter
+        9: 13, //start -> enter
+        12: 38, //dpad up -> arrow key up
+        13: 40, //dpad down -> arrow key down
+        14: 37, //dpad left -> arrow key left
+        15: 39 //dpad right -> arrow key right
+    }
 
-        const fallbackKeyCode = 135; //f24, key isn't used by youtube but is picked up and brings up the menu thing (which all buttons do if they dont do anything else)
-        const keyRepeatInterval = 100;
-        const keyRepeatDelay = 500;
+    const fallbackKeyCode = 135; //f24, key isn't used by youtube but is picked up and brings up the menu thing (which all buttons do if they dont do anything else)
+    const keyRepeatInterval = 100;
+    const keyRepeatDelay = 500;
 
-        let pressedButtons = {}
-        let keyRepeatTimeout;
+    let pressedButtons = {}
+    let keyRepeatTimeout;
 
-        window.addEventListener('gamepadconnected', (event) => {
-            requestAnimationFrame(() => checkControllerInput(event.gamepad.index))
-        })
+    let focused = await ipcRenderer.invoke('is-focused')
 
-        window.addEventListener('gamepaddisconnected', () => {
-            pressedButtons = {}
-        })
+    ipcRenderer.on('focus', () => {
+        focused = true;
+    })
 
-        function checkControllerInput(index) {
-            let gamepad = navigator.getGamepads()[index]
+    ipcRenderer.on('blur', () => {
+        focused = false;
+    })
 
-            if (gamepad) {
-                for (let i = 0; i < gamepad.buttons.length; i++) {
-                    let keyCode = gamepadKeyCodeMap[i]
-                    if (!keyCode) keyCode = fallbackKeyCode;
+    window.addEventListener('gamepadconnected', (event) => {
+        requestAnimationFrame(() => checkControllerInput(event.gamepad.index))
+    })
 
-                    let button = gamepad.buttons[i]
-                    let buttonWasPressed = pressedButtons[i]
+    window.addEventListener('gamepaddisconnected', () => {
+        pressedButtons = {}
+    })
 
-                    if (button.pressed && !buttonWasPressed) {
-                        pressedButtons[i] = true;
+    function checkControllerInput(index) {
+        let gamepad = navigator.getGamepads()[index]
+
+        if (gamepad) {
+            for (let i = 0; i < gamepad.buttons.length; i++) {
+                let keyCode = gamepadKeyCodeMap[i]
+                if (!keyCode) keyCode = fallbackKeyCode;
+
+                let button = gamepad.buttons[i]
+                let buttonWasPressed = pressedButtons[i]
+
+                if (button.pressed && !buttonWasPressed) {
+                    pressedButtons[i] = true;
+                    simulateKeyDown(keyCode)
+                    stopKeyRepeat()
+                    keyRepeatTimeout = setTimeout(() => startKeyRepeat(keyCode), keyRepeatDelay)
+                } else if (!button.pressed && buttonWasPressed) {
+                    pressedButtons[i] = false;
+                    simulateKeyUp(keyCode)
+                    stopKeyRepeat()
+                }
+            }
+
+            for (let i = 0; i < gamepad.axes.length; i++) {
+                let axisValue = gamepad.axes[i]
+                let keyCode = null;
+                let axisIndex = i + gamepad.buttons.length; //this is kind of hacky but its fine
+
+                let axisWasPressed = pressedButtons[axisIndex]
+
+                if (i === 0) {
+                    if (axisValue > 0.5) {
+                        keyCode = 39; //right arrow
+                    } else if (axisValue < -0.5) {
+                        keyCode = 37; //left arrow
+                    }
+                } else if (i === 1) {
+                    if (axisValue > 0.5) {
+                        keyCode = 40; //down arrow
+                    } else if (axisValue < -0.5) {
+                        keyCode = 38; //up arrow
+                    }
+                } else if (i === 2 || i === 3) {
+                    if (axisValue > 0.5 || axisValue < -0.5) {
+                        keyCode = fallbackKeyCode;
+                    }
+                }
+
+                if (keyCode) {
+                    if (!axisWasPressed) {
+                        pressedButtons[axisIndex] = true;
                         simulateKeyDown(keyCode)
                         stopKeyRepeat()
                         keyRepeatTimeout = setTimeout(() => startKeyRepeat(keyCode), keyRepeatDelay)
-                    } else if (!button.pressed && buttonWasPressed) {
-                        pressedButtons[i] = false;
+                    }
+                } else {
+                    if (axisWasPressed) {
+                        pressedButtons[axisIndex] = false;
                         simulateKeyUp(keyCode)
                         stopKeyRepeat()
                     }
                 }
-
-                for (let i = 0; i < gamepad.axes.length; i++) {
-                    let axisValue = gamepad.axes[i]
-                    let keyCode = null;
-                    let axisIndex = i + gamepad.buttons.length; //this is kind of hacky but its fine
-
-                    let axisWasPressed = pressedButtons[axisIndex]
-
-                    if (i === 0) {
-                        if (axisValue > 0.5) {
-                            keyCode = 39; //right arrow
-                        } else if (axisValue < -0.5) {
-                            keyCode = 37; //left arrow
-                        }
-                    } else if (i === 1) {
-                        if (axisValue > 0.5) {
-                            keyCode = 40; //down arrow
-                        } else if (axisValue < -0.5) {
-                            keyCode = 38; //up arrow
-                        }
-                    } else if (i === 2 || i === 3) {
-                        if (axisValue > 0.5 || axisValue < -0.5) {
-                            keyCode = fallbackKeyCode;
-                        }
-                    }
-
-                    if (keyCode) {
-                        if (!axisWasPressed) {
-                            pressedButtons[axisIndex] = true;
-                            simulateKeyDown(keyCode)
-                            stopKeyRepeat()
-                            keyRepeatTimeout = setTimeout(() => startKeyRepeat(keyCode), keyRepeatDelay)
-                        }
-                    } else {
-                        if (axisWasPressed) {
-                            pressedButtons[axisIndex] = false;
-                            simulateKeyUp(keyCode)
-                            stopKeyRepeat()
-                        }
-                    }
-                }
             }
-
-            requestAnimationFrame(() => checkControllerInput(index))
         }
 
-        function simulateKeyDown(keyCode) {
-            let event = new Event('keydown')
-            event.keyCode = keyCode;
-            document.dispatchEvent(event)
-        }
+        requestAnimationFrame(() => checkControllerInput(index))
+    }
 
-        function simulateKeyUp(keyCode) {
-            let event = new Event('keyup')
-            event.keyCode = keyCode;
-            document.dispatchEvent(event)
-        }
+    function simulateKeyDown(keyCode) {
+        if (!focused) return;
 
-        function startKeyRepeat(keyCode) {
-            clearInterval(keyRepeatTimeout)
-            clearTimeout(keyRepeatTimeout)
-            keyRepeatTimeout = setInterval(() => simulateKeyDown(keyCode), keyRepeatInterval)
-        }
+        let event = new Event('keydown')
+        event.keyCode = keyCode;
+        document.dispatchEvent(event)
+    }
 
-        function stopKeyRepeat() {
-            clearInterval(keyRepeatTimeout)
-        }
-    })
+    function simulateKeyUp(keyCode) {
+        if (!focused) return;
+
+        let event = new Event('keyup')
+        event.keyCode = keyCode;
+        document.dispatchEvent(event)
+    }
+
+    function startKeyRepeat(keyCode) {
+        clearInterval(keyRepeatTimeout)
+        clearTimeout(keyRepeatTimeout)
+        keyRepeatTimeout = setInterval(() => simulateKeyDown(keyCode), keyRepeatInterval)
+    }
+
+    function stopKeyRepeat() {
+        clearInterval(keyRepeatTimeout)
+    }
 }
 
 async function mouseDisappear() {

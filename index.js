@@ -45,7 +45,6 @@ async function createWindow() {
     let mainWindow = new BrowserWindow({
         width: 1200,
         height: 600,
-        autoHideMenuBar: true,
         backgroundColor: '#282828',
         fullscreen: state.fullscreen,
         webPreferences: {
@@ -53,6 +52,21 @@ async function createWindow() {
             contextIsolation: false,
             preload: path.join(__dirname, 'preload.js')
         }
+    })
+
+    mainWindow.setMenuBarVisibility(false)
+    mainWindow.setAutoHideMenuBar(false)
+
+    mainWindow.addListener('focus', () => {
+        mainWindow.webContents.send('focus')
+    })
+
+    mainWindow.addListener('blur', () => {
+        mainWindow.webContents.send('blur')
+    })
+
+    electron.ipcMain.handle('is-focused', () => {
+        return mainWindow.isFocused();
     })
 
     if (process.argv.includes('--debug-gpu')) {

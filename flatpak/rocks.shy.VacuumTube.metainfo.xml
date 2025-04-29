@@ -24,6 +24,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0.6" date="2025-04-29" type="stable">
+      <description>
+        <p>v1.0.6</p>
+        <ul>
+          <li>Fixed controller input being taken even when app is unfocused (#10)</li>
+          <li>Disabled alt menu bar</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.5" date="2025-04-27" type="stable">
       <description>
         <p>v1.0.5</p>
