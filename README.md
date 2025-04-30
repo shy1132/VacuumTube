@@ -2,7 +2,15 @@
 
 VacuumTube is an unofficial wrapper of YouTube Leanback (the console and Smart TV version of YouTube) for the desktop, with a built-in adblocker and minor enhancements.
 
+## What exactly is this?
+
 It is **not** a custom client, YouTube Leanback is an official interface. This project simply encompasses it and makes it usable as a standalone desktop application.
+
+YouTube Leanback is just an HTML5 app, and so you *can* just use it in your browser by going to https://www.youtube.com/tv, but they intentionally block browsers unless it's one of their console or TV apps.
+
+You can technically bypass this by spoofing your user agent, but it isn't the same experience you'd get on a console or TV as it doesn't support controllers outside of the official app, and it's just a much more involved process to get it working.
+
+VacuumTube solves all of this by wrapping it with Electron, pretending to be the YouTube app, implementing controller support, and overall making it a much better experience than just using it in your browser and spoofing your user agent.
 
 ## Installing
 
