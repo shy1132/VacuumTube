@@ -10,7 +10,7 @@ YouTube Leanback is just an HTML5 app, and so you *can* just use it in your brow
 
 You can technically bypass this by spoofing your user agent, but it isn't the same experience you'd get on a console or TV as it doesn't support controllers outside of the official app, and it's just a much more involved process to get it working.
 
-VacuumTube solves all of this by wrapping it with Electron, pretending to be the YouTube app, implementing controller support, and overall making it a much better experience than just spoofing your user agent.
+VacuumTube solves all of this by wrapping it with Electron, pretending to be the YouTube app, implementing controller *and* touch support, and overall making it a much better experience than just spoofing your user agent.
 
 ## Installing
 
