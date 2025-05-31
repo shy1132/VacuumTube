@@ -24,6 +24,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1.0" date="2025-05-31" type="stable">
+      <description>
+        <p>v1.1.0</p>
+        <ul>
+          <li>Added touch support via on-screen controls (#1)</li>
+          <li>Fixed zoom resolution hack sometimes breaking layout</li>
+          <li>Made default window resolution 16:9</li>
+          <li>Generally improved internals</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.0.6" date="2025-04-29" type="stable">
       <description>
         <p>v1.0.6</p>

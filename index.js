@@ -44,7 +44,7 @@ async function main() {
 async function createWindow() {
     let mainWindow = new BrowserWindow({
         width: 1200,
-        height: 600,
+        height: 675,
         backgroundColor: '#282828',
         fullscreen: state.fullscreen,
         webPreferences: {
@@ -81,9 +81,9 @@ async function createWindow() {
     })
 
     //trickery to make it always enable high res quality options
-    mainWindow.webContents.on('did-start-loading', () => {
+    electron.ipcMain.on('player-started-loading', () => {
         mainWindow.webContents.setZoomLevel(-10)
-        mainWindow.webContents.once('did-finish-loading', () => {
+        electron.ipcMain.once('player-finished-loading', () => {
             mainWindow.webContents.setZoomLevel(0)
         })
     })
