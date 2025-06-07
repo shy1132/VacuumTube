@@ -100,7 +100,7 @@ async function createWindow() {
     })
 }
 
-app.on('ready', function()  {
+app.on('ready', () => {
     autoUpdater.checkForUpdatesAndNotify()
 })
 
