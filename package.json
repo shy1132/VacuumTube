@@ -1,6 +1,6 @@
 {
     "name": "vacuumtube",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "YouTube TV interface on the desktop",
     "main": "index.js",
     "scripts": {
@@ -17,7 +17,7 @@
         "productName": "VacuumTube",
         "artifactName": "VacuumTube-${arch}.${ext}",
         "linux": {
-            "icon": "./assets/icon.png",
+            "icon": "./assets/icons",
             "synopsis": "YouTube TV interface on the desktop",
             "category": "AudioVideo",
             "desktop": {
