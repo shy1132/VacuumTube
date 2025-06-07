@@ -70,7 +70,7 @@ async function controllerSupport() {
     const keyRepeatInterval = 100;
     const keyRepeatDelay = 500;
 
-    let pressedButtons = {}
+    const pressedButtons = {}
     let keyRepeatTimeout;
 
     let focused = await ipcRenderer.invoke('is-focused')
@@ -83,32 +83,37 @@ async function controllerSupport() {
         focused = false;
     })
 
-    window.addEventListener('gamepadconnected', (event) => {
-        requestAnimationFrame(() => checkControllerInput(event.gamepad.index))
-    })
+    requestAnimationFrame(pollGamepads)
 
-    window.addEventListener('gamepaddisconnected', () => {
-        pressedButtons = {}
-    })
+    function pollGamepads() {
+        const gamepads = navigator.getGamepads()
+        for (let index of Object.keys(pressedButtons)) {
+            if (!gamepads[index]) pressedButtons[index] = null;
+        }
 
-    function checkControllerInput(index) {
-        let gamepad = navigator.getGamepads()[index]
+        let count = gamepads.filter(g => g).length;
 
-        if (gamepad) {
+        for (let gamepad of gamepads) {
+            if (!gamepad || !gamepad.connected) continue;
+            if (count > 1 && gamepad.id === 'Microsoft X-Box 360 pad 1 (STANDARD GAMEPAD Vendor: 28de Product: 11ff)') continue; //steam input emulated gamepad (only "pad 1" when another one is plugged in), this one is not to be trusted since it will just echo the inputs of the plugged in one for some reason
+
+            const index = gamepad.index;
+            if (!pressedButtons[index]) pressedButtons[index] = {}
+
             for (let i = 0; i < gamepad.buttons.length; i++) {
                 let keyCode = gamepadKeyCodeMap[i]
                 if (!keyCode) keyCode = fallbackKeyCode;
 
                 let button = gamepad.buttons[i]
-                let buttonWasPressed = pressedButtons[i]
+                let buttonWasPressed = pressedButtons[index][i]
 
                 if (button.pressed && !buttonWasPressed) {
-                    pressedButtons[i] = true;
+                    pressedButtons[index][i] = true;
                     simulateKeyDown(keyCode)
                     stopKeyRepeat()
                     keyRepeatTimeout = setTimeout(() => startKeyRepeat(keyCode), keyRepeatDelay)
                 } else if (!button.pressed && buttonWasPressed) {
-                    pressedButtons[i] = false;
+                    pressedButtons[index][i] = false;
                     simulateKeyUp(keyCode)
                     stopKeyRepeat()
                 }
@@ -119,7 +124,7 @@ async function controllerSupport() {
                 let keyCode = null;
                 let axisIndex = i + gamepad.buttons.length; //this is kind of hacky but its fine
 
-                let axisWasPressed = pressedButtons[axisIndex]
+                let axisWasPressed = pressedButtons[index][axisIndex]
 
                 if (i === 0) {
                     if (axisValue > 0.5) {
@@ -141,14 +146,14 @@ async function controllerSupport() {
 
                 if (keyCode) {
                     if (!axisWasPressed) {
-                        pressedButtons[axisIndex] = true;
+                        pressedButtons[index][axisIndex] = true;
                         simulateKeyDown(keyCode)
                         stopKeyRepeat()
                         keyRepeatTimeout = setTimeout(() => startKeyRepeat(keyCode), keyRepeatDelay)
                     }
                 } else {
                     if (axisWasPressed) {
-                        pressedButtons[axisIndex] = false;
+                        pressedButtons[index][axisIndex] = false;
                         simulateKeyUp(keyCode)
                         stopKeyRepeat()
                     }
@@ -156,7 +161,7 @@ async function controllerSupport() {
             }
         }
 
-        requestAnimationFrame(() => checkControllerInput(index))
+        requestAnimationFrame(pollGamepads)
     }
 
     function simulateKeyDown(keyCode) {

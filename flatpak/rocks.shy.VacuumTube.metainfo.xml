@@ -24,6 +24,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.1.2" date="2025-06-07" type="stable">
+      <description>
+        <p>v1.1.2</p>
+        <ul>
+          <li>Fixed controller input with multiple controllers (#20)</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.1" date="2025-06-06" type="stable">
       <description>
         <p>v1.1.1</p>
