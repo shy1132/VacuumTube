@@ -28,7 +28,7 @@
       <description>
         <p>v1.1.2</p>
         <ul>
-          <li>Fixed controller input with multiple controllers (#20)</li>
+          <li>Fixed controller input with multiple controllers + Steam Deck external controller fix (#20)</li>
         </ul>
       </description>
     </release>
