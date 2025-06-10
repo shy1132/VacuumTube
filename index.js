@@ -1,7 +1,6 @@
 //initialization
 const electron = require('electron')
 const { autoUpdater } = require('electron-updater')
-const { ElectronBlocker } = require('@ghostery/adblocker-electron')
 const path = require('path')
 const stateManager = require('./state.js')
 const package = require('./package.json')
@@ -14,20 +13,17 @@ const sessionData = path.join(userData, 'sessionData')
 app.setPath('sessionData', sessionData)
 
 //code
-const userAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //leanback is really weird about its user agents, but ps4 is optimal. also, added "compatible" and VacuumTube name just to be transparent...
-const runningOnDeck = process.env.SteamOS == '1' && process.env.SteamGamepadUI == '1'
+const userAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //leanback is really weird about its user agents, but ps4 allows the zoom hack to work for some reason. also added "compatible" and "VacuumTube" just to be transparent
+const runningOnSteam = process.env.SteamOS == '1' && process.env.SteamGamepadUI == '1'
 
 let state;
 
 async function main() {
-    if (runningOnDeck) app.commandLine.appendSwitch('--no-sandbox') //wont run without this in game mode for me
+    if (runningOnSteam) app.commandLine.appendSwitch('--no-sandbox') //won't run without this in game mode for me
 
     state = await stateManager.init(path.join(userData, 'state.json'), {
-        fullscreen: !!runningOnDeck //if running on steam deck in game mode, default fullscreen
+        fullscreen: !!runningOnSteam //if running on steam in game mode, default fullscreen
     })
-
-    let blocker = await ElectronBlocker.fromPrebuiltFull()
-    blocker.enableBlockingInSession(electron.session.defaultSession)
 
     electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
         if (details.requestHeaders['User-Agent']) details.requestHeaders['User-Agent'] = userAgent;
@@ -50,7 +46,8 @@ async function createWindow() {
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: false,
-            preload: path.join(__dirname, 'preload.js')
+            sandbox: false, //allows me to use node apis in preload, but doesn't allow youtube to do so (solely need node apis for requiring the modules)
+            preload: path.join(__dirname, 'preload/index.js')
         }
     })
 
@@ -81,6 +78,7 @@ async function createWindow() {
     })
 
     //trickery to make it always enable high res quality options
+    //todo: better way to do this? the zoom hack is noticeable because the profile pictures on the "who's watching?" screen will jump a bit
     electron.ipcMain.on('player-started-loading', () => {
         mainWindow.webContents.setZoomLevel(-10)
         electron.ipcMain.once('player-finished-loading', () => {

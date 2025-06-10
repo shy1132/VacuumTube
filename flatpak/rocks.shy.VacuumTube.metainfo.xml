@@ -24,6 +24,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.0" date="2025-06-09" type="stable">
+      <description>
+        <p>v1.2.0</p>
+        <ul>
+          <li>Adblocker now blocks home and search feed ads</li>
+          <li>Now properly handling Steam Input in Steam Game Mode (#22)</li>
+          <li>Added a convenience keybind (Ctrl + Shift + C) to copy the video link (#21)</li>
+          <li>Startup time improvement</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.1.2" date="2025-06-07" type="stable">
       <description>
         <p>v1.1.2</p>
