@@ -24,6 +24,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.2.1" date="2025-06-11" type="stable">
+      <description>
+        <p>v1.2.1</p>
+        <ul>
+          <li>Added --fullscreen launch argument</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.2.0" date="2025-06-09" type="stable">
       <description>
         <p>v1.2.0</p>

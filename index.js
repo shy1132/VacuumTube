@@ -38,11 +38,13 @@ async function main() {
 }
 
 async function createWindow() {
+    let forceFullscreen = process.argv.includes('--fullscreen')
+
     let mainWindow = new BrowserWindow({
         width: 1200,
         height: 675,
         backgroundColor: '#282828',
-        fullscreen: state.fullscreen,
+        fullscreen: forceFullscreen || state.fullscreen,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: false,
