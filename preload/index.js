@@ -6,7 +6,8 @@ let modules = [
     require('./modules/adblock'),
     require('./modules/mouse-disappear'),
     require('./modules/prevent-visibilitychange'),
-    require('./modules/override-f11')
+    require('./modules/override-f11'),
+    require('./modules/settings'),
 ]
 
 if (location.host === 'www.youtube.com') {
