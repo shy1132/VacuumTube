@@ -9,21 +9,40 @@
   </developer>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
-  <update_contact>shy+vt@shy.rocks</update_contact>
+  <update_contact>shy+vacuumtube@shy.rocks</update_contact>
   <description>
-    <p>VacuumTube is an unofficial open source wrapper of YouTube Leanback (the console and Smart TV version of YouTube) for the desktop, with a built-in adblocker and minor enhancements. It is the best way to experience the TV interface on your computer, media center, or Steam Deck.</p>
+    <p>VacuumTube is an unofficial open source wrapper of YouTube Leanback (the console and Smart TV version of YouTube) for the desktop, with a built-in adblocker and other enhancements. It is the best way to experience the TV interface on your computer, media center, or Steam Deck.</p>
   </description>
   <screenshots>
-    <screenshot>
-      <caption>Searching</caption>
-      <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/flatpak/screenshots/search.png</image>
-    </screenshot>
     <screenshot type="default">
       <caption>Watching a video</caption>
       <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/flatpak/screenshots/video.png</image>
     </screenshot>
+    <screenshot>
+      <caption>Searching</caption>
+      <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/flatpak/screenshots/search.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Settings</caption>
+      <image type="source">https://raw.githubusercontent.com/shy1132/VacuumTube/refs/heads/main/flatpak/screenshots/settings.png</image>
+    </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.0" date="2025-06-15" type="stable">
+      <description>
+        <p>v1.3.0</p>
+        <ul>
+          <li>Added VacuumTube settings within YouTube settings, with help of @bedsteler20 on GitHub</li>
+          <li>Ad Blocker can now be disabled from settings</li>
+          <li>Added h264ify</li>
+          <li>Added a low memory mode</li>
+          <li>Added Keep on Top option</li>
+          <li>Added --version launch argument</li>
+          <li>Fixed --fullscreen launch argument</li>
+          <li>Fixed startup race condition</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.2.1" date="2025-06-11" type="stable">
       <description>
         <p>v1.2.1</p>
@@ -36,7 +55,7 @@
       <description>
         <p>v1.2.0</p>
         <ul>
-          <li>Adblocker now blocks home and search feed ads</li>
+          <li>Ad Blocker now blocks home and search feed ads</li>
           <li>Now properly handling Steam Input in Steam Game Mode (#22)</li>
           <li>Added a convenience keybind (Ctrl + Shift + C) to copy the video link (#21)</li>
           <li>Startup time improvement</li>

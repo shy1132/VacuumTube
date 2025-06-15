@@ -1,3 +1,31 @@
+const rcMod = require('./util/resolveCommandModifiers')
+
+/**
+ * Creates a toast in the top right using YouTube UI
+ * @param {string} title - The title (top text) of the toast
+ * @param {string} subtitle - The subtitle (bottom text) of the toast
+ * @returns {void}
+ */
+function toast(title, subtitle) {
+    let toastCommand = {
+        openPopupAction: {
+            popupType: 'TOAST',
+            popup: {
+                overlayToastRenderer: {
+                    title: {
+                        simpleText: title
+                    },
+                    subtitle: {
+                        simpleText: subtitle
+                    }
+                }
+            }
+        }
+    };
+
+    rcMod.resolveCommand(toastCommand)
+}
+
 /**
  * Creates a popup menu configuration object for YouTube UI rendering
  * @param {Object} options - The options for the popup menu
@@ -13,8 +41,8 @@ function popupMenu(options) {
                 overlaySectionRenderer: {
                     dismissalCommand: {
                         signalAction: {
-                            signal: "POPUP_BACK",
-                        },
+                            signal: 'POPUP_BACK'
+                        }
                     },
                     overlay: {
                         overlayTwoPanelRenderer: {
@@ -23,24 +51,23 @@ function popupMenu(options) {
                                     header: {
                                         overlayPanelHeaderRenderer: {
                                             title: {
-                                                simpleText: options.title,
-                                            },
-                                        },
+                                                simpleText: options.title
+                                            }
+                                        }
                                     },
                                     content: {
                                         overlayPanelItemListRenderer: {
-                                            selectedIndex:
-                                                options.selectedIndex || 0,
+                                            selectedIndex: options.selectedIndex || 0,
                                             items: options.items,
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     };
 }
 
@@ -58,46 +85,43 @@ function link(options) {
     return {
         compactLinkRenderer: {
             title: {
-                simpleText: options.title,
+                simpleText: options.title
             },
-            secondaryIcon: options.icon
-                ? {
-                      iconType: options.icon,
-                  }
-                : undefined,
+            secondaryIcon: options.icon ? { iconType: options.icon } : undefined,
             serviceEndpoint: {
                 commandExecutorCommand: {
                     get commands() {
                         return [
                             options.closeMenu
                                 ? {
-                                      signalAction: {
-                                          signal: "POPUP_BACK",
-                                      },
-                                  }
+                                    signalAction: {
+                                        signal: 'POPUP_BACK'
+                                    }
+                                }
                                 : undefined,
                             options.callback
                                 ? {
-                                      signalAction: {
-                                          get signal() {
-                                              options.callback();
-                                              return "UNKNOWN";
-                                          },
-                                      },
-                                  }
+                                    signalAction: {
+                                        get signal() {
+                                            options.callback()
+                                            return 'UNKNOWN';
+                                        }
+                                    }
+                                }
                                 : undefined,
                             options.createSubMenu
                                 ? options.createSubMenu()
-                                : undefined,
-                        ];
-                    },
-                },
-            },
-        },
+                                : undefined
+                        ]
+                    }
+                }
+            }
+        }
     };
 }
 
 module.exports = {
+    toast,
     popupMenu,
-    link,
-};
+    link
+}

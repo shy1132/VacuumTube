@@ -1,4 +1,5 @@
 //controller support (normal leanback doesnt have this for some reason, not sure how the console apps do it...)
+
 const { ipcRenderer } = require('electron')
 
 module.exports = async () => {

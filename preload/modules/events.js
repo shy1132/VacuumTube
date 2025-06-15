@@ -1,4 +1,5 @@
 //events for main process to use
+
 const { ipcRenderer } = require('electron')
 
 module.exports = () => {

@@ -1,5 +1,6 @@
 //since leanback is made for tvs and consoles, there are some things you simply can't do. these keybinds serve as a way to do those things
-const util = require('../util.js')
+
+const ui = require('../ui.js')
 
 module.exports = () => {
     document.addEventListener('keydown', (e) => {
@@ -13,7 +14,7 @@ module.exports = () => {
             let url = `https://youtu.be/${id}`
             navigator.clipboard.writeText(url)
 
-            util.toast('VacuumTube', 'Video link copied to clipboard') //todo: locale? will need to be taken more seriously once there's a configuration ui
+            ui.toast('VacuumTube', 'Video link copied to clipboard') //todo: locale? will need to be taken more seriously once there's a configuration ui
         }
     })
 }
