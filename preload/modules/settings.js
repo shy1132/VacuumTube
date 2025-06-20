@@ -40,19 +40,25 @@ module.exports = async () => {
     let configOptions = {
         'adblock': createSettingBooleanRenderer(
             'Ad Block',
-            'Seamlessly blocks video and feed ads, not subject to YouTube\'s methods of preventing blockers. Restart after toggling.',
+            'Seamlessly blocks video and feed ads, not subject to YouTube\'s methods of preventing blockers. Relaunch after toggling.',
             null,
             'adblock'
         ),
         'h264ify': createSettingBooleanRenderer(
             'h264ify',
-            'Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Restart after toggling.',
+            'Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Relaunch after toggling.',
             null,
             'h264ify'
         ),
+        'hardware_decoding': createSettingBooleanRenderer(
+            'Hardware Decoding',
+            'Uses your GPU to decode videos when possible. Disabling this may fix playback issues, but can cause lag depending on your CPU. Relaunch after toggling.',
+            null,
+            'hardware_decoding'
+        ),
         'low_memory_mode': createSettingBooleanRenderer(
             'Low Memory Mode',
-            'Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Restart after toggling.',
+            'Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Relaunch after toggling.',
             null,
             'low_memory_mode'
         ),

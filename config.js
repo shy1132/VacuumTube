@@ -12,6 +12,7 @@ let config = {}
 const defaults = {
     fullscreen: false, //changes automatically depending on user's last preference
     adblock: true, //block ads
+    hardware_decoding: true, //use hardware gpu video decoding
     h264ify: false, //block non-h264 codecs for performance on slow devices
     low_memory_mode: false, //enables env_isLimitedMemory
     keep_on_top: false //whether or not to keep window on top

@@ -33,6 +33,10 @@ async function main() {
         fullscreen: !!runningOnSteam //if running on steam in game mode, override fullscreen to be on by default
     })
 
+    if (!config.hardware_decoding) {
+        electron.app.commandLine.appendSwitch('disable-accelerated-video-decode')
+    }
+
     electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
         if (details.requestHeaders['User-Agent']) details.requestHeaders['User-Agent'] = userAgent;
         callback({ cancel: false, requestHeaders: details.requestHeaders })
