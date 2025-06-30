@@ -108,6 +108,8 @@ async function createWindow() {
             url.searchParams.append('env_isLimitedMemory', true)
         }
 
+        url.searchParams.append('env_enableMediaStreams', true) //fixes voice search
+
         console.log(`loading youtube from ${url.href}`)
         mainWindow.loadURL(url.href, { userAgent })
     }
