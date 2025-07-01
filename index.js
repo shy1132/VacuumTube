@@ -91,6 +91,7 @@ async function createWindow() {
         }
     })
 
+    mainWindow.setAspectRatio(16 / 9)
     mainWindow.setMenuBarVisibility(false)
     mainWindow.setAutoHideMenuBar(false)
 
