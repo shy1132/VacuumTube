@@ -28,6 +28,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.3" date="2025-07-01" type="stable">
+      <description>
+        <p>v1.3.3</p>
+        <ul>
+          <li>Locked window aspect ratio to 16:9 (#37, see #38)</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.2" date="2025-06-30" type="stable">
       <description>
         <p>v1.3.2</p>
