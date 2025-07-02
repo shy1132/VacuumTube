@@ -91,6 +91,38 @@ async function createWindow() {
         }
     })
 
+    // Ensure the *content* area (excluding OS window borders) stays 16:9 on all platforms.
+    const [outerW, outerH] = mainWindow.getSize();
+    const [innerW, innerH] = mainWindow.getContentSize();
+    const extraWidth = outerW - innerW;
+    const extraHeight = outerH - innerH;
+
+    const TARGET_RATIO = 16 / 9;
+    const isWindows = process.platform === 'win32';
+
+    if (isWindows) {
+        // Custom resize handling for Windows where OS chrome breaks outer-ratio locking.
+        // To keep this implementation simple, we'll prevent the user from resizing
+        // the window on the wide side. It will automatically adjust the height.
+        mainWindow.on('will-resize', (event, newBounds) => {
+            event.preventDefault();
+            const contentW = newBounds.width - extraWidth;
+            const adjustedContentH = Math.round(contentW / TARGET_RATIO);
+            mainWindow.setBounds({
+                width: newBounds.width,
+                height: adjustedContentH + extraHeight
+            });
+        });
+
+        mainWindow.setBounds({
+            width: outerW,
+            height: Math.round((outerW - extraWidth) / TARGET_RATIO) + extraHeight
+        });
+    } else {
+        // Built-in electron aspect ratio lock works fine on Linux.
+        mainWindow.setAspectRatio(TARGET_RATIO);
+    }
+
     mainWindow.setMenuBarVisibility(false)
     mainWindow.setAutoHideMenuBar(false)
 
