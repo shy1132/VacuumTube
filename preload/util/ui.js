@@ -1,4 +1,4 @@
-const rcMod = require('./util/resolveCommandModifiers')
+const rcMod = require('./resolveCommandModifiers')
 
 /**
  * Creates a toast in the top right using YouTube UI

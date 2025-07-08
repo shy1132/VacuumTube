@@ -1,8 +1,13 @@
 //since leanback is made for tvs and consoles, there are some things you simply can't do. these keybinds serve as a way to do those things
 
-const ui = require('../ui.js')
+const ui = require('../util/ui')
+const localeProvider = require('../util/localeProvider')
 
-module.exports = () => {
+module.exports = async () => {
+    await localeProvider.waitUntilAvailable()
+
+    let locale = localeProvider.getLocale()
+
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') { //ctrl+alt+c to copy video url
             if (!window.yt?.player?.utils?.videoElement_?.baseURI) return;
@@ -14,7 +19,7 @@ module.exports = () => {
             let url = `https://youtu.be/${id}`
             navigator.clipboard.writeText(url)
 
-            ui.toast('VacuumTube', 'Video link copied to clipboard') //todo: locale? will need to be taken more seriously once there's a configuration ui
+            ui.toast('VacuumTube', locale.general.video_copied)
         }
     })
 }

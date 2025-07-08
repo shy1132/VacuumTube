@@ -1,10 +1,15 @@
-const configManager = require('../config.js')
-const jsonMod = require('../util/jsonModifiers.js')
-const rcMod = require('../util/resolveCommandModifiers.js')
+//injects custom VacuumTube settings into the youtube settings page
+
+const { ipcRenderer } = require('electron')
+const configManager = require('../config')
+const jsonMod = require('../util/jsonModifiers')
+const rcMod = require('../util/resolveCommandModifiers')
+const localeProvider = require('../util/localeProvider')
+const functions = require('../util/functions')
 
 let config = configManager.get()
 
-function createSettingBooleanRenderer(title, summary, icon, configName) {
+function createSettingBooleanRenderer(title, summary, configName, dynamicFunction) {
     return {
         settingBooleanRenderer: {
             itemId: 'VOICE_AND_AUDIO_ACTIVITY', //this has to be here for it to listen to the 'enabled' flag, but it doesn't affect anything else
@@ -19,54 +24,59 @@ function createSettingBooleanRenderer(title, summary, icon, configName) {
                     { text: summary }
                 ]
             },
-            thumbnail: {
-                thumbnails: [
-                    { url: icon }
-                ]
-            },
             enableServiceEndpoint: {
                 vtConfigOption: configName,
-                vtConfigValue: true
+                vtConfigValue: true,
+                dynamicFunction
             },
             disableServiceEndpoint: {
                 vtConfigOption: configName,
-                vtConfigValue: false
+                vtConfigValue: false,
+                dynamicFunction
             }
         }
     };
 }
 
 module.exports = async () => {
+    await localeProvider.waitUntilAvailable()
+    await functions.waitForCondition(() => !!window.ytcfg)
+
+    let isKids = window.ytcfg.data_.INNERTUBE_CLIENT_NAME === 'TVHTML5_FOR_KIDS' //if you enter/exit kids mode, the page reloads (and therefore, the preload modules re-inject), so this is fine to do non-dynamically
+    let locale = localeProvider.getLocale()
+
     let configOptions = {
         'adblock': createSettingBooleanRenderer(
-            'Ad Block',
-            'Seamlessly blocks video and feed ads, not subject to YouTube\'s methods of preventing blockers. Relaunch after toggling.',
-            null,
+            locale.settings.ad_block.title,
+            locale.settings.ad_block.description,
             'adblock'
         ),
         'h264ify': createSettingBooleanRenderer(
-            'h264ify',
-            'Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Relaunch after toggling.',
-            null,
+            locale.settings.h264ify.title,
+            locale.settings.h264ify.description,
             'h264ify'
         ),
         'hardware_decoding': createSettingBooleanRenderer(
-            'Hardware Decoding',
-            'Uses your GPU to decode videos when possible. Disabling this may fix playback issues, but can cause lag depending on your CPU. Relaunch after toggling.',
-            null,
+            locale.settings.hardware_decoding.title,
+            locale.settings.hardware_decoding.description,
             'hardware_decoding'
         ),
         'low_memory_mode': createSettingBooleanRenderer(
-            'Low Memory Mode',
-            'Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Relaunch after toggling.',
-            null,
+            locale.settings.low_memory_mode.title,
+            locale.settings.low_memory_mode.description,
             'low_memory_mode'
         ),
+        'fullscreen': createSettingBooleanRenderer( //todo: make it actively toggle fullscreen
+            locale.settings.fullscreen.title,
+            locale.settings.fullscreen.description,
+            'fullscreen',
+            (value) => ipcRenderer.invoke('set-fullscreen', value)
+        ),
         'keep_on_top': createSettingBooleanRenderer(
-            'Keep on Top',
-            'Makes VacuumTube launch with the window pinned on top of every other window. Doesn\'t apply in Steam Game Mode, where it\'s always on top.',
-            null,
-            'keep_on_top'
+            locale.settings.keep_on_top.title,
+            locale.settings.keep_on_top.description,
+            'keep_on_top',
+            (value) => ipcRenderer.invoke('set-on-top', value)
         )
     }
 
@@ -81,6 +91,10 @@ module.exports = async () => {
                 configOptions[key].settingBooleanRenderer.enabled = config[key] //it's actually reference based, you have to change the object itself when changing config for it to update (this took SO long to figure out, then it clicked...)
             }
 
+            if (input.dynamicFunction) {
+                input.dynamicFunction(input.vtConfigValue)
+            }
+
             return false;
         }
 
@@ -88,6 +102,8 @@ module.exports = async () => {
     })
 
     jsonMod.addModifier((json) => {
+        if (isKids) return json; //don't show these in youtube kids
+
         if (json?.items?.[0]?.settingCategoryCollectionRenderer) {
             json.items[0].settingCategoryCollectionRenderer.title = { //doesn't have a label by default
                 runs: [

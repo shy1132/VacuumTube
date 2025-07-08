@@ -13,9 +13,25 @@ const configManager = require('./config.js')
 const package = require('./package.json')
 
 //code
-const userAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //leanback is really weird about its user agents, but ps4 allows the zoom hack to work for some reason. also added "compatible" and "VacuumTube" just to be transparent
+/*
+about the user agent:
+leanback is extremely weird about user agents, a lot of ones do really different things for no reason. i can't imagine what the backend code looks like for this
+but, this is using the most optimal one i've been able to create
+
+Mozilla/5.0 makes youtube think it's a "DESKTOP" device
+(PS4; Leanback Shell) is part of the user agent of the ps4 youtube app, i chose ps4 because it's the most versatile in this situation since it gives the most up-to-date ui, and allows the zoom hack to work for some reason (can't replicate this on any other uas???)
+Cobalt/26.lts.0-qa is the latest cobalt version, cobalt is the browser the tv youtube app tends to run in internally
+the actual ps4 ua has more to it, but this is all that's needed for it to work here
+the "compatible" and "VacuumTube" part are just for transparency's sake, and to make sure they can detect it so i'm not screwing up any internal logging/analytics
+
+i currently don't like using the ps4 one, but i can't seem to find a better one. i'd prefer to use one that appears as chromium instead, so that it doesn't potentially do any cobalt-specific stuff
+i also don't like that it says "PlayStation 4" in the "App version" category of settings. i have found a way to change what it displays, but i'm not going to do that in fear of it breaking some other stuff or something
+if you think you can find a better one that adheres to what i think is best, please open an issue or a pr or something! i've lost hours over this lol
+*/
+const userAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}`
 const runningOnSteam = process.env.SteamOS == '1' && process.env.SteamGamepadUI == '1'
 
+let win;
 let config;
 
 async function main() {
@@ -36,11 +52,6 @@ async function main() {
     if (!config.hardware_decoding) {
         electron.app.commandLine.appendSwitch('disable-accelerated-video-decode')
     }
-
-    electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-        if (details.requestHeaders['User-Agent']) details.requestHeaders['User-Agent'] = userAgent;
-        callback({ cancel: false, requestHeaders: details.requestHeaders })
-    })
 
     //not needed until i add sponsorblock and dearrow support
     /*
@@ -68,6 +79,54 @@ async function main() {
     })
     */
 
+    //config management on the web side
+    electron.ipcMain.on('get-config', (event) => {
+        event.returnValue = config;
+    })
+
+    electron.ipcMain.on('set-config', (event, newConfig) => {
+        configManager.update(newConfig)
+        config = configManager.get()
+
+        if (win) {
+            win.webContents.send('config-update', config)
+        }
+
+        event.returnValue = config;
+    })
+
+    electron.ipcMain.handle('is-focused', () => {
+        if (win) {
+            return win.isFocused();
+        } else {
+            return false;
+        }
+    })
+
+    electron.ipcMain.handle('reload', () => {
+        if (win) {
+            win.webContents.reload()
+        }
+    })
+
+    electron.ipcMain.handle('set-fullscreen', (e, value) => {
+        if (win) {
+            win.setFullScreen(value)
+        }
+    })
+
+    electron.ipcMain.handle('set-on-top', (e, value) => {
+        if (win) {
+            win.setAlwaysOnTop(value)
+        }
+    })
+
+    electron.ipcMain.handle('set-zoom', (e, amount) => {
+        if (win) {
+            win.webContents.setZoomLevel(amount)
+        }
+    })
+
     createWindow()
 
     electron.app.on('activate', () => {
@@ -78,7 +137,7 @@ async function main() {
 async function createWindow() {
     let fullscreen = process.argv.includes('--fullscreen') || runningOnSteam || config.fullscreen || false;
 
-    let mainWindow = new electron.BrowserWindow({
+    win = new electron.BrowserWindow({
         width: 1200,
         height: 675,
         backgroundColor: '#282828',
@@ -92,110 +151,89 @@ async function createWindow() {
     })
 
     // Ensure the *content* area (excluding OS window borders) stays 16:9 on all platforms.
-    const [outerW, outerH] = mainWindow.getSize();
-    const [innerW, innerH] = mainWindow.getContentSize();
+    const [ outerW, outerH ] = win.getSize()
+    const [ innerW, innerH ] = win.getContentSize()
     const extraWidth = outerW - innerW;
     const extraHeight = outerH - innerH;
 
     const TARGET_RATIO = 16 / 9;
-    const isWindows = process.platform === 'win32';
+    const isWindows = process.platform === 'win32'
 
     if (isWindows) {
         // Custom resize handling for Windows where OS chrome breaks outer-ratio locking.
         // To keep this implementation simple, we'll prevent the user from resizing
         // the window on the wide side. It will automatically adjust the height.
-        mainWindow.on('will-resize', (event, newBounds) => {
-            event.preventDefault();
+        win.on('will-resize', (event, newBounds) => {
+            event.preventDefault()
+
             const contentW = newBounds.width - extraWidth;
-            const adjustedContentH = Math.round(contentW / TARGET_RATIO);
-            mainWindow.setBounds({
+            const adjustedContentH = Math.round(contentW / TARGET_RATIO)
+
+            win.setBounds({
                 width: newBounds.width,
                 height: adjustedContentH + extraHeight
-            });
-        });
+            })
+        })
 
-        mainWindow.setBounds({
+        win.setBounds({
             width: outerW,
             height: Math.round((outerW - extraWidth) / TARGET_RATIO) + extraHeight
-        });
+        })
     } else {
         // Built-in electron aspect ratio lock works fine on Linux.
-        mainWindow.setAspectRatio(TARGET_RATIO);
+        win.setAspectRatio(TARGET_RATIO)
     }
 
-    mainWindow.setMenuBarVisibility(false)
-    mainWindow.setAutoHideMenuBar(false)
+    win.setMenuBarVisibility(false)
+    win.setAutoHideMenuBar(false)
 
-    mainWindow.on('ready-to-show', () => {
-        mainWindow.setFullScreen(fullscreen)
-        mainWindow.setAlwaysOnTop(config.keep_on_top)
-        mainWindow.show()
+    win.on('ready-to-show', () => {
+        win.setFullScreen(fullscreen)
+        win.setAlwaysOnTop(config.keep_on_top)
+        win.show()
     })
 
     if (process.argv.includes('--debug-gpu')) {
-        mainWindow.loadURL('chrome://gpu', { userAgent })
-    } else {
-        let url = new URL('https://www.youtube.com/tv/')
-        if (config.low_memory_mode) {
-            url.searchParams.append('env_isLimitedMemory', true)
-        }
-
-        url.searchParams.append('env_enableMediaStreams', true) //fixes voice search
-
-        console.log(`loading youtube from ${url.href}`)
-        mainWindow.loadURL(url.href, { userAgent })
+        console.log('loading chrome://gpu')
+        win.loadURL('chrome://gpu', { userAgent })
+        return;
     }
 
+    let url = new URL('https://www.youtube.com/tv')
+    if (config.low_memory_mode) {
+        url.searchParams.append('env_isLimitedMemory', true) //makes youtube disable a lot of animations and other fancy stuff
+    }
+
+    url.searchParams.append('env_enableMediaStreams', true) //fixes voice search
+
+    console.log(`loading youtube from ${url.href}`)
+    win.loadURL(url.href, { userAgent })
+
     //remember fullscreen preference
-    mainWindow.on('enter-full-screen', async () => {
+    win.on('enter-full-screen', () => {
         configManager.update({ fullscreen: true })
         config = configManager.get()
-        mainWindow.webContents.send('config-update', config)
+        win.webContents.send('config-update', config)
     })
 
-    mainWindow.on('leave-full-screen', async () => {
+    win.on('leave-full-screen', () => {
         configManager.update({ fullscreen: false })
         config = configManager.get()
-        mainWindow.webContents.send('config-update', config)
-    })
-
-    //config management on the web side
-    electron.ipcMain.on('get-config', (event) => {
-        event.returnValue = config;
-    })
-
-    electron.ipcMain.on('set-config', (event, newConfig) => {
-        configManager.update(newConfig)
-        config = configManager.get()
-        mainWindow.webContents.send('config-update', config)
-        event.returnValue = config;
+        win.webContents.send('config-update', config)
     })
 
     //for the controller support to know whether or not the window itself is in focus
-    mainWindow.addListener('focus', () => {
-        mainWindow.webContents.send('focus')
+    win.addListener('focus', () => {
+        win.webContents.send('focus')
     })
 
-    mainWindow.addListener('blur', () => {
-        mainWindow.webContents.send('blur')
-    })
-
-    electron.ipcMain.handle('is-focused', () => {
-        return mainWindow.isFocused();
+    win.addListener('blur', () => {
+        win.webContents.send('blur')
     })
 
     //keep window title as VacuumTube
-    mainWindow.webContents.on('page-title-updated', () => {
-        mainWindow.setTitle('VacuumTube')
-    })
-
-    //trickery to make it always enable high res quality options
-    //todo: better way to do this? the zoom hack is noticeable because the profile pictures on the "who's watching?" screen will jump a bit
-    electron.ipcMain.on('player-started-loading', () => {
-        mainWindow.webContents.setZoomLevel(-10)
-        electron.ipcMain.once('player-finished-loading', () => {
-            mainWindow.webContents.setZoomLevel(0)
-        })
+    win.webContents.on('page-title-updated', () => {
+        win.setTitle('VacuumTube')
     })
 }
 

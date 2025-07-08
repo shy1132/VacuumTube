@@ -28,6 +28,19 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.4" date="2025-07-08" type="stable">
+      <description>
+        <p>v1.3.4</p>
+        <ul>
+          <li>Added localization support (need contributors!)</li>
+          <li>Added fullscreen option directly to VacuumTube settings</li>
+          <li>Made some settings apply dynamically</li>
+          <li>Disabled VacuumTube settings in YouTube Kids mode</li>
+          <li>Fixed YouTube sometimes running without VacuumTube modules after a reload</li>
+          <li>Mildly improved startup time</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.3" date="2025-07-01" type="stable">
       <description>
         <p>v1.3.3</p>
