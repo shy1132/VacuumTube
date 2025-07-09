@@ -1,0 +1,31 @@
+{
+    "general": {
+        "video_copied": "Tautan video disalin ke papan klip"
+    },
+    "settings": {
+        "ad_block": {
+            "title": "Blokir Iklan",
+            "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube. Luncurkan ulang setelah mengubah."
+        },
+        "h264ify": {
+            "title": "Gunakan H.264 (h264ify)",
+            "description": "Memastikan YouTube hanya memutar video dalam enkripsi-penguraian (codec) H.264. Membantu meningkatkan performa dan optimasi daya baterai, namun akan membatasi pemutaran video di atas resolusi 1080p. Luncurkan ulang setelah mengubah."
+        },
+        "hardware_decoding": {
+            "title": "Optimasi Grafis (Hardware Decoding)",
+            "description": "Gunakan kartu grafis (GPU) untuk mengurai pemutaran video jika sanggup. Mematikan opsi ini mungkin dapat menyelesaikan sebagian masalah pemutaran, namun dapat menghambat video jika prosesor tidak memadai. Luncurkan ulang setelah mengubah."
+        },
+        "low_memory_mode": {
+            "title": "Optimasi Memori",
+            "description": "Lakukan optimasi untuk perangkat bermemori rendah dengan mengurangi beberapa efek visual. Luncurkan ulang setelah mengubah."
+        },
+        "fullscreen": {
+            "title": "Mode Layar Penuh",
+            "description": "Memastikan VacuumTube selalu masuk dalam mode layar penuh setelah diluncurkan."
+        },
+        "keep_on_top": {
+            "title": "Tetap di Atas",
+            "description": "Memastikan jendela VacuumTube selalu berada di atas jendela aplikasi lain."
+        }
+    }
+}
