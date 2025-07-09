@@ -1,0 +1,31 @@
+{
+    "general": {
+        "video_copied": "Videolink naar klembord gekopieerd"
+    },
+    "settings": {
+        "ad_block": {
+            "title": "Ad-blokker",
+            "description": "Blokkeert naadloos video- en feed-advertenties en is niet onderhevig aan de blokkeermethoden van YouTube. Herstart na het omschakelen."
+        },
+        "h264ify": {
+            "title": "H.264 forceren (h264ify)",
+            "description": "Dwingt YouTube om video's alleen in H.264 te streamen. Dit kan helpen bij de prestaties en de levensduur van de batterij op langzamere apparaten, maar voorkomt dat u iets boven 1080p kunt bekijken. Herstart na het omschakelen."
+        },
+        "hardware_decoding": {
+            "title": "Hardwaredecodering",
+            "description": "Gebruikt waar mogelijk uw GPU om video's te decoderen. Als u dit uitschakelt, kunnen afspeelproblemen worden opgelost, maar kan er vertraging optreden, afhankelijk van uw CPU. Herstart na het omschakelen."
+        },
+        "low_memory_mode": {
+            "title": "Laaggeheugenmodus",
+            "description": "Vertelt YouTube om de modus met laag geheugen in te schakelen, wat de prestaties op langzamere apparaten kan verbeteren ten koste van sommige visuele effecten. Herstart na het omschakelen."
+        },
+        "fullscreen": {
+            "title": "Vollescherm",
+            "description": "Schakelt volledig scherm in en zorgt ervoor dat VacuumTube altijd opstart in volledig scherm."
+        },
+        "keep_on_top": {
+            "title": "Bovenaan houden",
+            "description": "Schakelt \"Bovenaan houden\" in en zorgt ervoor dat VacuumTube wordt gestart met het venster boven elk ander venster vastgepind."
+        }
+    }
+}

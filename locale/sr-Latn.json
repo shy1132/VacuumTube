@@ -1,0 +1,31 @@
+{
+    "general": {
+        "video_copied": "Link videa kopiran u međuspremnik"
+    },
+    "settings": {
+        "ad_block": {
+            "title": "Blokator Oglasa",
+            "description": "Besprekorno blokira video i fid oglase, nije podložan YouTube metodama protiv blokiranja. Ponovo pokrenite sistem nakon prebacivanja."
+        },
+        "h264ify": {
+            "title": "Primori H.264 (h264ify)",
+            "description": "Primorava YouTube da strimuje video zapise samo u H.264 kodeku. Ovo može poboljšati pokretanje i trajanje baterije na sporijim uređajima, ali vas sprečava da gledate bilo šta iznad 1080p. Ponovo pokrenite sistem nakon prebacivanja."
+        },
+        "hardware_decoding": {
+            "title": "Hardversko Dekodiranje",
+            "description": "Koristi vašu grafičku karticu za dekodiranje videa kada je to moguće. Onemogućavanje ove opcije može rešiti probleme sa reprodukcijom, ali može izazvati kašnjenje u zavisnosti od vašeg procesora. Ponovo pokrenite sistem nakon prebacivanja."
+        },
+        "low_memory_mode": {
+            "title": "Režim za Nisku Memoriju",
+            "description": "Nalaže YouTube-u da omogući režim sa malo memorije, što može poboljšati reprodukciju na sporijim uređajima, ali na štetu nekih vizuelnih efekata. Ponovo pokrenite sistem nakon prebacivanja."
+        },
+        "fullscreen": {
+            "title": "Ceo Ekran",
+            "description": "Omogućava ceo ekran i čini da VacuumTube uvek radi u režimu celog ekrana."
+        },
+        "keep_on_top": {
+            "title": "Ostani na vrhu",
+            "description": "Omogućava opciju „Ostani na vrhu“ i pokreće VacuumTube sa prozorom pričvršćenim preko svakog drugog prozora."
+        }
+    }
+}
