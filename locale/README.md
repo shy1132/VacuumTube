@@ -22,6 +22,6 @@ Otherwise, copy the `en.json` file and paste it in the same directory. Rename it
 
 After that, just go through every string and translate it to the desired language. Make sure it's properly formatted and gramatically correct, as every other string in the regular YouTube app is.
 
-I'd recommend doing this in a more sophisticated editor that does syntax highlighting, especially if you're inexperienced with JSON since you may not know what parts to translate. Only translate the text between quotes, and make sure not to translate things like "h264ify", since that's the name of an extension.
+I'd recommend doing this in a more sophisticated editor that does syntax highlighting, especially if you're inexperienced with JSON since you may not know what parts to translate. Only translate the text between quotes, and make sure not to translate things like "YouTube", "VacuumTube", and "h264ify", since those are names.
 
 Once you're done translating, either create a PR with your fork, or if you didn't know how to fork, open an issue with the translated JSON file.

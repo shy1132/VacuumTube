@@ -28,6 +28,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.5" date="2025-07-09" type="stable">
+      <description>
+        <p>v1.3.5</p>
+        <ul>
+          <li>Added VacuumTube translations for Dutch, German, Croatian, Bosnian, and Serbian (Latin), by @SecularSteve on GitHub</li>
+          <li>Added VacuumTube translation for Indonesian, by @KiKaraage on GitHub</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.4" date="2025-07-08" type="stable">
       <description>
         <p>v1.3.4</p>
