@@ -5,7 +5,7 @@
     "settings": {
         "ad_block": {
             "title": "Bloker Reklama",
-            "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama protiv blokiranja. Ponovo pokrenite nakon prebacivanja."
+            "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama protiv blokiranja. Ponovno pokrenite nakon prebacivanja."
         },
         "h264ify": {
             "title": "Prisili H.264 (h264ify)",
