@@ -1,0 +1,31 @@
+{
+    "general": {
+        "video_copied": "Videolink in die Zwischenablage kopiert"
+    },
+    "settings": {
+        "ad_block": {
+            "title": "Anzeigenblocker",
+            "description": "Blockiert nahtlos Video- und Feed-Werbung und unterliegt nicht den Methoden von YouTube zur Verhinderung von Blockern. Starten Sie nach dem Umschalten neu."
+        },
+        "h264ify": {
+            "title": "H.264 erzwingen (h264ify)",
+            "description": "Erzwingt, dass YouTube nur Videos im H.264-Codec streamt. Dies kann die Leistung und Akkulaufzeit auf langsameren Geräten verbessern, verhindert aber, dass Sie Videos mit mehr als 1080p ansehen können. Starten Sie nach dem Umschalten neu."
+        },
+        "hardware_decoding": {
+            "title": "Hardware-Dekodierung",
+            "description": "Verwendet Ihren Grafikprozessor zur Dekodierung von Videos, wenn möglich. Die Deaktivierung dieser Funktion kann Wiedergabeprobleme beheben, kann aber je nach CPU zu Verzögerungen führen. Starten Sie nach dem Umschalten neu."
+        },
+        "low_memory_mode": {
+            "title": "Wenigspeichermodus",
+            "description": "Weist YouTube an, den Modus für geringen Speicherbedarf zu aktivieren, was die Leistung auf langsameren Geräten auf Kosten einiger visueller Effekte verbessern kann. Starten Sie nach dem Umschalten neu."
+        },
+        "fullscreen": {
+            "title": "Vollbildschirm",
+            "description": "Aktiviert den Vollbildmodus und lässt VacuumTube immer im Vollbildmodus starten."
+        },
+        "keep_on_top": {
+            "title": "Oben halten",
+            "description": "Aktiviert „Oben halten“ und sorgt dafür, dass VacuumTube so gestartet wird, dass das Fenster über allen anderen Fenstern angeheftet ist."
+        }
+    }
+}
