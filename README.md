@@ -1,6 +1,4 @@
 # VacuumTube
-
-
 <p>
     <a href="https://github.com/shy1132/VacuumTube/stargazers">
       <img alt="Stars" title="Stars" src="https://img.shields.io/github/stars/shy1132/VacuumTube?style=shield&label=%E2%AD%90%20Stars&branch=main&kill_cache=1%22" />
