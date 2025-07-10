@@ -1,0 +1,31 @@
+{
+    "general": {
+        "video_copied": "Video bağlantısı panoya kopyalandı"
+    },
+    "settings": {
+        "ad_block": {
+            "title": "Reklam Engelleyici",
+            "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir. Değiştirdikten sonra yeniden başlatın."
+        },
+        "h264ify": {
+            "title": "H.264 İçin Zorla (h264ify)",
+            "description": "YouTube üstünde H.264 biçimli videoların görünmesini sağlar. Yavaş cihazlarda performansa ve pil ömrüne yardımcı olabilir, ama 1080p üstündeki çözünürlükte video izlemenizi engeller. Değiştirdikten sonra yeniden başlatın."
+        },
+        "hardware_decoding": {
+            "title": "Donanımsal Kod Çözücü",
+            "description": "Mümkünse videoları çözmek için GPU kullanır. Bu özelliği devre dışı bırakmak oynatma sorunlarını çözebilir, ancak CPU üstünde gecikmeye neden olabilir. Değiştirdikten sonra yeniden başlatın."
+        },
+        "low_memory_mode": {
+            "title": "Düşük Bellek Modu",
+            "description": "YouTube düşük bellek modu etkinleştirmesini sağlar. Bazı görsel efektlerden ödün vererek daha yavaş cihazlarda performansı artırabilir. Değiştirdikten sonra yeniden başlatın."
+        },
+        "fullscreen": {
+            "title": "Tam Ekran",
+            "description": "Tam ekran özelliğini etkinleştirir ve VacuumTube her zaman tam ekranda başlatılır."
+        },
+        "keep_on_top": {
+            "title": "Üstte Tut",
+            "description": "Üstte Tutmayı etkinleştirir ve VacuumTube tüm pencerelerin üstüne sabitlenerek başlatılır."
+        }
+    }
+}
