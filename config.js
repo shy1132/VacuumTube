@@ -28,6 +28,18 @@ function init(overrides = {}) {
         console.log(`reading config from ${configFile}`)
 
         let parsed = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
+        if (parsed['0']) { //i was accidentally still passing the path of the config file to the init function before the overrides (old behavior), causing it to apply the path string as an override and ignore the actual ovrerides... oops
+            console.log('fixing config bug')
+
+            for (let key of Object.keys(parsed)) {
+                if (!isNaN(Number(key))) { //remove each character of the path string...
+                    delete parsed[key];
+                }
+            }
+
+            fs.writeFileSync(configFile, JSON.stringify(parsed, null, 4))
+        }
+
         config = {
             ...defaults,
             ...parsed

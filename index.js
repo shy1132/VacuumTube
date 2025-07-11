@@ -24,9 +24,8 @@ Cobalt/26.lts.0-qa is the latest cobalt version, cobalt is the browser the tv yo
 the actual ps4 ua has more to it, but this is all that's needed for it to work here
 the "compatible" and "VacuumTube" part are just for transparency's sake, and to make sure they can detect it so i'm not screwing up any internal logging/analytics
 
-i currently don't like using the ps4 one, but i can't seem to find a better one. i'd prefer to use one that appears as chromium instead, so that it doesn't potentially do any cobalt-specific stuff
-i also don't like that it says "PlayStation 4" in the "App version" category of settings. i have found a way to change what it displays, but i'm not going to do that in fear of it breaking some other stuff or something
-if you think you can find a better one that adheres to what i think is best, please open an issue or a pr or something! i've lost hours over this lol
+this is only used because you have to have a good user agent to be "allowed" onto leanback, and many innertube endpoints check the user agent specifically to know what to send (e.g. high quality thumbnails)
+VacuumTube overrides some things to identify properly, but this user agent has to be sent with every request sadly
 */
 const userAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}`
 const runningOnSteam = process.env.SteamOS == '1' && process.env.SteamGamepadUI == '1'
@@ -45,8 +44,8 @@ async function main() {
 
     if (runningOnSteam) electron.app.commandLine.appendSwitch('--no-sandbox') //won't run without this in game mode for me
 
-    config = configManager.init(path.join(userData, 'config.json'), {
-        fullscreen: !!runningOnSteam //if running on steam in game mode, override fullscreen to be on by default
+    config = configManager.init({
+        fullscreen: !!runningOnSteam //if running on steam in game mode, override fullscreen to be on by default (note that this was broken from 1.3.0 until 1.3.6 due to config bug)
     })
 
     if (!config.hardware_decoding) {
@@ -199,15 +198,8 @@ async function createWindow() {
         return;
     }
 
-    let url = new URL('https://www.youtube.com/tv')
-    if (config.low_memory_mode) {
-        url.searchParams.append('env_isLimitedMemory', true) //makes youtube disable a lot of animations and other fancy stuff
-    }
-
-    url.searchParams.append('env_enableMediaStreams', true) //fixes voice search
-
-    console.log(`loading youtube from ${url.href}`)
-    win.loadURL(url.href, { userAgent })
+    console.log('loading youtube')
+    win.loadURL('https://www.youtube.com/tv', { userAgent })
 
     //remember fullscreen preference
     win.on('enter-full-screen', () => {

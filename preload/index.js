@@ -1,18 +1,17 @@
+const fs = require('fs')
+const path = require('path')
+
 if (location.host === 'www.youtube.com') {
-    let modules = [
-        require('./modules/flags'),
-        require('./modules/settings'),
-        require('./modules/fix-reloads'),
-        require('./modules/enable-highres'),
-        require('./modules/keybinds'),
-        require('./modules/controller-support'),
-        require('./modules/touch-controls'),
-        require('./modules/mouse-disappear'),
-        require('./modules/prevent-visibilitychange'),
-        require('./modules/override-f11'),
-        require('./modules/adblock'),
-        require('./modules/h264ify')
-    ]
+    let modulesPath = path.join(__dirname, 'modules')
+    let moduleFiles = fs.readdirSync(modulesPath)
+
+    let modules = []
+    for (let file of moduleFiles) {
+        if (!file.endsWith('.js')) continue;
+
+        let modulePath = path.join(modulesPath, file)
+        modules.push(require(modulePath))
+    }
 
     for (let module of modules) {
         try {

@@ -1,4 +1,4 @@
-//injects custom VacuumTube settings into the youtube settings page
+//injects custom VacuumTube settings into the youtube settings page (and removes an irrelevant option from youtube settings)
 
 const { ipcRenderer } = require('electron')
 const configManager = require('../config')
@@ -102,9 +102,21 @@ module.exports = async () => {
     })
 
     jsonMod.addModifier((json) => {
-        if (isKids) return json; //don't show these in youtube kids
-
         if (json?.items?.[0]?.settingCategoryCollectionRenderer) {
+            for (let item of json.items) {
+                let category = item.settingCategoryCollectionRenderer;
+
+                /*
+                if you're on an in-house browser (like steel or cobalt), this shows the license for the browser
+                in this case, it'd show cobalt's license since we use a ps4 user agent which uses the cobalt browser
+                in situations where it runs outside of an in-house browser, it simply doesn't send the "Credits" button in the get_settings response
+                since we can't change the user agent, we have to remove it manually
+                */
+                category.items = category.items.filter(c => c.settingReadOnlyItemRenderer?.itemId !== 'ABOUT_OPEN_SOURCE_LICENSES') //this line looks really bad out of context
+            }
+
+            if (isKids) return json; //don't show VacuumTube settings in youtube kids
+
             json.items[0].settingCategoryCollectionRenderer.title = { //doesn't have a label by default
                 runs: [
                     { text: 'YouTube' }
