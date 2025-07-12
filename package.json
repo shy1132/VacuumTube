@@ -91,6 +91,7 @@
         "electron-builder": "^25.1.8"
     },
     "dependencies": {
-        "electron-updater": "^6.6.2"
+        "electron-updater": "^6.6.2",
+        "chokidar": "^4.0.3"
     }
 }
