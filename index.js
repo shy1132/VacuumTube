@@ -65,16 +65,25 @@ async function main() {
                 let header = details.responseHeaders['content-security-policy'][i]
 
                 if (config.userstyles) {
-                    // Allow unsafe-inline and data URLs for style-src to enable userstyles
+                    // Allow unsafe-inline, data URLs, and external stylesheets for userstyles
                     // Remove nonces since unsafe-inline is ignored when nonces are present
                     let styleSrcPattern = /style-src\s([^;]*)/
                     let styleSrcMatch = header.match(styleSrcPattern)
                     if (styleSrcMatch) {
                         let existing = styleSrcMatch[1]
-                        // Remove all nonce values and add unsafe-inline and data:
+                        // Remove all nonce values and add unsafe-inline, data URLs, and wildcard for @import
                         let withoutNonces = existing.replace(/'nonce-[^']*'/g, '').trim()
-                        let updated = `style-src ${withoutNonces} 'unsafe-inline' data:`
+                        let updated = `style-src ${withoutNonces} 'unsafe-inline' data: *`
                         header = header.replace(styleSrcPattern, updated)
+                    }
+
+                    // Allow external fonts
+                    let fontSrcPattern = /font-src\s([^;]*)/
+                    let fontSrcMatch = header.match(fontSrcPattern)
+                    if (fontSrcMatch) {
+                        let existing = fontSrcMatch[1]
+                        let updated = `font-src ${existing} * data:`
+                        header = header.replace(fontSrcPattern, updated)
                     }
                 }
 
