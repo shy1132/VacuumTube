@@ -30,7 +30,7 @@
         "keep_on_top": {
             "title": "Ostani na vrhu",
             "description": "Omogućava opciju \"Ostani na vrhu\" i pokreće VacuumTube s prozorom zakačenim preko svakog drugog prozora."
-        }
+        },
         "userstyles": {
             "title": "Prilagođeni CSS (korisnički stilovi)",
             "description": "Omogućava ubrizgavanje prilagođenih CSS stilova. Postavite svoje .css datoteke u mapu 'korisnički stilovi'."
