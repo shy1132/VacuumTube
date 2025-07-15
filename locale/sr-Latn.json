@@ -7,6 +7,10 @@
             "title": "Blokator Oglasa",
             "description": "Besprekorno blokira video i fid oglase, nije podložan YouTube metodama protiv blokiranja. Ponovo pokrenite sistem nakon prebacivanja."
         },
+        "dearrow": {
+            "title": "DeArrow",
+            "description": "Zamenjuje naslove i sličice tačnijim, manje senzacionalističkim verzijama iz javne baze podataka koju su prikupili korisnici. Usporava učitavanje, jer mora da preuzme informacije sa servera. Ponovo pokrenite nakon prebacivanja."
+        },
         "h264ify": {
             "title": "Primori H.264 (h264ify)",
             "description": "Primorava YouTube da strimuje video zapise samo u H.264 kodeku. Ovo može poboljšati pokretanje i trajanje baterije na sporijim uređajima, ali vas sprečava da gledate bilo šta iznad 1080p. Ponovo pokrenite sistem nakon prebacivanja."
@@ -26,6 +30,10 @@
         "keep_on_top": {
             "title": "Ostani na vrhu",
             "description": "Omogućava opciju „Ostani na vrhu“ i pokreće VacuumTube sa prozorom pričvršćenim preko svakog drugog prozora."
+        },
+        "userstyles": {
+            "title": "Prilagođeni CSS (korisnički stilovi)",
+            "description": "Omogućava ubrizgavanje prilagođenih CSS stilova. Postavite svoje .css datoteke u mapu 'korisnički stilovi'."
         }
     }
 }
