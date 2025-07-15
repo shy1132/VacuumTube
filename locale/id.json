@@ -7,6 +7,10 @@
             "title": "Blokir Iklan",
             "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube. Luncurkan ulang setelah mengubah."
         },
+        "dearrow": {
+            "title": "DeArrow",
+            "description": "Mengganti judul dan gambar pratinjau video yang lebih akurat dan tidak sensasional dari basis data publik yang dihimpun bersama. Proses pengambilan informasi dari server ini akan mengakibatkan bertambahnya waktu muat VacuumTube. Luncurkan ulang setelah mengubah."
+        },
         "h264ify": {
             "title": "Gunakan H.264 (h264ify)",
             "description": "Memastikan YouTube hanya memutar video dalam enkripsi-penguraian (codec) H.264. Membantu meningkatkan performa dan optimasi daya baterai, namun akan membatasi pemutaran video di atas resolusi 1080p. Luncurkan ulang setelah mengubah."
@@ -26,6 +30,10 @@
         "keep_on_top": {
             "title": "Tetap di Atas",
             "description": "Memastikan jendela VacuumTube selalu berada di atas jendela aplikasi lain."
+        },
+        "userstyles": {
+            "title": "Kustomisasi CSS (Userstyles)",
+            "description": "Memungkinkan pengaplikasian kustomisasi CSS khusus. Letakkan file .css Anda dalam folder 'userstyles' pada folder instalasi VacuumTube."
         }
     }
 }
