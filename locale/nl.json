@@ -7,6 +7,10 @@
             "title": "Ad-blokker",
             "description": "Blokkeert naadloos video- en feed-advertenties en is niet onderhevig aan de blokkeermethoden van YouTube. Herstart na het omschakelen."
         },
+        "dearrow": {
+            "title": "DeArrow",
+            "description": "Vervangt titels en miniaturen door nauwkeurigere, minder sensationele versies uit een openbare, crowdsourcedatabase. Vertraagt het laden, omdat het info moet ophalen van de server. Herstart na omschakelen."
+        },
         "h264ify": {
             "title": "H.264 forceren (h264ify)",
             "description": "Dwingt YouTube om video's alleen in H.264 te streamen. Dit kan helpen bij de prestaties en de levensduur van de batterij op langzamere apparaten, maar voorkomt dat u iets boven 1080p kunt bekijken. Herstart na het omschakelen."
@@ -26,6 +30,10 @@
         "keep_on_top": {
             "title": "Bovenaan houden",
             "description": "Schakelt \"Bovenaan houden\" in en zorgt ervoor dat VacuumTube wordt gestart met het venster boven elk ander venster vastgepind."
+        },
+        "userstyles": {
+            "title": "Aangepaste CSS (gebruikersstijlen)",
+            "description": "Maakt injectie van aangepaste CSS-stijlen mogelijk. Plaats je .css-bestanden in de gebruikersstijlen map."
         }
     }
 }
