@@ -12,8 +12,9 @@ let config = {}
 const defaults = {
     fullscreen: false, //changes automatically depending on user's last preference
     adblock: true, //block ads
-    hardware_decoding: true, //use hardware gpu video decoding
+    dearrow: false, //replaces titles and thumbnails with more accurate and less sensationalized versions from a crowdsourced database (https://dearrow.ajay.app/)
     h264ify: false, //block non-h264 codecs for performance on slow devices
+    hardware_decoding: true, //use hardware gpu video decoding
     low_memory_mode: false, //enables env_isLimitedMemory
     keep_on_top: false, //whether or not to keep window on top
     userstyles: false //whether or not to enable custom CSS injection
@@ -21,16 +22,16 @@ const defaults = {
 
 function init(overrides = {}) {
     if (fs.existsSync(legacyStateFile)) {
-        console.log('migrating legacy state.json')
+        console.log('[config] migrating legacy state.json')
         fs.renameSync(legacyStateFile, configFile)
     }
 
     if (fs.existsSync(configFile) && isValidJson(configFile)) {
-        console.log(`reading config from ${configFile}`)
+        console.log(`[config] reading config from ${configFile}`)
 
         let parsed = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
-        if (parsed['0']) { //i was accidentally still passing the path of the config file to the init function before the overrides (old behavior), causing it to apply the path string as an override and ignore the actual ovrerides... oops
-            console.log('fixing config bug')
+        if (parsed['0']) { //i was accidentally still passing the path of the config file to the init function before the overrides (old behavior), causing it to apply the path string as an override and ignore the actual overrides... oops
+            console.log('[config] fixing config bug')
 
             for (let key of Object.keys(parsed)) {
                 if (!isNaN(Number(key))) { //remove each character of the path string...
@@ -46,9 +47,9 @@ function init(overrides = {}) {
             ...parsed
         }
 
-        console.log('loaded config', config)
+        console.log('[config] loaded config', config)
     } else {
-        console.log('initializing default config')
+        console.log('[config] initializing default config')
 
         config = {
             ...defaults,
@@ -69,13 +70,13 @@ function init(overrides = {}) {
 
 function save() {
     if (changed) {
-        console.log('saving updated config to file')
+        console.log('[config] saving updated config to file')
 
         try {
             fs.writeFileSync(configFile, JSON.stringify(config, null, 4))
             return true;
         } catch (err) {
-            console.error('failed to write config file', err)
+            console.error('[config] failed to write config file', err)
             return false;
         } finally {
             changed = false;

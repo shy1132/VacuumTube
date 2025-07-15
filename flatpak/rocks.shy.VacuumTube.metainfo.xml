@@ -28,6 +28,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.7" date="2025-07-15" type="stable">
+      <description>
+        <p>v1.3.7</p>
+        <ul>
+          <li>DeArrow support</li>
+          <li>CSS Userstyle support, thanks to @LeviSnoot on GitHub</li>
+          <li>Internal improvements</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.6" date="2025-07-10" type="stable">
       <description>
         <p>v1.3.6</p>

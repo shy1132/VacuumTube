@@ -27,9 +27,10 @@ the actual ps4 ua has more to it, but this is all that's needed for it to work h
 the "compatible" and "VacuumTube" part are just for transparency's sake, and to make sure they can detect it so i'm not screwing up any internal logging/analytics
 
 this is only used because you have to have a good user agent to be "allowed" onto leanback, and many innertube endpoints check the user agent specifically to know what to send (e.g. high quality thumbnails)
-VacuumTube overrides some things to identify properly, but this user agent has to be sent with every request sadly
+VacuumTube overrides some things to identify properly, but this user agent has to be sent with every request to youtube sadly
 */
-const userAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}`
+const youtubeUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //for youtube
+const userAgent = `VacuumTube/${package.version}` //for anything else
 const runningOnSteam = process.env.SteamOS == '1' && process.env.SteamGamepadUI == '1'
 
 let win;
@@ -54,45 +55,76 @@ async function main() {
         electron.app.commandLine.appendSwitch('disable-accelerated-video-decode')
     }
 
-    // CSP override for userstyles and future sponsorblock/dearrow support
+    // CSP override for userstyles and sponsorblock/dearrow support
     electron.session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+        let url = new URL(details.url)
+        if (url.host !== 'www.youtube.com') return callback({ cancel: false });
+
         if (details.responseHeaders['content-security-policy']) {
             for (let i = 0; i < details.responseHeaders['content-security-policy'].length; i++) {
                 let header = details.responseHeaders['content-security-policy'][i]
 
-                // Allow unsafe-inline and data URLs for style-src to enable userstyles
-                // Remove nonces since unsafe-inline is ignored when nonces are present
-                let styleSrcPattern = /style-src\s([^;]*)/
-                let styleSrcMatch = header.match(styleSrcPattern)
-                if (styleSrcMatch) {
-                    let existing = styleSrcMatch[1]
-                    // Remove all nonce values and add unsafe-inline and data:
-                    let withoutNonces = existing.replace(/'nonce-[^']*'/g, '').trim()
-                    let updated = `style-src ${withoutNonces} 'unsafe-inline' data:`
-                    header = header.replace(styleSrcPattern, updated)
-                    console.log('[CSP] Modified style-src for userstyles:', updated)
+                if (config.userstyles) {
+                    // Allow unsafe-inline and data URLs for style-src to enable userstyles
+                    // Remove nonces since unsafe-inline is ignored when nonces are present
+                    let styleSrcPattern = /style-src\s([^;]*)/
+                    let styleSrcMatch = header.match(styleSrcPattern)
+                    if (styleSrcMatch) {
+                        let existing = styleSrcMatch[1]
+                        // Remove all nonce values and add unsafe-inline and data:
+                        let withoutNonces = existing.replace(/'nonce-[^']*'/g, '').trim()
+                        let updated = `style-src ${withoutNonces} 'unsafe-inline' data:`
+                        header = header.replace(styleSrcPattern, updated)
+                    }
                 }
 
-                //not needed until i add sponsorblock and dearrow support
-                /*
+                //sponsorblock (not taken advantage fo at the moment)
                 let connectPattern = /connect-src\s([^;]*)/
                 let connectMatch = header.match(connectPattern)
                 if (connectMatch) {
                     let existing = connectMatch[1]
-                    let additions = 'sponsor.ajay.app dearrow-thumb.ajay.app'
-                    if (!existing.includes('sponsor.ajay.app')) {
-                        let updated = `connect-src ${existing} ${additions}`
-                        header = header.replace(connectPattern, updated)
-                    }
+                    let additions = 'sponsor.ajay.app'
+                    let updated = `connect-src ${existing} ${additions}`
+                    header = header.replace(connectPattern, updated)
                 }
-                */
+
+                //dearrow
+                let imgPattern = /img-src\s([^;]*)/
+                let imgMatch = header.match(imgPattern)
+                if (imgMatch) {
+                    let existing = imgMatch[1]
+                    let additions = 'dearrow-thumb.ajay.app'
+                    let updated = `img-src ${existing} ${additions}`
+                    header = header.replace(imgPattern, updated)
+                }
 
                 details.responseHeaders['content-security-policy'][i] = header;
             }
         }
 
+        //for some reason, this simply doesn't work. i have no idea why, but since csp errors really shouldn't occur, it's probably fine
+        /*
+        //since we pretend to be cobalt, but aren't actually cobalt, it shouldn't report csp failures as cobalt-related
+        if (details.responseHeaders['report-to'] && details.responseHeaders['report-to'][0].includes('youtube_cobalt')) {
+            delete details.responseHeaders['report-to'];
+        }
+        */
+
         callback({
             responseHeaders: details.responseHeaders
+        })
+    })
+
+    electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+        let url = new URL(details.url)
+        if (url.host === 'www.youtube.com') {
+            details.requestHeaders['user-agent'] = youtubeUserAgent;
+        } else {
+            details.requestHeaders['user-agent'] = userAgent;
+        }
+
+        callback({
+            requestHeaders: details.requestHeaders
         })
     })
 
@@ -146,7 +178,7 @@ async function main() {
 
     // Userstyles
     const userstylesDir = path.join(userData, 'userstyles')
-    let userstylesWatcher = null
+    let userstylesWatcher = null;
 
     if (!fs.existsSync(userstylesDir)) {
         fs.mkdirSync(userstylesDir, { recursive: true })
@@ -155,13 +187,13 @@ async function main() {
 
     function getUserstyles() {
         const styles = []
-        
+
         if (!fs.existsSync(userstylesDir)) {
-            return styles
+            return styles;
         }
 
         const files = fs.readdirSync(userstylesDir)
-        
+
         for (const file of files) {
             if (file.endsWith('.css')) {
                 const filePath = path.join(userstylesDir, file)
@@ -173,8 +205,8 @@ async function main() {
                 }
             }
         }
-        
-        return styles
+
+        return styles;
     }
 
     function setupUserstylesWatcher() {
@@ -190,13 +222,13 @@ async function main() {
 
         userstylesWatcher.on('add', (filePath) => {
             const filename = path.basename(filePath)
-            
+
             if (!filename.endsWith('.css')) {
                 return
             }
-            
+
             console.log(`[Userstyles] Added: ${filename}`)
-            
+
             try {
                 const css = fs.readFileSync(filePath, 'utf-8')
                 if (win) {
@@ -209,13 +241,11 @@ async function main() {
 
         userstylesWatcher.on('change', (filePath) => {
             const filename = path.basename(filePath)
-            
-            if (!filename.endsWith('.css')) {
-                return
-            }
+
+            if (!filename.endsWith('.css')) return;
             
             console.log(`[Userstyles] Changed: ${filename}`)
-            
+
             try {
                 const css = fs.readFileSync(filePath, 'utf-8')
                 console.log(`[Userstyles] CSS length: ${css.length}`)
@@ -232,13 +262,11 @@ async function main() {
 
         userstylesWatcher.on('unlink', (filePath) => {
             const filename = path.basename(filePath)
-            
-            if (!filename.endsWith('.css')) {
-                return
-            }
-            
+
+            if (!filename.endsWith('.css')) return;
+
             console.log(`[Userstyles] Removed: ${filename}`)
-            
+
             if (win) {
                 win.webContents.send('userstyle-removed', { filename })
             }
@@ -247,11 +275,11 @@ async function main() {
         userstylesWatcher.on('ready', () => {
             console.log(`[Userstyles] Watcher ready, watching: ${userstylesDir}`)
         })
-        
+
         userstylesWatcher.on('error', (error) => {
             console.error(`[Userstyles] Watcher error:`, error)
         })
-        
+
         console.log(`[Userstyles] Setting up watcher for: ${userstylesDir}`)
     }
 
@@ -338,7 +366,7 @@ async function createWindow() {
     }
 
     console.log('loading youtube')
-    win.loadURL('https://www.youtube.com/tv', { userAgent })
+    win.loadURL('https://www.youtube.com/tv', { userAgent: youtubeUserAgent })
 
     //remember fullscreen preference
     win.on('enter-full-screen', () => {

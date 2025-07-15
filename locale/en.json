@@ -7,6 +7,10 @@
             "title": "Ad Block",
             "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers. Relaunch after toggling."
         },
+        "dearrow": {
+            "title": "DeArrow",
+            "description": "Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database. Slows down loading, as it has to fetch info from the server. Relaunch after toggling."
+        },
         "h264ify": {
             "title": "Force H.264 (h264ify)",
             "description": "Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Relaunch after toggling."
