@@ -2,6 +2,8 @@
 const electron = require('electron')
 const { autoUpdater } = require('electron-updater')
 const path = require('path')
+const fs = require('fs')
+const chokidar = require('chokidar')
 
 electron.app.setName('VacuumTube')
 
@@ -52,23 +54,40 @@ async function main() {
         electron.app.commandLine.appendSwitch('disable-accelerated-video-decode')
     }
 
-    //not needed until i add sponsorblock and dearrow support
-    /*
+    // CSP override for userstyles and future sponsorblock/dearrow support
     electron.session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
         if (details.responseHeaders['content-security-policy']) {
             for (let i = 0; i < details.responseHeaders['content-security-policy'].length; i++) {
                 let header = details.responseHeaders['content-security-policy'][i]
 
-                let connectPattern = /connect-src\s([^;]*)/
-                let match = header.match(connectPattern)
-                if (match) {
-                    let existing = match[1]
-                    let additions = 'sponsor.ajay.app dearrow-thumb.ajay.app'
-                    let updated = `connect-src ${existing} ${additions}`
-                    header = header.replace(connectPattern, updated)
-
-                    details.responseHeaders['content-security-policy'][i] = header;
+                // Allow unsafe-inline and data URLs for style-src to enable userstyles
+                // Remove nonces since unsafe-inline is ignored when nonces are present
+                let styleSrcPattern = /style-src\s([^;]*)/
+                let styleSrcMatch = header.match(styleSrcPattern)
+                if (styleSrcMatch) {
+                    let existing = styleSrcMatch[1]
+                    // Remove all nonce values and add unsafe-inline and data:
+                    let withoutNonces = existing.replace(/'nonce-[^']*'/g, '').trim()
+                    let updated = `style-src ${withoutNonces} 'unsafe-inline' data:`
+                    header = header.replace(styleSrcPattern, updated)
+                    console.log('[CSP] Modified style-src for userstyles:', updated)
                 }
+
+                //not needed until i add sponsorblock and dearrow support
+                /*
+                let connectPattern = /connect-src\s([^;]*)/
+                let connectMatch = header.match(connectPattern)
+                if (connectMatch) {
+                    let existing = connectMatch[1]
+                    let additions = 'sponsor.ajay.app dearrow-thumb.ajay.app'
+                    if (!existing.includes('sponsor.ajay.app')) {
+                        let updated = `connect-src ${existing} ${additions}`
+                        header = header.replace(connectPattern, updated)
+                    }
+                }
+                */
+
+                details.responseHeaders['content-security-policy'][i] = header;
             }
         }
 
@@ -76,7 +95,6 @@ async function main() {
             responseHeaders: details.responseHeaders
         })
     })
-    */
 
     //config management on the web side
     electron.ipcMain.on('get-config', (event) => {
@@ -126,7 +144,128 @@ async function main() {
         }
     })
 
-    createWindow()
+    // Userstyles
+    const userstylesDir = path.join(userData, 'userstyles')
+    let userstylesWatcher = null
+
+    if (!fs.existsSync(userstylesDir)) {
+        fs.mkdirSync(userstylesDir, { recursive: true })
+        console.log(`Created userstyles directory: ${userstylesDir}`)
+    }
+
+    function getUserstyles() {
+        const styles = []
+        
+        if (!fs.existsSync(userstylesDir)) {
+            return styles
+        }
+
+        const files = fs.readdirSync(userstylesDir)
+        
+        for (const file of files) {
+            if (file.endsWith('.css')) {
+                const filePath = path.join(userstylesDir, file)
+                try {
+                    const css = fs.readFileSync(filePath, 'utf-8')
+                    styles.push({ filename: file, css })
+                } catch (error) {
+                    console.error(`Failed to read userstyle ${file}:`, error)
+                }
+            }
+        }
+        
+        return styles
+    }
+
+    function setupUserstylesWatcher() {
+        if (userstylesWatcher) {
+            userstylesWatcher.close()
+        }
+
+        userstylesWatcher = chokidar.watch(userstylesDir, {
+            persistent: true,
+            ignoreInitial: true,
+            depth: 0 // Only watch files in the root directory
+        })
+
+        userstylesWatcher.on('add', (filePath) => {
+            const filename = path.basename(filePath)
+            
+            if (!filename.endsWith('.css')) {
+                return
+            }
+            
+            console.log(`[Userstyles] Added: ${filename}`)
+            
+            try {
+                const css = fs.readFileSync(filePath, 'utf-8')
+                if (win) {
+                    win.webContents.send('userstyle-updated', { filename, css })
+                }
+            } catch (error) {
+                console.error(`Failed to read new userstyle ${filename}:`, error)
+            }
+        })
+
+        userstylesWatcher.on('change', (filePath) => {
+            const filename = path.basename(filePath)
+            
+            if (!filename.endsWith('.css')) {
+                return
+            }
+            
+            console.log(`[Userstyles] Changed: ${filename}`)
+            
+            try {
+                const css = fs.readFileSync(filePath, 'utf-8')
+                console.log(`[Userstyles] CSS length: ${css.length}`)
+                if (win) {
+                    win.webContents.send('userstyle-updated', { filename, css })
+                    console.log(`[Userstyles] Sent update to renderer`)
+                } else {
+                    console.log(`[Userstyles] Window not available, cannot send update`)
+                }
+            } catch (error) {
+                console.error(`Failed to read changed userstyle ${filename}:`, error)
+            }
+        })
+
+        userstylesWatcher.on('unlink', (filePath) => {
+            const filename = path.basename(filePath)
+            
+            if (!filename.endsWith('.css')) {
+                return
+            }
+            
+            console.log(`[Userstyles] Removed: ${filename}`)
+            
+            if (win) {
+                win.webContents.send('userstyle-removed', { filename })
+            }
+        })
+
+        userstylesWatcher.on('ready', () => {
+            console.log(`[Userstyles] Watcher ready, watching: ${userstylesDir}`)
+        })
+        
+        userstylesWatcher.on('error', (error) => {
+            console.error(`[Userstyles] Watcher error:`, error)
+        })
+        
+        console.log(`[Userstyles] Setting up watcher for: ${userstylesDir}`)
+    }
+
+    electron.ipcMain.handle('get-userstyles', () => {
+        return getUserstyles()
+    })
+
+    electron.ipcMain.handle('open-userstyles-folder', () => {
+        electron.shell.openPath(userstylesDir)
+    })
+
+    await createWindow()
+    
+    setupUserstylesWatcher()
 
     electron.app.on('activate', () => {
         if (electron.BrowserWindow.getAllWindows().length === 0) createWindow()

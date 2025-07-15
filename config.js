@@ -15,7 +15,8 @@ const defaults = {
     hardware_decoding: true, //use hardware gpu video decoding
     h264ify: false, //block non-h264 codecs for performance on slow devices
     low_memory_mode: false, //enables env_isLimitedMemory
-    keep_on_top: false //whether or not to keep window on top
+    keep_on_top: false, //whether or not to keep window on top
+    userstyles: false //whether or not to enable custom CSS injection
 }
 
 function init(overrides = {}) {

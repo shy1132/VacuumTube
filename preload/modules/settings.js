@@ -77,6 +77,11 @@ module.exports = async () => {
             locale.settings.keep_on_top.description,
             'keep_on_top',
             (value) => ipcRenderer.invoke('set-on-top', value)
+        ),
+        'userstyles': createSettingBooleanRenderer(
+            locale.settings.userstyles.title,
+            locale.settings.userstyles.description,
+            'userstyles'
         )
     }
 
@@ -88,7 +93,7 @@ module.exports = async () => {
             config = configManager.get()
 
             for (let key of Object.keys(configOptions)) {
-                configOptions[key].settingBooleanRenderer.enabled = config[key] //it's actually reference based, you have to change the object itself when changing config for it to update (this took SO long to figure out, then it clicked...)
+                    configOptions[key].settingBooleanRenderer.enabled = config[key] //it's actually reference based, you have to change the object itself when changing config for it to update (this took SO long to figure out, then it clicked...)
             }
 
             if (input.dynamicFunction) {

@@ -72,3 +72,14 @@ npm run start
 # Or package release builds
 npm run build
 ```
+
+## Custom CSS (Userstyles)
+
+You can apply custom styles to VacuumTube by first enabling it in the settings, and then creating `.css` files in the userstyles folder.
+
+### File Location
+
+Your userstyles folder is located at:
+
+- **Windows**: `%APPDATA%\VacuumTube\userstyles\`
+- **Linux**: `~/.config/VacuumTube/userstyles/`

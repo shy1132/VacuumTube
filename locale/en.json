@@ -26,6 +26,10 @@
         "keep_on_top": {
             "title": "Keep on Top",
             "description": "Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window."
+        },
+        "userstyles": {
+            "title": "Custom CSS (Userstyles)",
+            "description": "Enables injection of custom CSS styles. Place your .css files in the userstyles folder."
         }
     }
 }
