@@ -87,7 +87,7 @@ async function main() {
                     }
                 }
 
-                //sponsorblock (not taken advantage fo at the moment)
+                //sponsorblock (not used at the moment)
                 let connectPattern = /connect-src\s([^;]*)/
                 let connectMatch = header.match(connectPattern)
                 if (connectMatch) {

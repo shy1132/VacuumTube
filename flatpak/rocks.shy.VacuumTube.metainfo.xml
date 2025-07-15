@@ -28,6 +28,16 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.8" date="2025-07-15" type="stable">
+      <description>
+        <p>v1.3.8</p>
+        <ul>
+          <li>Updated translations for Bosnian, German, Croation, Dutch, Serbian (Latin), and Turkish</li>
+          <li>Fixed external stylesheets and fonts in userstyles</li>
+          <li>Fixed controller typing an S when pressing X while searching (#47)</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.7" date="2025-07-15" type="stable">
       <description>
         <p>v1.3.7</p>
