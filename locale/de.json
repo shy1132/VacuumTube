@@ -7,6 +7,10 @@
             "title": "Anzeigenblocker",
             "description": "Blockiert nahtlos Video- und Feed-Werbung und unterliegt nicht den Methoden von YouTube zur Verhinderung von Blockern. Starten Sie nach dem Umschalten neu."
         },
+        "dearrow": {
+            "title": "DeArrow",
+            "description": "Ersetzt Titel und Vorschaubilder durch genauere, weniger sensationslüsterne Versionen aus einer öffentlichen Crowdsourced-Datenbank. Verlangsamt das Laden, da es Informationen vom Server abrufen muss. Neustart nach Umschalten."
+        },
         "h264ify": {
             "title": "H.264 erzwingen (h264ify)",
             "description": "Erzwingt, dass YouTube nur Videos im H.264-Codec streamt. Dies kann die Leistung und Akkulaufzeit auf langsameren Geräten verbessern, verhindert aber, dass Sie Videos mit mehr als 1080p ansehen können. Starten Sie nach dem Umschalten neu."
@@ -26,6 +30,10 @@
         "keep_on_top": {
             "title": "Oben halten",
             "description": "Aktiviert „Oben halten“ und sorgt dafür, dass VacuumTube so gestartet wird, dass das Fenster über allen anderen Fenstern angeheftet ist."
+        },
+        "userstyles": {
+            "title": "Benutzerdefinierte CSS (Benutzerstile)",
+            "description": "Ermöglicht das Einfügen von benutzerdefinierten CSS-Stilen. Legen Sie Ihre .css-Dateien im Ordner „Benutzerstile“ ab."
         }
     }
 }
