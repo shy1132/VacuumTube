@@ -7,6 +7,10 @@
             "title": "Reklam Engelleyici",
             "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir. Değiştirdikten sonra yeniden başlatın."
         },
+		 "dearrow": {
+            "title": "DeArrow",
+            "description": "Başlıkları ve küçük resimleri, herkese açık veritabanından alınan daha doğru ve daha az sansasyonel sürümlerle değiştirir. Sunucudan bilgi alması gerektiğinden yüklemeyi yavaşlatır. Değiştirdikten sonra yeniden başlatın."
+        },
         "h264ify": {
             "title": "H.264 İçin Zorla (h264ify)",
             "description": "YouTube üstünde H.264 biçimli videoların görünmesini sağlar. Yavaş cihazlarda performansa ve pil ömrüne yardımcı olabilir, ama 1080p üstündeki çözünürlükte video izlemenizi engeller. Değiştirdikten sonra yeniden başlatın."
@@ -26,6 +30,10 @@
         "keep_on_top": {
             "title": "Üstte Tut",
             "description": "Üstte Tutmayı etkinleştirir ve VacuumTube tüm pencerelerin üstüne sabitlenerek başlatılır."
+        },
+        "userstyles": {
+            "title": "Özel CSS (Kullanıcı Stilleri)",
+            "description": "Özel CSS stillerinin eklenmesini sağlar. .css dosyalarınızı userstyles klasörüne yerleştirin."
         }
     }
 }
