@@ -56,6 +56,11 @@ module.exports = async () => {
             locale.settings.dearrow.description,
             'dearrow'
         ),
+        'dislikes': createSettingBooleanRenderer(
+            locale.settings.dislikes.title,
+            locale.settings.dislikes.description,
+            'dislikes'
+        ),
         'h264ify': createSettingBooleanRenderer(
             locale.settings.h264ify.title,
             locale.settings.h264ify.description,

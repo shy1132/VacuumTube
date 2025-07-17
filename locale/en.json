@@ -1,15 +1,24 @@
 {
     "general": {
-        "video_copied": "Video link copied to clipboard"
+        "video_copied": "Video link copied to clipboard",
+        "dislikes": "Dislikes"
     },
     "settings": {
         "ad_block": {
             "title": "Ad Block",
             "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers. Relaunch after toggling."
         },
+        "sponsorblock_unused": {
+            "title": "SponsorBlock",
+            "description": "Skips sponsor segments in YouTube videos using a crowdsourced database. Also supports skipping intros, outros, and reminders to subscribe. Relaunch after toggling."
+        },
         "dearrow": {
             "title": "DeArrow",
             "description": "Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database. Slows down loading, as it has to fetch info from the server. Relaunch after toggling."
+        },
+        "dislikes": {
+            "title": "Return Dislikes",
+            "description": "Uses the Return YouTube Dislike API (returnyoutubedislike.com) to re-add dislikes to YouTube. Slows down video loading, as it has to fetch info from the server. Relaunch after toggling."
         },
         "h264ify": {
             "title": "Force H.264 (h264ify)",
@@ -33,7 +42,7 @@
         },
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
-            "description": "Enables injection of custom CSS styles. Place your .css files in the userstyles folder."
+            "description": "Enables injection of custom CSS styles. Place your .css files in the {path} folder."
         }
     }
 }

@@ -13,6 +13,7 @@ const defaults = {
     fullscreen: false, //changes automatically depending on user's last preference
     adblock: true, //block ads
     dearrow: false, //replaces titles and thumbnails with more accurate and less sensationalized versions from a crowdsourced database (https://dearrow.ajay.app/)
+    dislikes: false, //readds youtube dislikes via https://www.returnyoutubedislike.com/
     h264ify: false, //block non-h264 codecs for performance on slow devices
     hardware_decoding: true, //use hardware gpu video decoding
     low_memory_mode: false, //enables env_isLimitedMemory

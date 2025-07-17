@@ -87,12 +87,12 @@ async function main() {
                     }
                 }
 
-                //sponsorblock (not used at the moment)
+                //sponsorblock (not used at the moment) and return youtube dislike
                 let connectPattern = /connect-src\s([^;]*)/
                 let connectMatch = header.match(connectPattern)
                 if (connectMatch) {
                     let existing = connectMatch[1]
-                    let additions = 'sponsor.ajay.app'
+                    let additions = 'sponsor.ajay.app returnyoutubedislikeapi.com'
                     let updated = `connect-src ${existing} ${additions}`
                     header = header.replace(connectPattern, updated)
                 }
