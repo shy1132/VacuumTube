@@ -153,6 +153,7 @@ async function main() {
         event.returnValue = config;
     })
 
+    //etc helpers
     electron.ipcMain.handle('is-focused', () => {
         if (win) {
             return win.isFocused();
@@ -292,8 +293,12 @@ async function main() {
         console.log(`[Userstyles] Setting up watcher for: ${userstylesDir}`)
     }
 
+    electron.ipcMain.on('get-userstyles-path', (event) => {
+        event.returnValue = userstylesDir;
+    })
+
     electron.ipcMain.handle('get-userstyles', () => {
-        return getUserstyles()
+        return getUserstyles();
     })
 
     electron.ipcMain.handle('open-userstyles-folder', () => {

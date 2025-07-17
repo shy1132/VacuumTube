@@ -7,6 +7,7 @@ const rcMod = require('../util/resolveCommandModifiers')
 const localeProvider = require('../util/localeProvider')
 const functions = require('../util/functions')
 
+let cssPath = ipcRenderer.sendSync('get-userstyles-path')
 let config = configManager.get()
 
 function createSettingBooleanRenderer(title, summary, configName, dynamicFunction) {
@@ -90,7 +91,7 @@ module.exports = async () => {
         ),
         'userstyles': createSettingBooleanRenderer(
             locale.settings.userstyles.title,
-            locale.settings.userstyles.description,
+            locale.settings.userstyles.description.replace('{path}', cssPath),
             'userstyles'
         )
     }
