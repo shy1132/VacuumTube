@@ -1,15 +1,24 @@
 {
     "general": {
         "video_copied": "Video bağlantısı panoya kopyalandı"
+		"dislikes": "Beğenmeyenler"
     },
     "settings": {
         "ad_block": {
             "title": "Reklam Engelleyici",
             "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir. Değiştirdikten sonra yeniden başlatın."
         },
+		"sponsorblock_unused": {
+            "title": "Sponsor Engelleyici",
+            "description": "Kitlesel veritabanı kullanarak YouTube videolarındaki sponsor bölümlerini atlar. Ayrıca girişleri, çıkışları ve abonelik hatırlatıcılarını atlamayı da destekler. Değiştirdikten sonra yeniden başlatın."
+        },
 		"dearrow": {
             "title": "DeArrow",
             "description": "Başlıkları ve küçük resimleri, herkese açık veritabanından alınan daha doğru ve daha az sansasyonel sürümlerle değiştirir. Sunucudan bilgi alması gerektiğinden yüklemeyi yavaşlatır. Değiştirdikten sonra yeniden başlatın."
+        },
+		"dislikes": {
+            "title": "Beğenmemeleri Göster",
+            "description": "YouTube beğenmeyenleri göstermek için YouTube Beğenmeme API (returnyoutubedislike.com) kullanır. Sunucudan bilgi alması gerektiğinden video yüklemesini yavaşlatır. Değiştirdikten sonra yeniden başlatın."
         },
         "h264ify": {
             "title": "H.264 İçin Zorla (h264ify)",
@@ -33,7 +42,7 @@
         },
         "userstyles": {
             "title": "Özel CSS (Kullanıcı Stilleri)",
-            "description": "Özel CSS stillerinin eklenmesini sağlar. .css dosyalarınızı userstyles klasörüne yerleştirin."
+            "description": "Özel CSS stillerinin eklenmesini sağlar. .css dosyalarınızı {path} klasörüne yerleştirin."
         }
     }
 }
