@@ -1,15 +1,24 @@
 {
     "general": {
-        "video_copied": "Tautan video disalin ke papan klip"
+        "video_copied": "Tautan video disalin ke papan klip",
+        "dislikes": "Tidak Suka"
     },
     "settings": {
         "ad_block": {
             "title": "Blokir Iklan",
             "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube. Luncurkan ulang setelah mengubah."
         },
+        "sponsorblock_unused": {
+            "title": "SponsorBlock",
+            "description": "Lewati segmen sponsor pada video YouTube berdasarkan basis data publik. Juga mendukung fitur lewati intro, outro, dan ajakan langganan (subscribe). Luncurkan ulang setelah mengubah."
+        },
         "dearrow": {
             "title": "DeArrow",
             "description": "Mengganti judul dan gambar pratinjau video yang lebih akurat dan tidak sensasional dari basis data publik yang dihimpun bersama. Proses pengambilan informasi dari server ini akan mengakibatkan bertambahnya waktu muat VacuumTube. Luncurkan ulang setelah mengubah."
+        },
+        "dislikes": {
+            "title": "Kembalikan Jumlah 'Tidak Suka'",
+            "description": "Gunakan API Return YouTube Dislike (returnyoutubedislike.com) untuk mengembalikan fitur info jumlah 'Tidak Suka' pada video YouTube. Proses pengambilan info ini akan memperlambat pemuatan video. Luncurkan ulang setelah mengubah."
         },
         "h264ify": {
             "title": "Gunakan H.264 (h264ify)",
@@ -33,7 +42,7 @@
         },
         "userstyles": {
             "title": "Kustomisasi CSS (Userstyles)",
-            "description": "Memungkinkan pengaplikasian kustomisasi CSS khusus. Letakkan file .css Anda dalam folder 'userstyles' pada folder instalasi VacuumTube."
+            "description": "Memungkinkan penggunaan gaya CSS kustom. Letakkan file .css kustom pada folder {path}."
         }
     }
 }
