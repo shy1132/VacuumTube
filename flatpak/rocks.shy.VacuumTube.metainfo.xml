@@ -28,6 +28,17 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.9" date="2025-07-19" type="stable">
+      <description>
+        <p>v1.3.9</p>
+        <ul>
+          <li>Added Swedish Translation, by @LeviSnoot on GitHub</li>
+          <li>Updated translation for Indonesian and Turkish</li>
+          <li>Return YouTube Dislike support (#53)</li>
+          <li>Now showing path to userstyles in settings</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.8" date="2025-07-15" type="stable">
       <description>
         <p>v1.3.8</p>
