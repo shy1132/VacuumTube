@@ -33,7 +33,6 @@
         <p>v1.3.9</p>
         <ul>
           <li>Added Swedish Translation, by @LeviSnoot on GitHub</li>
-          <li>Updated translation for Indonesian and Turkish</li>
           <li>Return YouTube Dislike support (#53)</li>
           <li>Now showing path to userstyles in settings</li>
         </ul>
