@@ -13,14 +13,14 @@ module.exports = async () => {
     let enterHeld = false;
     let shiftEnterHeld = false;
 
-    window.addEventListener('keydown', e => {
+    document.addEventListener('keydown', (e) => {
         if (e.key === 'Shift') shiftHeld = true;
         if (e.key === 'Enter') enterHeld = true;
 
         shiftEnterHeld = shiftHeld && enterHeld;
     }, true)
 
-    window.addEventListener('keyup', e => {
+    document.addEventListener('keyup', (e) => {
         if (e.key === 'Shift') shiftHeld = false;
         if (e.key === 'Enter') enterHeld = false;
 
