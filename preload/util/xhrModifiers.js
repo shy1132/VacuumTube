@@ -26,6 +26,8 @@ window.XMLHttpRequest = function () { //i've lost track of what's going on in he
     let loadHandler = null;
 
     async function modifyResponse() {
+        if (xhr.responseType !== '' && xhr.responseType !== 'text') return;
+
         if (xhr._modifiedAlready || xhr.readyState !== 4) return;
         xhr._modifiedAlready = true;
 

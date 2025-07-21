@@ -28,11 +28,21 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.10" date="2025-07-21" type="stable">
+      <description>
+        <p>v1.3.10</p>
+        <ul>
+          <li>Updated Swedish translation</li>
+          <li>Added Shift+Enter shortcut for long-presses</li>
+          <li>Fixed bug with internal request modifier</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.9" date="2025-07-19" type="stable">
       <description>
         <p>v1.3.9</p>
         <ul>
-          <li>Added Swedish Translation, by @LeviSnoot on GitHub</li>
+          <li>Added Swedish translation, by @LeviSnoot on GitHub</li>
           <li>Return YouTube Dislike support (#53)</li>
           <li>Now showing path to userstyles in settings</li>
         </ul>
