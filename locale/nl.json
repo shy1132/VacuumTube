@@ -1,15 +1,24 @@
 {
     "general": {
         "video_copied": "Videolink naar klembord gekopieerd"
+        "dislikes": "Afkeerknoppen"
     },
     "settings": {
         "ad_block": {
             "title": "Ad-blokker",
             "description": "Blokkeert naadloos video- en feed-advertenties en is niet onderhevig aan de blokkeermethoden van YouTube. Herstart na het omschakelen."
         },
+        "sponsorblock_unused": {
+            "title": "Sponsorblok",
+            "description": "Slaat sponsorsegmenten in YouTube-video's over met behulp van een crowdsourced database. Ondersteunt ook het overslaan van intro's, outro's en herinneringen om je te abonneren. Start opnieuw op na het omschakelen."
+        },
         "dearrow": {
             "title": "DeArrow",
             "description": "Vervangt titels en miniaturen door nauwkeurigere, minder sensationele versies uit een openbare, crowdsourcedatabase. Vertraagt het laden, omdat het info moet ophalen van de server. Herstart na omschakelen."
+        },
+        "dislikes": {
+            "title": "Afkeren teruggeven",
+            "description": "Gebruikt de Return YouTube Dislike API (returnyoutubedislike.com) om afkeerknoppen opnieuw toe te voegen aan YouTube. Vertraagt het laden van video's, omdat het informatie van de server moet ophalen. Start opnieuw op na het omschakelen."
         },
         "h264ify": {
             "title": "H.264 forceren (h264ify)",
