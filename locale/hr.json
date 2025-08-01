@@ -1,6 +1,6 @@
 {
     "general": {
-        "video_copied": "Link videa kopiran u međuspremnik
+        "video_copied": "Link videa kopiran u međuspremnik"
         "dislikes": "Palac dolje"
     },
     "settings": {
@@ -18,7 +18,7 @@
         },
         "dislikes": {
             "title": "Vratite donji palac",
-            "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake "nesviđa mi se" na YouTube. Usporava učitavanje videozapisa jer mora dohvaćati informacije s poslužitelja. Ponovno pokrenite nakon prebacivanja."
+            "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake 'nesviđa mi se' na YouTube. Usporava učitavanje videozapisa jer mora dohvaćati informacije s poslužitelja. Ponovno pokrenite nakon prebacivanja."
         },
         "h264ify": {
             "title": "Prisili H.264 (h264ify)",

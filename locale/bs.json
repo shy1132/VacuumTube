@@ -18,7 +18,7 @@
         },
         "dislikes": {
             "title": "Vratite donji palac",
-            "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake "nesviđa mi se" na YouTube. Usporava učitavanje videa jer mora preuzeti informacije sa servera. Ponovo pokrenite nakon prebacivanja."
+            "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake 'nesviđa mi se' na YouTube. Usporava učitavanje videa jer mora preuzeti informacije sa servera. Ponovo pokrenite nakon prebacivanja."
         },
         "h264ify": {
             "title": "Prisili H.264 (h264ify)",
