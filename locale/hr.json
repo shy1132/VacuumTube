@@ -1,15 +1,24 @@
 {
     "general": {
         "video_copied": "Link videa kopiran u međuspremnik"
+        "dislikes": "Palac dolje"
     },
     "settings": {
         "ad_block": {
             "title": "Bloker Reklama",
             "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama protiv blokiranja. Ponovno pokrenite nakon prebacivanja."
         },
+        "sponsorblock_unused": {
+            "title": "Sponzorski blokator",
+            "description": "Preskače segmente sponzora u YouTube videozapisima koristeći bazu podataka prikupljenu od mnoštva korisnika. Također podržava preskakanje uvoda, završetaka i podsjetnika za pretplatu. Ponovno pokrenite nakon prebacivanja."
+        },
         "dearrow": {
             "title": "DeArrow",
             "description": "Zamjenjuje naslove i sličice točnijim, manje senzacionalističkim verzijama iz javne baze podataka koju prikupljaju korisnici. Usporava učitavanje jer mora dohvaćati informacije s poslužitelja. Ponovno pokrenite nakon prebacivanja."
+        },
+        "dislikes": {
+            "title": "Vratite donji palac",
+            "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake 'nesviđa mi se' na YouTube. Usporava učitavanje videozapisa jer mora dohvaćati informacije s poslužitelja. Ponovno pokrenite nakon prebacivanja."
         },
         "h264ify": {
             "title": "Prisili H.264 (h264ify)",
