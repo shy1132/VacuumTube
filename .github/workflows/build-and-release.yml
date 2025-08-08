@@ -1,0 +1,43 @@
+name: Build and release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+            build_script: build-mac
+    
+    runs-on: ${{ matrix.os }}
+    name: Build for ${{ matrix.platform }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build ${{ matrix.platform }} app
+        run: npm run ${{ matrix.build_script }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+
+      - name: Upload Mac artifacts to release
+        if: matrix.platform == 'mac'
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.dmg --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/latest-mac.yml --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
