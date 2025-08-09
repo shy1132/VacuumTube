@@ -128,3 +128,5 @@ dist
 
 # specific to this repo
 flatpak/generated-sources.json
+
+.DS_Store
