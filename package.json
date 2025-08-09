@@ -8,7 +8,9 @@
         "build": "electron-builder -wl",
         "build-appimage": "electron-builder --linux appimage",
         "flatpak:build-unpacked": "electron-builder --linux --dir",
-        "build-mac": "electron-builder --mac"
+        "build-mac": "electron-builder --mac",
+        "build-windows": "electron-builder --win",
+        "build-linux": "electron-builder --linux"
     },
     "keywords": [],
     "author": "shy (shy@shy.rocks)",

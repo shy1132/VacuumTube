@@ -12,6 +12,9 @@ jobs:
           - os: macos-latest
             platform: mac
             build_script: build-mac
+          - os: windows-latest
+            platform: windows
+            build_script: build-windows
     
     runs-on: ${{ matrix.os }}
     name: Build for ${{ matrix.platform }}
@@ -39,5 +42,16 @@ jobs:
         run: |
           gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.dmg --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/latest-mac.yml --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows artifacts to release
+        if: matrix.platform == 'windows'
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x64-Portable.zip --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64-Portable.zip --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-Setup.exe --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-Setup.exe.blockmap --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/latest.yml --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
