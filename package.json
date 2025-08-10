@@ -88,8 +88,9 @@
             "category": "public.app-category.video",
             "target": [
                 {
-                    "target": "dmg",
+                    "target": "universal",
                     "arch": [
+                        "x64",
                         "arm64"
                     ]
                 }
