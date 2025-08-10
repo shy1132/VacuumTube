@@ -87,5 +87,6 @@ You can apply custom styles to VacuumTube by first enabling it in the settings, 
 Your userstyles folder is located at:
 
 - **Windows**: `%APPDATA%\VacuumTube\userstyles\`
+- **macOS**: `~/Library/Application Support/VacuumTube/userstyles/`
 - **Linux**: `~/.config/VacuumTube/userstyles/`
 - **Linux (Flatpak)**: `~/.var/app/rocks.shy.VacuumTube/config/VacuumTube/userstyles/`
