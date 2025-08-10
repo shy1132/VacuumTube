@@ -5,7 +5,6 @@
     "main": "index.js",
     "scripts": {
         "start": "electron .",
-        "build": "electron-builder -wl",
         "build-appimage": "electron-builder --linux appimage",
         "flatpak:build-unpacked": "electron-builder --linux --dir",
         "build-mac": "electron-builder --mac",
@@ -90,8 +89,7 @@
                 {
                     "target": "dmg",
                     "arch": [
-                        "x64",
-                        "arm64"
+                        "universal"
                     ]
                 }
             ]
