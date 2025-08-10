@@ -1,5 +1,9 @@
 name: Build and release
 
+permissions:
+  contents: write
+  packages: write
+
 on:
   push:
     tags:
