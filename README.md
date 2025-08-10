@@ -39,8 +39,11 @@ If you don't know the difference, pick the Installer.
   - [x64 / amd64](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-x64-Portable.zip)
   - [Arm® 64](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64-Portable.zip)
 
-### Mac
-No macOS builds available yet.
+### macOS
+
+While macOS builds are available, they are completely untested since I don't have access to Mac hardware. If anything goes wrong at all, please make an issue!
+
+- [Universal](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-universal.dmg)
 
 ### Linux
 
