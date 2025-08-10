@@ -67,11 +67,11 @@ jobs:
         if: matrix.platform == 'linux'
         run: |
           gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-amd64.deb --clobber
-          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.AppImage --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.deb --clobber
-          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.tar.gz --clobber
-          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x64.tar.gz --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x86_64.AppImage --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.AppImage --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x64.tar.gz --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.tar.gz --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/latest-linux.yml --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/latest-linux-arm64.yml --clobber
         env:
