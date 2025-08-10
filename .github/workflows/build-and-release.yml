@@ -1,0 +1,74 @@
+name: Build and release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+            build_script: build-mac
+          - os: windows-latest
+            platform: windows
+            build_script: build-windows
+          - os: ubuntu-latest
+            platform: linux
+            build_script: build-linux
+    
+    runs-on: ${{ matrix.os }}
+    name: Build for ${{ matrix.platform }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build ${{ matrix.platform }} app
+        run: npm run ${{ matrix.build_script }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+
+      - name: Upload Mac artifacts to release
+        if: matrix.platform == 'mac'
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.dmg --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/latest-mac.yml --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows artifacts to release
+        if: matrix.platform == 'windows'
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x64-Portable.zip --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64-Portable.zip --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-Setup.exe --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-Setup.exe.blockmap --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/latest.yml --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Linux artifacts to release
+        if: matrix.platform == 'linux'
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-amd64.deb --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.AppImage --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.deb --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64.tar.gz --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x64.tar.gz --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x86_64.AppImage --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/latest-linux.yml --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/latest-linux-arm64.yml --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
