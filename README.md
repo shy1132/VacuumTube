@@ -74,8 +74,10 @@ npm i
 # Run without packaging
 npm run start
 
-# Or package release builds
-npm run build
+# Or package builds for your operating system
+npm run build-windows
+npm run build-mac
+npm run build-linux
 ```
 
 ## Custom CSS (Userstyles)
