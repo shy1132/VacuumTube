@@ -13,12 +13,12 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: macos-latest
-            platform: mac
-            build_script: build-mac
           - os: windows-latest
             platform: windows
             build_script: build-windows
+          - os: macos-latest
+            platform: mac
+            build_script: build-mac
           - os: ubuntu-latest
             platform: linux
             build_script: build-linux
@@ -44,14 +44,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
 
-      - name: Upload Mac artifacts to release
-        if: matrix.platform == 'mac'
-        run: |
-          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-universal.dmg --clobber
-          gh release upload ${{ github.event.release.tag_name }} dist/latest-mac.yml --clobber
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload Windows artifacts to release
         if: matrix.platform == 'windows'
         run: |
@@ -60,6 +52,14 @@ jobs:
           gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-x64-Portable.zip --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-arm64-Portable.zip --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/latest.yml --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Mac artifacts to release
+        if: matrix.platform == 'mac'
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-universal.dmg --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/latest-mac.yml --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
