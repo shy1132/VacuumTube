@@ -1,85 +1,87 @@
 //custom CSS styles
 
-const { ipcRenderer } = require("electron");
-const configManager = require("../config");
+const { ipcRenderer } = require('electron')
+const configManager = require('../config')
+const functions = require('../util/functions')
+const css = require('../util/css')
 
-let config = configManager.get();
-let injectedStyles = new Set();
+let config = configManager.get()
 
-function injectCSS(filename, css) {
-	const styleId = `userstyle-${filename.replace(/[^a-zA-Z0-9]/g, "-")}`;
+const injected = new Set()
 
-	const existingStyle = document.getElementById(styleId);
-	if (existingStyle) {
-		existingStyle.remove();
-	}
-
-	const style = document.createElement("style");
-	style.id = styleId;
-	style.type = "text/css";
-	style.textContent = css;
-	document.head.appendChild(style);
-
-	injectedStyles.add(filename);
-	console.log(`[Userstyles] Injected: ${filename}`);
+function injectCSS(filename, text) {
+	const id = getId(filename)
+	injected.add(id)
+	css.inject(id, text)
+	console.log(`[Userstyles] Injected: ${id}`)
 }
 
-function removeCSS(filename) {
-	const styleId = `userstyle-${filename.replace(/[^a-zA-Z0-9]/g, "-")}`;
-	const style = document.getElementById(styleId);
-	if (style) {
-		style.remove();
-		injectedStyles.delete(filename);
-		console.log(`[Userstyles] Removed: ${filename}`);
+function removeCSS(identifier, isFileName) {
+	let id = identifier;
+	if (isFileName) {
+		id = getId(identifier)
 	}
+
+	injected.delete(id)
+	css.delete(id)
+	console.log(`[Userstyles] Removed: ${id}`)
 }
 
 async function loadUserstyles() {
 	if (!config.userstyles) {
-		console.log("[Userstyles] Disabled in config");
+		console.log('[Userstyles] Disabled in config')
 		return;
 	}
 
 	try {
-		const styles = await ipcRenderer.invoke("get-userstyles");
-
-		injectedStyles.forEach((filename) => removeCSS(filename));
+		const styles = await ipcRenderer.invoke('get-userstyles')
 
 		styles.forEach(({ filename, css }) => {
-			injectCSS(filename, css);
-		});
+			injectCSS(filename, css)
+		})
 
-		console.log(`[Userstyles] Loaded ${styles.length} stylesheets`);
+		console.log(`[Userstyles] Loaded ${styles.length} stylesheets`)
 	} catch (error) {
-		console.error("[Userstyles] Failed to load styles:", error);
+		console.error('[Userstyles] Failed to load styles:', error)
 	}
 }
 
+function getId(filename) {
+	let filenameNoExt = filename.slice(0, -('.css'.length))
+	let cleanFilename = filenameNoExt.replace(/[^a-zA-Z0-9]/g, '-')
+	return `userstyle-${cleanFilename}`;
+}
+
 module.exports = async () => {
-	console.log("[Userstyles] Initializing...");
+	await functions.waitForCondition(() => !!document.head)
 
-	await loadUserstyles();
+	console.log('[Userstyles] Initializing...')
 
-	ipcRenderer.on("config-update", (event, newConfig) => {
+	await loadUserstyles()
+
+	ipcRenderer.on('config-update', (event, newConfig) => {
 		const wasEnabled = config.userstyles;
 		config = newConfig;
 
 		if (config.userstyles && !wasEnabled) {
-			loadUserstyles();
+			loadUserstyles()
 		} else if (!config.userstyles && wasEnabled) {
-			injectedStyles.forEach((filename) => removeCSS(filename));
+			injected.forEach((id) => {
+				removeCSS(id)
+			})
 		}
-	});
+	})
 
-	ipcRenderer.on("userstyle-updated", (event, { filename, css }) => {
+	ipcRenderer.on('userstyle-updated', (event, { filename, css }) => {
 		if (config.userstyles) {
-			injectCSS(filename, css);
+			injectCSS(filename, css)
 		}
-	});
+	})
 
-	ipcRenderer.on("userstyle-removed", (event, { filename }) => {
-		removeCSS(filename);
-	});
+	ipcRenderer.on('userstyle-removed', (event, { filename }) => {
+		const id = getId(filename)
+		removeCSS(id, true)
+	})
 
-	console.log("[Userstyles] Initialized");
-};
+	console.log('[Userstyles] Initialized')
+}

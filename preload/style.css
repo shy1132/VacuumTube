@@ -1,0 +1,5 @@
+/*css patches*/
+
+body {
+    user-select: none; /*without this, you can accidentally ctrl+a and select everything, have to refresh to fix*/
+}
