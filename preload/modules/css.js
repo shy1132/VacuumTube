@@ -1,4 +1,4 @@
-//insert the css patches
+//apply the css patches
 
 const fs = require('fs')
 const path = require('path')
