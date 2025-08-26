@@ -28,6 +28,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.14" date="2025-08-25" type="stable">
+      <description>
+        <p>v1.3.14</p>
+        <ul>
+          <li>Disabled "Sign in with your remote" due to it not working properly under VacuumTube</li>
+          <li>Fixed modules not injecting in weird cases</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.13" date="2025-08-13" type="stable">
       <description>
         <p>v1.3.13</p>

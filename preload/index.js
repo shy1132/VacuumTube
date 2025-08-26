@@ -1,4 +1,4 @@
-if (location.host === 'www.youtube.com') {
+if (location.host === 'www.youtube.com' && location.pathname === '/tv') {
     const xhrModifiers = require('./util/xhrModifiers')
     xhrModifiers.block() //it makes an xhr request pretty fast as soon as it loads, so fast that some modules don't have time to modify it...
 
