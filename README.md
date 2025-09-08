@@ -75,9 +75,9 @@ npm i
 npm run start
 
 # Or package builds for your operating system
-npm run build-windows
-npm run build-mac
-npm run build-linux
+npm run windows:build
+npm run mac:build
+npm run linux:build(-unpacked,-appimage)
 ```
 
 ## Custom CSS (Userstyles)
