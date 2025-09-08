@@ -55,11 +55,20 @@ async function main() {
         electron.app.commandLine.appendSwitch('disable-accelerated-video-decode')
     }
 
-    // CSP override for userstyles and sponsorblock/dearrow support
+    //general request modification
+    electron.session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
+        let url = new URL(details.url)
+        if (url.host === 'csp.withgoogle.com') return callback({ cancel: true }); //electron refuses to modify or remove the Report-To header, so i just block csp by domain. they have specific csp endpoints for the cobalt engine, and i don't wanna mess with those analytics
+
+        callback({ cancel: false })
+    })
+
+    //general response modification
     electron.session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
         let url = new URL(details.url)
         if (url.host !== 'www.youtube.com') return callback({ cancel: false });
 
+        // CSP override for userstyles and sponsorblock/dearrow support
         if (details.responseHeaders['content-security-policy']) {
             for (let i = 0; i < details.responseHeaders['content-security-policy'].length; i++) {
                 let header = details.responseHeaders['content-security-policy'][i]
@@ -110,14 +119,6 @@ async function main() {
                 details.responseHeaders['content-security-policy'][i] = header;
             }
         }
-
-        //for some reason, this simply doesn't work. i have no idea why, but since csp errors really shouldn't occur, it's probably fine
-        /*
-        //since we pretend to be cobalt, but aren't actually cobalt, it shouldn't report csp failures as cobalt-related
-        if (details.responseHeaders['report-to'] && details.responseHeaders['report-to'][0].includes('youtube_cobalt')) {
-            delete details.responseHeaders['report-to'];
-        }
-        */
 
         callback({
             responseHeaders: details.responseHeaders
@@ -306,7 +307,7 @@ async function main() {
     })
 
     await createWindow()
-    
+
     setupUserstylesWatcher()
 
     electron.app.on('activate', () => {

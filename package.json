@@ -1,15 +1,15 @@
 {
     "name": "vacuumtube",
-    "version": "1.3.14",
+    "version": "1.3.15",
     "description": "YouTube TV interface on the desktop",
     "main": "index.js",
     "scripts": {
         "start": "electron .",
-        "build-appimage": "electron-builder --linux appimage",
-        "flatpak:build-unpacked": "electron-builder --linux --dir",
-        "build-mac": "electron-builder --mac",
-        "build-windows": "electron-builder --win",
-        "build-linux": "electron-builder --linux"
+        "windows:build": "electron-builder --win",
+        "mac:build": "electron-builder --mac",
+        "linux:build": "electron-builder --linux",
+        "linux:build-unpacked": "electron-builder --linux --dir",
+        "linux:build-appimage": "electron-builder --linux appimage"
     },
     "keywords": [],
     "author": "shy (shy@shy.rocks)",
@@ -105,7 +105,7 @@
         "electron-builder": "^25.1.8"
     },
     "dependencies": {
-        "electron-updater": "^6.6.2",
-        "chokidar": "^4.0.3"
+        "chokidar": "^4.0.3",
+        "electron-updater": "^6.6.2"
     }
 }

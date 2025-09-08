@@ -64,7 +64,7 @@ function init(overrides = {}) {
         }
     }
 
-    setInterval(save, 2500)
+    setInterval(save, 500)
 
     return config;
 }

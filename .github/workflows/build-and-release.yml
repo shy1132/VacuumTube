@@ -15,13 +15,13 @@ jobs:
         include:
           - os: windows-latest
             platform: windows
-            build_script: build-windows
+            build_script: windows:build
           - os: macos-latest
             platform: mac
-            build_script: build-mac
+            build_script: mac:build
           - os: ubuntu-latest
             platform: linux
-            build_script: build-linux
+            build_script: linux:build
     
     runs-on: ${{ matrix.os }}
     name: Build for ${{ matrix.platform }}
