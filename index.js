@@ -13,7 +13,8 @@ electron.app.setPath('sessionData', sessionData)
 
 const configManager = require('./config.js')
 const package = require('./package.json')
-
+const {  Menu, MenuItem } = require("electron/main");
+const { ipcRenderer } = require("electron/renderer");
 //code
 /*
 about the user agent:
@@ -366,7 +367,7 @@ async function createWindow() {
         win.setAspectRatio(TARGET_RATIO)
     }
 
-    win.setMenuBarVisibility(false)
+    // win.setMenuBarVisibility(false)
     win.setAutoHideMenuBar(false)
 
     win.on('ready-to-show', () => {
@@ -410,6 +411,37 @@ async function createWindow() {
     win.webContents.on('page-title-updated', () => {
         win.setTitle('VacuumTube')
     })
+
+const menu = new Menu();
+
+// The first submenu needs to be the app menu on macOS
+if (process.platform === "darwin") {
+  const appMenu = new MenuItem({ role: "appMenu" });
+  menu.append(appMenu);
+}
+
+const submenu = Menu.buildFromTemplate([
+  {
+    label: "Open a Dialog",
+    click: () => contextMenu.popup(),
+    accelerator: "CommandOrControl+Alt+R",
+  },
+]);
+const contextMenu = Menu.buildFromTemplate([
+  { role: "copy" },
+  { role: "cut" },
+  { role: "paste" },
+  { role: "selectall" },
+]);
+// ipcRenderer.addListener("vacuum-settings-menu", (_event, params) => {
+//   // only show the context menu if the element is editable
+// //   if (params.) {
+//     contextMenu.popup();
+// //   }
+// });
+menu.append(new MenuItem({ label: "Custom Menu", submenu }));
+
+Menu.setApplicationMenu(menu);
 }
 
 electron.app.once('ready', () => {
