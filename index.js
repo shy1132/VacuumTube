@@ -423,7 +423,13 @@ async function createWindow() {
 
     const submenu = Menu.buildFromTemplate([{
         label: "Settings",
-        click: () => onClick(electron),
+        click: () => {
+            if (onClick(electron,configManager)){
+                config = configManager.get();
+                win.webContents.send("config-update", config);
+                //TODO: Make it work without restarting
+            }
+        },
         accelerator: "CommandOrControl+Alt+R",
     }]);
     settingsMenu.append(new MenuItem({ label: "Custom Menu", submenu }));
