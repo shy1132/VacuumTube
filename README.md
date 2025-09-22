@@ -59,6 +59,41 @@ Otherwise, you can use a distribution package or a portable one. If you don't kn
   - [AppImage](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.AppImage)
   - [Ubuntu/Debian/Mint (.deb)](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.deb)
   - [tarball](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.tar.gz)
+ 
+## Settings
+
+VacuumTube has some settings that you can change, which are located directly in the YouTube settings.
+
+- Ad Block
+  - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
+- DeArrow
+  - Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database
+- Return Dislikes
+  - Uses the [Return YouTube Dislike](https://returnyoutubedislike.com) API to re-add dislikes to YouTube
+- Force H.264
+  - Forces YouTube to only stream videos in the H.264 codec (like [h264ify](https://github.com/erkserkserks/h264ify))
+- Hardware Decoding
+  - Uses your GPU to decode videos when possible
+- Low Memory Mode
+  - Tells YouTube to enable it's low memory mode
+- Fullscreen
+  - Enables fullscreen, and makes VacuumTube always launch in fullscreen
+- Keep on Top
+  - Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window
+- Custom CSS (Userstyles)
+  - Enables injection of custom CSS styles. See the section below for more information
+
+## Custom CSS (Userstyles)
+
+You can apply custom styles to VacuumTube by first enabling it in the settings, and then creating `.css` files in the userstyles folder. You can access the developer tools by pressing **Ctrl+Shift+I**, these are extremely useful for writing custom CSS.
+
+### File Location
+
+Your userstyles folder is located at:
+
+- **Windows**: `%APPDATA%\VacuumTube\userstyles\`
+- **macOS**: `~/Library/Application Support/VacuumTube/userstyles/`
+- **Linux**: `~/.config/VacuumTube/userstyles/`
 
 ## Building from Source
 
@@ -79,16 +114,4 @@ npm run windows:build
 npm run mac:build
 npm run linux:build(-unpacked,-appimage)
 ```
-
-## Custom CSS (Userstyles)
-
-You can apply custom styles to VacuumTube by first enabling it in the settings, and then creating `.css` files in the userstyles folder. You can access the developer tools by pressing **Ctrl+Shift+I**, these are extremely useful for writing custom CSS.
-
-### File Location
-
-Your userstyles folder is located at:
-
-- **Windows**: `%APPDATA%\VacuumTube\userstyles\`
-- **macOS**: `~/Library/Application Support/VacuumTube/userstyles/`
-- **Linux**: `~/.config/VacuumTube/userstyles/`
 - **Linux (Flatpak)**: `~/.var/app/rocks.shy.VacuumTube/config/VacuumTube/userstyles/`
