@@ -7,16 +7,14 @@ const toggleableSettings = {
   userstyles: "user styles",
 };
 
-
-
 // Returns is configManager updated
-export async function onClick(electron, configManager) {
+export async function onSettingsMenuClicked(electron, configManager) {
   let config = configManager.get();
   let responseButton = (
     await electron.dialog.showMessageBox({
       message: "Settings",
-      detail: "Details",
-      buttons: makeButtonsForMessageBox(configManager),
+      detail: makeDetailsForMessageBox(config),
+      buttons: makeButtonsForMessageBox(config),
       cancelId: -1,
     })
   ).response;
@@ -32,16 +30,25 @@ export async function onClick(electron, configManager) {
 }
 
 // Makes the buttons array:["Enable fullscreen","Enable dislikes"...]
-function makeButtonsForMessageBox(configManager) {
-  let config = configManager.get();
+function makeButtonsForMessageBox(config) {
   let buttons = [];
   for (const e of Object.keys(toggleableSettings)) {
     let text = textFromBool(!config[e]) + " " + toggleableSettings[e] + ".";
-    console.log("add:", text);
     buttons.push(text);
   }
-  console.log("buttons:", buttons);
+  console.log("[settings]buttons:", buttons);
   return buttons;
+}
+
+// Makes the details array:"Enabled fullscreen.\nEnabled dislikes.\n..."
+function makeDetailsForMessageBox(config) {
+  let details = [];
+  for (const e of Object.keys(toggleableSettings)) {
+    let text = textFromBool(config[e]) + "d " + toggleableSettings[e] + ".";
+    details.push(text);
+  }
+  console.log("[settings]details:", details);
+  return details.join("\n");
 }
 
 // "Enable" or "Disable"

@@ -14,8 +14,7 @@ electron.app.setPath('sessionData', sessionData)
 const configManager = require('./config.js')
 const package = require('./package.json')
 const {  Menu, MenuItem } = require("electron/main");
-const { ipcRenderer } = require("electron/renderer");
-const { onClick } = require('./settings_menu/settings_menu.js')
+const { onSettingsMenuClicked } = require('./settings_menu/settings_menu.js')
 //code
 /*
 about the user agent:
@@ -424,7 +423,7 @@ async function createWindow() {
     const submenu = Menu.buildFromTemplate([{
         label: "Settings",
         click: () => {
-            if (onClick(electron,configManager)){
+            if (onSettingsMenuClicked(electron,configManager)){
                 config = configManager.get();
                 win.webContents.send("config-update", config);
                 //TODO: Make it work without restarting
