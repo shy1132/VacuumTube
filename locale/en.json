@@ -20,6 +20,10 @@
             "title": "Return Dislikes",
             "description": "Uses the Return YouTube Dislike API (returnyoutubedislike.com) to re-add dislikes to YouTube. Slows down video loading, as it has to fetch info from the server. Relaunch after toggling."
         },
+        "hide_shorts": {
+            "title": "Hide Shorts",
+            "description": "Hides YouTube Shorts from the homepage. Relaunch after toggling."
+        },
         "h264ify": {
             "title": "Force H.264 (h264ify)",
             "description": "Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Relaunch after toggling."

@@ -14,6 +14,7 @@ const defaults = {
     adblock: true, //block ads
     dearrow: false, //replaces titles and thumbnails with more accurate and less sensationalized versions from a crowdsourced database (https://dearrow.ajay.app/)
     dislikes: false, //readds youtube dislikes via https://www.returnyoutubedislike.com/
+    hide_shorts: false, //hide youtube shorts from homepage
     h264ify: false, //block non-h264 codecs for performance on slow devices
     hardware_decoding: true, //use hardware gpu video decoding
     low_memory_mode: false, //enables env_isLimitedMemory

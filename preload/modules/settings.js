@@ -62,6 +62,11 @@ module.exports = async () => {
             locale.settings.dislikes.description,
             'dislikes'
         ),
+        'hide_shorts': createSettingBooleanRenderer(
+            locale.settings.hide_shorts.title,
+            locale.settings.hide_shorts.description,
+            'hide_shorts'
+        ),
         'h264ify': createSettingBooleanRenderer(
             locale.settings.h264ify.title,
             locale.settings.h264ify.description,
