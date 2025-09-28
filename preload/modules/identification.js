@@ -6,6 +6,7 @@ const configOverrides = require('../util/configOverrides')
 
 const osPlatform = os.platform()
 const osRelease = os.release()
+const hostname = os.hostname() //still the same in flatpak
 
 const platformMap = {
     'win32': 'Windows',
@@ -39,7 +40,7 @@ module.exports = () => {
         os: osName,
         os_version: osVersion,
         feature_switches: {
-            mdx_device_label: 'VacuumTube'
+            mdx_device_label: `VacuumTube on ${hostname}` //label that displays on cast
         }
     })
 
