@@ -1,6 +1,8 @@
 //controller support (normal leanback doesnt have this for some reason, not sure how the console apps do it...)
 
 const { ipcRenderer } = require('electron')
+const ui = require('../util/ui')
+const localeProvider = require('../util/localeProvider')
 
 module.exports = async () => {
     const gamepadKeyCodeMap = { //aiming to maintain parity with the console versions of leanback
@@ -25,6 +27,7 @@ module.exports = async () => {
 
     const pressedButtons = {}
     let keyRepeatTimeout;
+    let hasPressedButton = false;
 
     let focused = await ipcRenderer.invoke('is-focused')
 
@@ -35,6 +38,18 @@ module.exports = async () => {
     ipcRenderer.on('blur', () => {
         focused = false;
     })
+
+    let runningOnSteam = await ipcRenderer.invoke('is-steam')
+    if (runningOnSteam) {
+        setTimeout(async () => {
+            if (!hasPressedButton) {
+                await localeProvider.waitUntilAvailable()
+
+                const locale = localeProvider.getLocale()
+                ui.toast('VacuumTube', locale.general.steam_controller_notice)
+            }
+        }, 5000)
+    }
 
     requestAnimationFrame(pollGamepads)
 
@@ -70,6 +85,7 @@ module.exports = async () => {
             let buttonWasPressed = pressedButtons[index][i]
 
             if (button.pressed && !buttonWasPressed) {
+                hasPressedButton = true;
                 pressedButtons[index][i] = true;
                 simulateKeyDown(keyCode)
                 stopKeyRepeat()
@@ -108,6 +124,7 @@ module.exports = async () => {
 
             if (keyCode) {
                 if (!axisWasPressed) {
+                    hasPressedButton = true;
                     pressedButtons[index][axisIndex] = true;
                     simulateKeyDown(keyCode)
                     stopKeyRepeat()

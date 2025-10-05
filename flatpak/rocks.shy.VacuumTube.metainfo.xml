@@ -28,6 +28,14 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.3.18" date="2025-10-04" type="stable">
+      <description>
+        <p>v1.3.18</p>
+        <ul>
+          <li>Added helpful notice for external controller bug with Steam handhelds</li>
+        </ul>
+      </description>
+    </release>
     <release version="1.3.17" date="2025-09-28" type="stable">
       <description>
         <p>v1.3.17</p>

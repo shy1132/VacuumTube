@@ -31,7 +31,7 @@ VacuumTube overrides some things to identify properly, but this user agent has t
 */
 const youtubeUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //for youtube
 const userAgent = `VacuumTube/${package.version}` //for anything else
-const runningOnSteam = process.env.SteamOS == '1' && process.env.SteamGamepadUI == '1'
+const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI === '1'
 
 let win;
 let config;
@@ -161,6 +161,10 @@ async function main() {
         } else {
             return false;
         }
+    })
+
+    electron.ipcMain.handle('is-steam', () => {
+        return runningOnSteam;
     })
 
     electron.ipcMain.handle('reload', () => {

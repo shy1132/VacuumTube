@@ -7,7 +7,7 @@ JSON.parse = (...args) => {
     let json = jsonParse.apply(this, args)
 
     try {
-        if (typeof json == 'object') {
+        if (typeof json === 'object') {
             for (let modifier of modifiers) {
                 json = modifier(json)
             }

@@ -1,7 +1,8 @@
 {
     "general": {
         "video_copied": "Video link copied to clipboard",
-        "dislikes": "Dislikes"
+        "dislikes": "Dislikes",
+        "steam_controller_notice": "External controller isn't detected? Try the steamdeck-input-disabler plugin from Decky."
     },
     "settings": {
         "ad_block": {
