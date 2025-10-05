@@ -6,9 +6,9 @@ const configManager = require('../config')
 const config = configManager.get()
 
 module.exports = () => {
-    if (!config.adblock) return;
-
     xhrModifiers.addResponseModifier((url, text) => {
+        if (!config.adblock) return;
+
         if (
             !url.startsWith('/youtubei/v1/browse') &&
             !url.startsWith('/youtubei/v1/search')
@@ -47,6 +47,8 @@ module.exports = () => {
 
     //video ads (i don't know where these appear in requests)
     jsonMod.addModifier((json) => {
+        if (!config.adblock) return json;
+
         if (json.adPlacements) {
             json.adPlacements = []
         }

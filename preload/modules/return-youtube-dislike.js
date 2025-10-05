@@ -14,13 +14,13 @@ async function fetchDislikes(videoId) {
 }
 
 module.exports = async () => {
-    if (!config.dislikes) return;
-
     await localeProvider.waitUntilAvailable()
 
     let locale = localeProvider.getLocale()
 
     xhrModifiers.addResponseModifier(async (url, text) => {
+        if (!config.dislikes) return;
+
         if (
             !url.startsWith('/youtubei/v1/next')
         ) {

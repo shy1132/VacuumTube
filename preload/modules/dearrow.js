@@ -27,9 +27,9 @@ function getThumbnail(id) {
 }
 
 module.exports = () => {
-    if (!config.dearrow) return;
-
     xhrModifiers.addResponseModifier(async (url, text) => {
+        if (!config.dearrow) return;
+    
         if (
             !url.startsWith('/youtubei/v1/browse') &&
             !url.startsWith('/youtubei/v1/search') &&

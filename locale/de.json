@@ -6,7 +6,7 @@
     "settings": {
         "ad_block": {
             "title": "Anzeigenblocker",
-            "description": "Blockiert nahtlos Video- und Feed-Werbung und unterliegt nicht den Methoden von YouTube zur Verhinderung von Blockern. Starten Sie nach dem Umschalten neu."
+            "description": "Blockiert nahtlos Video- und Feed-Werbung und unterliegt nicht den Methoden von YouTube zur Verhinderung von Blockern"
         },
         "sponsorblock_unused": {
             "title": "SponsorBlock",
@@ -14,11 +14,11 @@
         },
         "dearrow": {
             "title": "DeArrow",
-            "description": "Ersetzt Titel und Vorschaubilder durch genauere, weniger sensationslüsterne Versionen aus einer öffentlichen Crowdsourced-Datenbank. Verlangsamt das Laden, da es Informationen vom Server abrufen muss. Neustart nach Umschalten."
+            "description": "Ersetzt Titel und Vorschaubilder durch genauere, weniger sensationslüsterne Versionen aus einer öffentlichen Crowdsourced-Datenbank. Verlangsamt das Laden, da es Informationen vom Server abrufen muss"
         },
         "dislikes": {
             "title": "Abneigungen zurückgeben",
-            "description": "Verwendet die YouTube Abneigungen zurückgeben API (returnyoutubedislike.com), um Abneigungsknöpfe wieder zu YouTube hinzuzufügen. Verlangsamt das Laden von Videos, da Informationen vom Server abgerufen werden müssen. Nach dem Umschalten neu starten."
+            "description": "Verwendet die YouTube Abneigungen zurückgeben API (returnyoutubedislike.com), um Abneigungsknöpfe wieder zu YouTube hinzuzufügen. Verlangsamt das Laden von Videos, da Informationen vom Server abgerufen werden müssen"
         },
         "h264ify": {
             "title": "H.264 erzwingen (h264ify)",

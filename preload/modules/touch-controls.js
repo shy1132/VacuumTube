@@ -3,12 +3,12 @@
 module.exports = () => {
     window.addEventListener('load', () => {
         const touchKeyCodeMap = {
-            'back': 27, //escape
+            'back':   27, //escape
             'select': 13, //enter
-            'up': 38,
-            'down': 40,
-            'left': 37,
-            'right': 39
+            'up':     38,
+            'down':   40,
+            'left':   37,
+            'right':  39
         }
 
         function simulateKeyDown(keyCode) {

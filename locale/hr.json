@@ -6,7 +6,7 @@
     "settings": {
         "ad_block": {
             "title": "Bloker Reklama",
-            "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama protiv blokiranja. Ponovno pokrenite nakon prebacivanja."
+            "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama protiv blokiranja"
         },
         "sponsorblock_unused": {
             "title": "Sponzorski blokator",
@@ -14,11 +14,11 @@
         },
         "dearrow": {
             "title": "DeArrow",
-            "description": "Zamjenjuje naslove i sličice točnijim, manje senzacionalističkim verzijama iz javne baze podataka koju prikupljaju korisnici. Usporava učitavanje jer mora dohvaćati informacije s poslužitelja. Ponovno pokrenite nakon prebacivanja."
+            "description": "Zamjenjuje naslove i sličice točnijim, manje senzacionalističkim verzijama iz javne baze podataka koju prikupljaju korisnici. Usporava učitavanje jer mora dohvaćati informacije s poslužitelja"
         },
         "dislikes": {
             "title": "Vratite donji palac",
-            "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake 'nesviđa mi se' na YouTube. Usporava učitavanje videozapisa jer mora dohvaćati informacije s poslužitelja. Ponovno pokrenite nakon prebacivanja."
+            "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake 'nesviđa mi se' na YouTube. Usporava učitavanje videozapisa jer mora dohvaćati informacije s poslužitelja"
         },
         "h264ify": {
             "title": "Prisili H.264 (h264ify)",

@@ -5,9 +5,9 @@ const configManager = require('../config')
 const config = configManager.get()
 
 module.exports = () => {
-    if (!config.hide_shorts) return;
-
     xhrModifiers.addResponseModifier(async (url, text) => {
+        if (!config.hide_shorts) return;
+
         if (
             !url.startsWith('/youtubei/v1/browse')
         ) {

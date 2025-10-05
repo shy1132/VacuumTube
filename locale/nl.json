@@ -6,7 +6,7 @@
     "settings": {
         "ad_block": {
             "title": "Ad-blokker",
-            "description": "Blokkeert naadloos video- en feed-advertenties en is niet onderhevig aan de blokkeermethoden van YouTube. Herstart na het omschakelen."
+            "description": "Blokkeert naadloos video- en feed-advertenties en is niet onderhevig aan de blokkeermethoden van YouTube"
         },
         "sponsorblock_unused": {
             "title": "Sponsorblok",
@@ -14,11 +14,11 @@
         },
         "dearrow": {
             "title": "DeArrow",
-            "description": "Vervangt titels en miniaturen door nauwkeurigere, minder sensationele versies uit een openbare, crowdsourcedatabase. Vertraagt het laden, omdat het info moet ophalen van de server. Herstart na omschakelen."
+            "description": "Vervangt titels en miniaturen door nauwkeurigere, minder sensationele versies uit een openbare, crowdsourcedatabase. Vertraagt het laden, omdat het info moet ophalen van de server"
         },
         "dislikes": {
             "title": "Afkeren teruggeven",
-            "description": "Gebruikt de Return YouTube Dislike API (returnyoutubedislike.com) om afkeerknoppen opnieuw toe te voegen aan YouTube. Vertraagt het laden van video's, omdat het informatie van de server moet ophalen. Start opnieuw op na het omschakelen."
+            "description": "Gebruikt de Return YouTube Dislike API (returnyoutubedislike.com) om afkeerknoppen opnieuw toe te voegen aan YouTube. Vertraagt het laden van video's, omdat het informatie van de server moet ophalen"
         },
         "h264ify": {
             "title": "H.264 forceren (h264ify)",

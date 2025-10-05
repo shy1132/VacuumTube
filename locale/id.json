@@ -6,7 +6,7 @@
     "settings": {
         "ad_block": {
             "title": "Blokir Iklan",
-            "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube. Luncurkan ulang setelah mengubah."
+            "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube"
         },
         "sponsorblock_unused": {
             "title": "SponsorBlock",
@@ -14,11 +14,11 @@
         },
         "dearrow": {
             "title": "DeArrow",
-            "description": "Mengganti judul dan gambar pratinjau video yang lebih akurat dan tidak sensasional dari basis data publik yang dihimpun bersama. Proses pengambilan informasi dari server ini akan mengakibatkan bertambahnya waktu muat VacuumTube. Luncurkan ulang setelah mengubah."
+            "description": "Mengganti judul dan gambar pratinjau video yang lebih akurat dan tidak sensasional dari basis data publik yang dihimpun bersama. Proses pengambilan informasi dari server ini akan mengakibatkan bertambahnya waktu muat VacuumTube"
         },
         "dislikes": {
             "title": "Kembalikan Jumlah 'Tidak Suka'",
-            "description": "Gunakan API Return YouTube Dislike (returnyoutubedislike.com) untuk mengembalikan fitur info jumlah 'Tidak Suka' pada video YouTube. Proses pengambilan info ini akan memperlambat pemuatan video. Luncurkan ulang setelah mengubah."
+            "description": "Gunakan API Return YouTube Dislike (returnyoutubedislike.com) untuk mengembalikan fitur info jumlah 'Tidak Suka' pada video YouTube. Proses pengambilan info ini akan memperlambat pemuatan video"
         },
         "h264ify": {
             "title": "Gunakan H.264 (h264ify)",

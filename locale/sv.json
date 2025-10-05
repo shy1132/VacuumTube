@@ -6,7 +6,7 @@
     "settings": {
         "ad_block": {
             "title": "Reklamblockering",
-            "description": "Blockerar sömlöst reklam i videor och flödet. Påverkas ej av YouTube:s metoder för att förhindra reklamblockering. Starta om appen efter du har ändrat inställningen."
+            "description": "Blockerar sömlöst reklam i videor och flödet. Påverkas ej av YouTube:s metoder för att förhindra reklamblockering"
         },
         "sponsorblock_unused": {
             "title": "SponsorBlock",
@@ -14,11 +14,11 @@
         },
         "dearrow": {
             "title": "DeArrow",
-            "description": "Ersätter titlar och indexbilder med mer korrekta och mindre sensationella varianter från en publikt crowdsourcad databas. Saktar ner sidladdning, eftersom att DeArrow måste hämta informationen från servern. Starta om appen efter du har ändrat inställningen."
+            "description": "Ersätter titlar och indexbilder med mer korrekta och mindre sensationella varianter från en publikt crowdsourcad databas. Saktar ner sidladdning, eftersom att DeArrow måste hämta informationen från servern"
         },
         "dislikes": {
             "title": "Återinför Ogillningar",
-            "description": "Använder Return YouTube Dislike API (returnyoutubedislike.com) för att återinföra ogillningar till YouTube. Saktar ner videoladdning, eftersom information måste hämtas från servern. Starta om appen efter du har ändrat inställningen."
+            "description": "Använder Return YouTube Dislike API (returnyoutubedislike.com) för att återinföra ogillningar till YouTube. Saktar ner videoladdning, eftersom information måste hämtas från servern"
         },
         "h264ify": {
             "title": "Tvinga H.264 (h264ify)",

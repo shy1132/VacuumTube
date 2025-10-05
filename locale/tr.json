@@ -6,7 +6,7 @@
     "settings": {
         "ad_block": {
             "title": "Reklam Engelleyici",
-            "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir. Değiştirdikten sonra yeniden başlatın."
+            "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir"
         },
 		"sponsorblock_unused": {
             "title": "Sponsor Engelleyici",
@@ -14,11 +14,11 @@
         },
 		"dearrow": {
             "title": "DeArrow",
-            "description": "Başlıkları ve küçük resimleri, herkese açık veritabanından alınan daha doğru ve daha az sansasyonel sürümlerle değiştirir. Sunucudan bilgi alması gerektiğinden yüklemeyi yavaşlatır. Değiştirdikten sonra yeniden başlatın."
+            "description": "Başlıkları ve küçük resimleri, herkese açık veritabanından alınan daha doğru ve daha az sansasyonel sürümlerle değiştirir. Sunucudan bilgi alması gerektiğinden yüklemeyi yavaşlatır"
         },
 		"dislikes": {
             "title": "Beğenmemeleri Göster",
-            "description": "YouTube beğenmeyenleri göstermek için YouTube Beğenmeme API (returnyoutubedislike.com) kullanır. Sunucudan bilgi alması gerektiğinden video yüklemesini yavaşlatır. Değiştirdikten sonra yeniden başlatın."
+            "description": "YouTube beğenmeyenleri göstermek için YouTube Beğenmeme API (returnyoutubedislike.com) kullanır. Sunucudan bilgi alması gerektiğinden video yüklemesini yavaşlatır"
         },
         "h264ify": {
             "title": "H.264 İçin Zorla (h264ify)",

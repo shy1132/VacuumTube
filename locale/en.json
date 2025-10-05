@@ -7,7 +7,7 @@
     "settings": {
         "ad_block": {
             "title": "Ad Block",
-            "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers. Relaunch after toggling."
+            "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers"
         },
         "sponsorblock_unused": {
             "title": "SponsorBlock",
@@ -15,15 +15,15 @@
         },
         "dearrow": {
             "title": "DeArrow",
-            "description": "Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database. Slows down loading, as it has to fetch info from the server. Relaunch after toggling."
+            "description": "Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database. Slows down loading, as it has to fetch info from the server"
         },
         "dislikes": {
             "title": "Return Dislikes",
-            "description": "Uses the Return YouTube Dislike API (returnyoutubedislike.com) to re-add dislikes to YouTube. Slows down video loading, as it has to fetch info from the server. Relaunch after toggling."
+            "description": "Uses the Return YouTube Dislike API (returnyoutubedislike.com) to re-add dislikes to YouTube. Slows down video loading, as it has to fetch info from the server"
         },
         "hide_shorts": {
             "title": "Hide Shorts",
-            "description": "Hides YouTube Shorts from the homepage. Relaunch after toggling."
+            "description": "Hides YouTube Shorts from the homepage"
         },
         "h264ify": {
             "title": "Force H.264 (h264ify)",
@@ -39,15 +39,15 @@
         },
         "fullscreen": {
             "title": "Fullscreen",
-            "description": "Enables fullscreen, and makes VacuumTube always launch in fullscreen."
+            "description": "Enables fullscreen, and makes VacuumTube always launch in fullscreen"
         },
         "keep_on_top": {
             "title": "Keep on Top",
-            "description": "Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window."
+            "description": "Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window"
         },
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
-            "description": "Enables injection of custom CSS styles. Place your .css files in the {path} folder."
+            "description": "Enables injection of custom CSS styles. Place your .css files in the {path} folder"
         }
     }
 }
