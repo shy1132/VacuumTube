@@ -70,6 +70,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database
 - Return Dislikes
   - Uses the [Return YouTube Dislike](https://returnyoutubedislike.com) API to re-add dislikes to YouTube
+- Hide Shorts
+  - Hides YouTube Shorts from the homepage
 - Force H.264
   - Forces YouTube to only stream videos in the H.264 codec (like [h264ify](https://github.com/erkserkserks/h264ify))
 - Hardware Decoding
