@@ -84,6 +84,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window
 - Custom CSS (Userstyles)
   - Enables injection of custom CSS styles. See the section below for more information
+- Controller Support
+  - Allows toggling of controller support in VacuumTube (on by default, can be turned off to avoid conflicting with apps like JoyToKey)
 
 ## Custom CSS (Userstyles)
 
