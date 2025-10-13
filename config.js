@@ -19,7 +19,8 @@ const defaults = {
     hardware_decoding: true, //use hardware gpu video decoding
     low_memory_mode: false, //enables env_isLimitedMemory
     keep_on_top: false, //whether or not to keep window on top
-    userstyles: false //whether or not to enable custom CSS injection
+    userstyles: false, //whether or not to enable custom CSS injection
+    controller_support: true //whether or not to enable game controller support
 }
 
 function init(overrides = {}) {

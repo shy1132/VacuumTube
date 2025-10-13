@@ -98,6 +98,11 @@ module.exports = async () => {
             locale.settings.userstyles.title,
             locale.settings.userstyles.description.replace('{path}', cssPath),
             'userstyles'
+        ),
+        'controller_support': createSettingBooleanRenderer(
+            locale.settings.controller_support.title,
+            locale.settings.controller_support.description,
+            'controller_support'
         )
     }
 

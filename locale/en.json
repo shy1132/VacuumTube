@@ -48,6 +48,10 @@
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
             "description": "Enables injection of custom CSS styles. Place your .css files in the {path} folder"
+        },
+        "controller_support": {
+            "title": "Controller Support",
+            "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox Controller."
         }
     }
 }

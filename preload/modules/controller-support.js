@@ -3,6 +3,8 @@
 const { ipcRenderer } = require('electron')
 const ui = require('../util/ui')
 const localeProvider = require('../util/localeProvider')
+const configManager = require('../config')
+const config = configManager.get()
 
 module.exports = async () => {
     const gamepadKeyCodeMap = { //aiming to maintain parity with the console versions of leanback
@@ -141,7 +143,7 @@ module.exports = async () => {
     }
 
     function simulateKeyDown(keyCode) {
-        if (!focused) return;
+        if (!focused || !config.controller_support) return;
 
         let event = new Event('keydown')
         event.keyCode = keyCode;
@@ -149,7 +151,7 @@ module.exports = async () => {
     }
 
     function simulateKeyUp(keyCode) {
-        if (!focused) return;
+        if (!focused || !config.controller_support) return;
 
         let event = new Event('keyup')
         event.keyCode = keyCode;
