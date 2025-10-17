@@ -373,7 +373,7 @@ async function createWindow() {
     win.setMenuBarVisibility(false)
     win.setAutoHideMenuBar(false)
 
-    win.on('ready-to-show', () => {
+    win.once('ready-to-show', () => {
         win.setFullScreen(fullscreen)
         win.setAlwaysOnTop(config.keep_on_top)
         win.show()

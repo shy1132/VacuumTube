@@ -1,6 +1,6 @@
 {
     "name": "vacuumtube",
-    "version": "1.3.20",
+    "version": "1.3.21",
     "description": "YouTube for TV, on your PC",
     "main": "index.js",
     "scripts": {
