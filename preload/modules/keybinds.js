@@ -39,7 +39,7 @@ module.exports = async () => {
     })
 
     document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') { //ctrl+alt+c to copy video url
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') { //ctrl+shift+c to copy video url
             if (!window.yt?.player?.utils?.videoElement_?.baseURI) return;
 
             let baseUri = window.yt.player.utils.videoElement_.baseURI;
