@@ -87,6 +87,15 @@ VacuumTube has some settings that you can change, which are located directly in 
 - Controller Support
   - Allows toggling of controller support in VacuumTube (on by default, can be turned off to avoid conflicting with apps like JoyToKey)
 
+## Keybinds
+
+VacuumTube exposes a few custom keybinds for actions that may be desired on a desktop:
+
+- `Ctrl+Shift+C`
+  - Copy current video URL to clipboard
+- `Shift+Enter`
+  - Simulate long-press of the Enter key
+
 ## Custom CSS (Userstyles)
 
 You can apply custom styles to VacuumTube by first enabling it in the settings, and then creating `.css` files in the userstyles folder. You can access the developer tools by pressing **Ctrl+Shift+I**, these are extremely useful for writing custom CSS.
