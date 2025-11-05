@@ -367,7 +367,7 @@ async function createWindow() {
             height: Math.round((outerW - extraWidth) / TARGET_RATIO) + extraHeight
         })
     } else {
-        // Built-in electron aspect ratio lock works fine on Linux but interferes with fullscreen on MacOS.
+        // Built-in electron aspect ratio lock works fine on Linux.
         win.setAspectRatio(TARGET_RATIO)
     }
 
