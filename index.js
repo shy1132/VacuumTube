@@ -327,6 +327,7 @@ async function createWindow() {
         height: 675,
         backgroundColor: '#282828',
         fullscreen, //this sometimes doesn't work for people, so it's repeated below
+        fullscreenable: true, //explicitly enable fullscreen functionality on MacOS
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: false,
@@ -344,7 +345,6 @@ async function createWindow() {
 
     const TARGET_RATIO = 16 / 9;
     const isWindows = process.platform === 'win32'
-    const isMac = process.platform === 'darwin'
 
     if (isWindows) {
         // Custom resize handling for Windows where OS chrome breaks outer-ratio locking.
@@ -366,7 +366,7 @@ async function createWindow() {
             width: outerW,
             height: Math.round((outerW - extraWidth) / TARGET_RATIO) + extraHeight
         })
-    } else if (!isMac) {
+    } else {
         // Built-in electron aspect ratio lock works fine on Linux but interferes with fullscreen on MacOS.
         win.setAspectRatio(TARGET_RATIO)
     }
