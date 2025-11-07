@@ -19,7 +19,11 @@
         },
         "dislikes": {
             "title": "Return Dislikes",
-            "description": "Uses the Return YouTube Dislike API (returnyoutubedislike.com) to re-add dislikes to YouTube. Slows down video loading, as it has to fetch info from the server"
+            "description": "Uses community data from the Return YouTube Dislike API (returnyoutubedislike.com) to show rough dislike counts. Slows down video loading, as it has to fetch info from the server"
+        },
+        "remove_super_resolution": {
+            "title": "Remove Super Resolution",
+            "description": "Remove \"Super resolution\" (AI upscaled) qualities from low quality videos"
         },
         "hide_shorts": {
             "title": "Hide Shorts",

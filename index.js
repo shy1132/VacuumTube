@@ -45,15 +45,33 @@ async function main() {
         return;
     }
 
-    if (runningOnSteam) electron.app.commandLine.appendSwitch('--no-sandbox') //won't run without this in game mode for me
+    if (process.platform === 'linux') {
+        electron.app.commandLine.appendSwitch('--disable-features', 'WaylandWpColorManagerV1') //colors on wayland are super washed out in newer chromium versions for some reason, but this seems to fix it
+    }
+
+    if (runningOnSteam) {
+        electron.app.commandLine.appendSwitch('--no-sandbox') //won't run without this in game mode for me
+    }
 
     config = configManager.init({
         fullscreen: !!runningOnSteam //if running on steam in game mode, override fullscreen to be on by default (note that this was broken from 1.3.0 until 1.3.6 due to config bug)
     })
 
     if (!config.hardware_decoding) {
-        electron.app.commandLine.appendSwitch('disable-accelerated-video-decode')
+        electron.app.commandLine.appendSwitch('--disable-accelerated-video-decode')
     }
+
+    electron.app.on('window-all-closed', () => {
+        if (process.platform !== 'darwin') electron.app.quit()
+    })
+
+    electron.app.on('before-quit', () => {
+        configManager.save()
+    })
+
+    await electron.app.whenReady()
+
+    autoUpdater.checkForUpdatesAndNotify()
 
     //general request modification
     electron.session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
@@ -417,15 +435,4 @@ async function createWindow() {
     })
 }
 
-electron.app.once('ready', () => {
-    autoUpdater.checkForUpdatesAndNotify()
-    main()
-})
-
-electron.app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') electron.app.quit()
-})
-
-electron.app.on('before-quit', () => {
-    configManager.save()
-})
+main()

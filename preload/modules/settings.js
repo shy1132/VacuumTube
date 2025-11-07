@@ -62,6 +62,11 @@ module.exports = async () => {
             locale.settings.dislikes.description,
             'dislikes'
         ),
+        'remove_super_resolution': createSettingBooleanRenderer(
+            locale.settings.remove_super_resolution.title,
+            locale.settings.remove_super_resolution.description,
+            'remove_super_resolution'
+        ),
         'hide_shorts': createSettingBooleanRenderer(
             locale.settings.hide_shorts.title,
             locale.settings.hide_shorts.description,
