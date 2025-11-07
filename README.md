@@ -69,7 +69,9 @@ VacuumTube has some settings that you can change, which are located directly in 
 - DeArrow
   - Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database
 - Return Dislikes
-  - Uses the [Return YouTube Dislike](https://returnyoutubedislike.com) API to re-add dislikes to YouTube
+  - Uses community data from the [Return YouTube Dislike API](returnyoutubedislike.com) to show rough dislike counts
+- Remove Super Resolution
+  - Removes \"Super resolution\" (AI upscaled) qualities from low quality videos
 - Hide Shorts
   - Hides YouTube Shorts from the homepage
 - Force H.264
