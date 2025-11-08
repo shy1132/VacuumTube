@@ -23,14 +23,17 @@ but, this is using the most optimal one i've been able to create
 Mozilla/5.0 makes youtube think it's a "DESKTOP" device
 (PS4; Leanback Shell) is part of the user agent of the ps4 youtube app, i chose ps4 because it's the most versatile in this situation since it gives the most up-to-date ui, and allows the zoom hack to work for some reason (can't replicate this on any other uas???)
 Cobalt/26.lts.0-qa is the latest cobalt version, cobalt is the browser the tv youtube app tends to run in internally
+ON CLIENT SIDE: Cobalt/19.lts.0-qa is an older cobalt version so that youtube doesn't automatically assume widevine is supported
 the actual ps4 ua has more to it, but this is all that's needed for it to work here
 the "compatible" and "VacuumTube" part are just for transparency's sake, and to make sure they can detect it so i'm not screwing up any internal logging/analytics
 
 this is only used because you have to have a good user agent to be "allowed" onto leanback, and many innertube endpoints check the user agent specifically to know what to send (e.g. high quality thumbnails)
 VacuumTube overrides some things to identify properly, but this user agent has to be sent with every request to youtube sadly
 */
-const youtubeUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //for youtube
+const youtubeUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //for youtube, sent in innertube calls
+const youtubeClientUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/19.lts.0-qa; compatible; VacuumTube/${package.version}` //for youtube, somewhere in client scripts this matters because it parses cobalt version explicitly from the user agent, which affects playability because cobalt 26 "should" work with widevine, when we can't support that
 const userAgent = `VacuumTube/${package.version}` //for anything else
+
 const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI === '1'
 
 let win;
@@ -405,7 +408,7 @@ async function createWindow() {
     }
 
     console.log('loading youtube')
-    win.loadURL('https://www.youtube.com/tv', { userAgent: youtubeUserAgent })
+    win.loadURL('https://www.youtube.com/tv', { userAgent: youtubeClientUserAgent })
 
     //remember fullscreen preference
     win.on('enter-full-screen', () => {

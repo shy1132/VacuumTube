@@ -28,63 +28,12 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.3.24" date="2025-11-06" type="stable">
+    <release version="1.3.25" date="2025-11-07" type="stable">
       <description>
-        <p>v1.3.24</p>
+        <p>v1.3.25</p>
         <ul>
-          <li>Added setting to block "Super resolution" feature (AI upscaled qualities)</li>
-          <li>Fixed desaturated colors on Wayland</li>
-          <li>Fixed potential startup race condition</li>
-          <li>Made description of the Return Dislikes setting more clear</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.3.23" date="2025-11-05" type="stable">
-      <description>
-        <p>v1.3.23</p>
-        <ul>
-          <li>Fixed fullscreen on macOS</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.3.22" date="2025-11-05" type="stable">
-      <description>
-        <p>v1.3.22</p>
-        <ul>
-          <li>Updated to Electron v39.1.0</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.3.21" date="2025-10-17" type="stable">
-      <description>
-        <p>v1.3.21</p>
-        <ul>
-          <li>Fixed fullscreen and Keep on Top resetting when switching accounts</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.3.20" date="2025-10-13" type="stable">
-      <description>
-        <p>v1.3.20</p>
-        <ul>
-          <li>Added setting to disable controller support (Implemented by @FM1337 on GitHub)</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.3.19" date="2025-10-05" type="stable">
-      <description>
-        <p>v1.3.19</p>
-        <ul>
-          <li>The Ad Block, DeArrow, Return Dislikes, and Hide Shorts settings no longer require a relaunch after toggling</li>
-          <li>Change summary and description to be more accurate</li>
-        </ul>
-      </description>
-    </release>
-    <release version="1.3.18" date="2025-10-04" type="stable">
-      <description>
-        <p>v1.3.18</p>
-        <ul>
-          <li>Added helpful notice for external controller bug with Steam handhelds</li>
+          <li>Fixed "This video format is not supported" appearing on every video for some users</li>
+          <li>Fixed some issues in client identification overriding</li>
         </ul>
       </description>
     </release>

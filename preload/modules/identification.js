@@ -2,7 +2,9 @@
 
 const os = require('os')
 const package = require('../../package.json') //it feels weird that this works
+const xhrModifiers = require('../util/xhrModifiers')
 const configOverrides = require('../util/configOverrides')
+const functions = require('../util/functions')
 
 const osPlatform = os.platform()
 const osRelease = os.release()
@@ -74,5 +76,58 @@ module.exports = () => {
                 }
             }
         }
+    })
+
+    //sometimes, xhrs can be sent (but not ran to completion) before all of this has time to kick in, so we manually patch too just to be safe
+    xhrModifiers.addRequestModifier((url, body) => {
+        if (!url.startsWith('/youtubei/')) return body;
+
+        let json;
+        try {
+            json = JSON.parse(body)
+        } catch {
+            return body;
+        }
+
+        if (json?.context?.client) {
+            functions.deepMerge(json.context.client, {
+                platform: 'DESKTOP',
+                platformDetail: '__DELETE__',
+                clientFormFactor: 'UNKNOWN_FORM_FACTOR',
+                deviceMake: 'VacuumTube',
+                deviceModel: package.version,
+                browserName: 'Chrome',
+                browserVersion: process.versions.chrome,
+                osName: osName,
+                osVersion: osVersion,
+                tvAppInfo: {
+                    releaseVehicle: '__DELETE__'
+                }
+            })
+
+            body = JSON.stringify(json)
+        }
+
+        return body;
+    })
+
+    xhrModifiers.addResponseModifier((url, text) => {
+        if (!url.startsWith('/tv_config')) return;
+
+        let parts = text.split('\n')
+        let lastLine = parts[parts.length - 1]
+        let json = JSON.parse(lastLine)
+
+        functions.deepMerge(json.webPlayerContextConfig.WEB_PLAYER_CONTEXT_CONFIG_ID_LIVING_ROOM_WATCH.device, {
+            platform: 'DESKTOP',
+            brand: 'VacuumTube',
+            model: package.version,
+            browser: 'Chrome',
+            browserVersion: process.versions.chrome,
+            os: osName,
+            cobaltReleaseVehicle: '__DELETE__'
+        })
+
+        return JSON.stringify(json);
     })
 }

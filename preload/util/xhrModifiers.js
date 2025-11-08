@@ -3,6 +3,7 @@
 const functions = require('./functions')
 
 const responseModifiers = []
+const requestModifiers = []
 const OriginalXMLHttpRequest = window.XMLHttpRequest;
 
 let blocked = false;
@@ -10,6 +11,7 @@ let blocked = false;
 window.XMLHttpRequest = function () { //i've lost track of what's going on in here at this point, but it works
     const xhr = new OriginalXMLHttpRequest()
     const originalOpen = xhr.open;
+    const originalSend = xhr.send;
 
     xhr.open = async function (method, url) {
         this._method = method;
@@ -20,6 +22,24 @@ window.XMLHttpRequest = function () { //i've lost track of what's going on in he
         }
 
         return originalOpen.apply(this, arguments);
+    }
+
+    xhr.send = async function (body) {
+        if (blocked) {
+            await functions.waitForCondition(() => !blocked)
+        }
+
+        for (let modifier of requestModifiers) {
+            try {
+                let modified = await modifier(xhr._url, body)
+                body = modified;
+            } catch (err) {
+                console.error('an xhr request modifier failed', err)
+                continue;
+            }
+        }
+
+        return originalSend.apply(this, [ body ]);
     }
 
     let readyStateHandler = null;
@@ -40,7 +60,7 @@ window.XMLHttpRequest = function () { //i've lost track of what's going on in he
 
                 modifiedText = modified;
             } catch (err) {
-                console.error('an xhr modifier failed', err)
+                console.error('an xhr response modifier failed', err)
                 continue;
             }
         }
@@ -110,6 +130,10 @@ function addResponseModifier(func) {
     responseModifiers.push(func)
 }
 
+function addRequestModifier(func) {
+    requestModifiers.push(func)
+}
+
 function block() {
     blocked = true;
 }
@@ -120,6 +144,7 @@ function unblock() {
 
 module.exports = {
     addResponseModifier,
+    addRequestModifier,
     block,
     unblock
 }
