@@ -112,7 +112,7 @@ function link(options) {
                             options.createSubMenu
                                 ? options.createSubMenu()
                                 : undefined
-                        ]
+                        ].filter(Boolean)
                     }
                 }
             }
