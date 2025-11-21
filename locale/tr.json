@@ -8,7 +8,7 @@
             "title": "Reklam Engelleyici",
             "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir"
         },
-		"sponsorblock_unused": {
+		"sponsorblock": {
             "title": "Sponsor Engelleyici",
             "description": "Kitlesel veritabanı kullanarak YouTube videolarındaki sponsor bölümlerini atlar. Ayrıca girişleri, çıkışları ve abonelik hatırlatıcılarını atlamayı da destekler. Değiştirdikten sonra yeniden başlatın."
         },

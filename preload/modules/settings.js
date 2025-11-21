@@ -52,6 +52,11 @@ module.exports = async () => {
             locale.settings.ad_block.description,
             'adblock'
         ),
+        'sponsorblock': createSettingBooleanRenderer(
+            locale.settings.sponsorblock.title,
+            locale.settings.sponsorblock.description,
+            'sponsorblock'
+        ),
         'dearrow': createSettingBooleanRenderer(
             locale.settings.dearrow.title,
             locale.settings.dearrow.description,

@@ -9,7 +9,7 @@
             "title": "Ad Block",
             "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers"
         },
-        "sponsorblock_unused": {
+        "sponsorblock": {
             "title": "SponsorBlock",
             "description": "Skips sponsor segments in YouTube videos using a crowdsourced database. Also supports skipping intros, outros, and reminders to subscribe. Relaunch after toggling."
         },
