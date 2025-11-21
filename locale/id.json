@@ -8,7 +8,7 @@
             "title": "Blokir Iklan",
             "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube"
         },
-        "sponsorblock_unused": {
+        "sponsorblock": {
             "title": "SponsorBlock",
             "description": "Lewati segmen sponsor pada video YouTube berdasarkan basis data publik. Juga mendukung fitur lewati intro, outro, dan ajakan langganan (subscribe). Luncurkan ulang setelah mengubah."
         },

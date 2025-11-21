@@ -8,7 +8,7 @@
             "title": "Bloker Reklama",
             "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama za sprječavanje blokatora"
         },
-        "sponsorblock_unused": {
+        "sponsorblock": {
             "title": "Sponzorski blokator",
             "description": "Preskače segmente sponzora u YouTube videozapisima koristeći bazu podataka prikupljenu od strane korisnika. Također podržava preskakanje uvoda, završetaka i podsjetnika za pretplatu. Ponovo pokrenite nakon prebacivanja."
         },

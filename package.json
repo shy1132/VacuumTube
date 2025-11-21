@@ -105,6 +105,7 @@
     },
     "dependencies": {
         "chokidar": "^4.0.3",
-        "electron-updater": "^6.6.2"
+        "electron-updater": "^6.6.2",
+        "sponsorblock-api": "^0.2.4"
     }
 }

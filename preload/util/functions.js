@@ -50,6 +50,32 @@ function deepMerge(current, updates) {
     return current;
 }
 
+function displayNotification(message, timeout = 4000) {
+    if (!document.querySelector('.ytaf-notification-container')) {
+        const c = document.createElement('div');
+        c.classList.add('ytaf-notification-container');
+        document.body.appendChild(c);
+    }
+
+    const element = document.createElement('div');
+    const innerElement = document.createElement('div');
+    innerElement.innerText = message;
+    innerElement.classList.add('message');
+    innerElement.classList.add('message-hidden');
+    element.appendChild(innerElement);
+    document.querySelector('.ytaf-notification-container').appendChild(element);
+
+    setTimeout(() => {
+        element.classList.remove('message-hidden');
+    }, 100);
+    setTimeout(() => {
+        innerElement.classList.add('message-hidden');
+        setTimeout(() => {
+            element.remove();
+        }, 1000);
+    }, timeout);
+}
+
 module.exports = {
     waitForSelector,
     waitForCondition,

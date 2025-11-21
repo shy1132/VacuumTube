@@ -12,6 +12,8 @@ let config = {}
 const defaults = {
     fullscreen: false, //changes automatically depending on user's last preference
     adblock: true, //block ads
+    sponsorblock: true, // Enable Sponsorblock
+    sponsorblock_uuid: crypto.randomUUID(), // Sponsorblock wants to track this per user so you can ask it for stats later
     dearrow: false, //replaces titles and thumbnails with more accurate and less sensationalized versions from a crowdsourced database (https://dearrow.ajay.app/)
     dislikes: false, //readds youtube dislikes via https://www.returnyoutubedislike.com/
     remove_super_resolution: false, //block "super resolution" (ai upscaled qualities)

@@ -8,7 +8,7 @@
             "title": "Reklamblockering",
             "description": "Blockerar sömlöst reklam i videor och flödet. Påverkas ej av YouTube:s metoder för att förhindra reklamblockering"
         },
-        "sponsorblock_unused": {
+        "sponsorblock": {
             "title": "SponsorBlock",
             "description": "Hoppar över sponsrade segment i YouTube-videor med hjälp av en crowdsourcad databas. Kan även hoppa över vinjetter (in och ut) samt prenumerationsuppmaningar. Starta om appen efter du har ändrat inställningen."
         },
