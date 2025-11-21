@@ -407,6 +407,15 @@ async function createWindow() {
         return;
     }
 
+    if (process.argv.includes('--enable-devtools')) {
+        console.log('Launching with devtools enabled')
+        win.webContents.on("before-input-event", (event, input) => {
+            if (input.type === 'keyUp' && input.key === 'F12') {
+                win.webContents.toggleDevTools();
+            }
+        }, true)
+    }
+
     console.log('loading youtube')
     win.loadURL('https://www.youtube.com/tv', { userAgent: youtubeClientUserAgent })
 
