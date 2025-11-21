@@ -6,9 +6,34 @@ const jsonMod = require('../util/jsonModifiers')
 const rcMod = require('../util/resolveCommandModifiers')
 const localeProvider = require('../util/localeProvider')
 const functions = require('../util/functions')
+const ui = require('../util/ui')
 
 let cssPath = ipcRenderer.sendSync('get-userstyles-path')
 let config = configManager.get()
+
+function createSettingButtonRenderer(title, summary, callback) {
+    return {
+        settingActionRenderer: {
+            title: {
+                runs: [ { text: title } ]
+            },
+            subtitle: {
+                runs: [ { text: summary } ]
+            },
+            actionButton: {
+                buttonRenderer: {
+                    text: {
+                        runs: [ { text: title } ] 
+                    },
+                    navigationEndpoint: {
+                        vtConfigOption: 'vt-button',
+                        vtConfigValue: callback
+                    }
+                }
+            }
+        }
+    };
+}
 
 function createSettingBooleanRenderer(title, summary, configName, dynamicFunction) {
     return {
@@ -108,11 +133,36 @@ module.exports = async () => {
             locale.settings.controller_support.title,
             locale.settings.controller_support.description,
             'controller_support'
+        ),
+        'exit': createSettingButtonRenderer(
+            locale.settings.exit.title,
+            locale.settings.exit.description,
+            () => {
+                rcMod.resolveCommand(ui.popupMenu({
+                    title: locale.settings.exit.confirmation,
+                    items: [
+                        ui.link({
+                            title: locale.settings.exit.yes,
+                            callback: () => window.close(),
+                            closeMenu: true
+                        }),
+                        ui.link({
+                           title: locale.settings.exit.no,
+                            closeMenu: true
+                         })
+                        ]    
+                }))
+            }
         )
     }
 
     rcMod.addInputModifier((input) => {
         if (input.vtConfigOption) {
+            if (input.vtConfigOption === 'vt-button') {
+                input.vtConfigValue()
+                return false
+            }
+
             let newConfig = {}
             newConfig[input.vtConfigOption] = input.vtConfigValue;
             configManager.set(newConfig)

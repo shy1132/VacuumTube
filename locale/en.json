@@ -56,6 +56,13 @@
         "controller_support": {
             "title": "Controller Support",
             "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox Controller."
+        },
+        "exit": {
+            "title": "Exit",
+            "description": "Closes the program and returns to the desktop.",
+            "confirmation": "Are you sure you want to exit?",
+            "yes": "Yes",
+            "no": "No"
         }
     }
 }
