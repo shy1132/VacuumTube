@@ -8,7 +8,7 @@
             "title": "Anzeigenblocker",
             "description": "Blockiert nahtlos Video- und Feed-Werbung und unterliegt nicht den Methoden von YouTube zur Verhinderung von Blockern"
         },
-        "sponsorblock": {
+        "sponsorblock_full_unused": {
             "title": "SponsorBlock",
             "description": "Überspringt Sponsorensegmente in YouTube-Videos mithilfe einer Crowdsourcing-Datenbank. Unterstützt auch das Überspringen von Intros, Outros und Aufforderungen zum Abonnieren. Nach dem Umschalten neu starten."
         },

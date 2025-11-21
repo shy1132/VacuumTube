@@ -22,7 +22,7 @@ module.exports = () => {
             let homeFeed = json.contents?.tvBrowseRenderer?.content?.tvSurfaceContentRenderer?.content?.sectionListRenderer;
             if (!homeFeed || !homeFeed.contents) return;
 
-            homeFeed.contents = homeFeed.contents.filter(r => !r.adSlotRenderer)
+            homeFeed.contents = homeFeed.contents.filter(r => !r.adSlotRenderer && !r.promoShelfRenderer)
 
             for (let feed of homeFeed.contents) {
                 let horizontal = feed?.shelfRenderer?.content?.horizontalListRenderer;

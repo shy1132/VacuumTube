@@ -28,12 +28,13 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.3.25" date="2025-11-07" type="stable">
+    <release version="1.4.0" date="2025-11-21" type="stable">
       <description>
-        <p>v1.3.25</p>
+        <p>v1.4.0</p>
         <ul>
-          <li>Fixed "This video format is not supported" appearing on every video for some users</li>
-          <li>Fixed some issues in client identification overriding</li>
+          <li>Added basic SponsorBlock support (#16, implemented by Andicraft)</li>
+          <li>Added --enable-devtools launch flag</li>
+          <li>Fixed banner ads not being blocked by Ad Block</li>
         </ul>
       </description>
     </release>

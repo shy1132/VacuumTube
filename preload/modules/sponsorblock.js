@@ -1,59 +1,59 @@
-const { SponsorBlock } = require('sponsorblock-api');
-const configManager = require('../config');
+const { SponsorBlock } = require('sponsorblock-api')
+const ui = require('../util/ui')
+const localeProvider = require('../util/localeProvider')
+const configManager = require('../config')
 const config = configManager.get()
 
-let sponsorBlock = null;
-let sponsorBlockSegments = []
+module.exports = async () => {
+    await localeProvider.waitUntilAvailable()
+    let locale = localeProvider.getLocale()
 
-let activeVideoId = 0;
-let attachVideoTimeout = null
-let activeVideo = null
-const attachToVideo = function () {
-    clearTimeout(attachVideoTimeout)
-    attachVideoTimeout = null
+    let sponsorBlock = new SponsorBlock(config.sponsorblock_uuid)
+    let sponsorBlockSegments = []
 
-    activeVideo = document.querySelector('video')
-    if (!activeVideo) {
-        attachVideoTimeout = setTimeout(attachToVideo, 100)
-        return
+    let activeVideoId = 0;
+    let attachVideoTimeout = null;
+    let activeVideo = null;
+    const attachToVideo = function () {
+        clearTimeout(attachVideoTimeout)
+        attachVideoTimeout = null;
+
+        activeVideo = document.querySelector('video')
+        if (!activeVideo) {
+            attachVideoTimeout = setTimeout(attachToVideo, 100)
+            return;
+        }
+
+        console.log("Sponsorblock attached to video ID ", activeVideoId)
+
+        activeVideo.addEventListener('timeupdate', checkForSponsorSkip)
     }
 
-    console.log("Sponsorblock attached to video ID ", activeVideoId)
+    const checkForSponsorSkip = function () {
+        if (!config.sponsorblock || !activeVideo || sponsorBlockSegments.length === 0) return;
 
-    activeVideo.addEventListener('timeupdate', checkForSponsorSkip)
-}
+        if (activeVideo.paused) return;
 
-const checkForSponsorSkip = function () {
-    if (!config.sponsorblock || !activeVideo || sponsorBlockSegments.length === 0)
-        return
+        let matchingSegment = sponsorBlockSegments.filter((v) => {
+            // Only skip if at the start of the segment - if the user jumped into the segment
+            // they probably want to watch it for whatever reason
+            return activeVideo.currentTime > v.startTime
+                && activeVideo.currentTime < v.startTime + 2
+                && activeVideo.currentTime < v.endTime;
+        }).sort((x, y) => x.startTime - y.startTime)
 
-    if (activeVideo.paused)
-        return
+        if (matchingSegment.length === 0) return;
 
-    let matchingSegment = sponsorBlockSegments.filter((v) => {
-        // Only skip if at the start of the segment - if the user jumped into the segment
-        // they probably want to watch it for whatever reason
-        return activeVideo.currentTime > v.startTime
-            && activeVideo.currentTime < v.startTime + 2
-            && activeVideo.currentTime < v.endTime
-    }).sort((x,y) => x.startTime - y.startTime)
-    if (matchingSegment.length === 0)
-        return
+        console.log("Skipping sponsor segment...")
 
-    // TODO: Add a notification when this happens
-    console.log("Skipping sponsor segment...")
-    activeVideo.currentTime = matchingSegment[0].endTime
-}
+        activeVideo.currentTime = matchingSegment[0].endTime;
 
-module.exports = () => {
-    if (!config.sponsorblock)
-        return;
+        ui.toast('VacuumTube', locale.sponsorblock.sponsor_skipped)
+    }
 
-    sponsorBlock = new SponsorBlock(config.sponsorblock_uuid)
 
     window.addEventListener('hashchange', () => {
-        if (!config.sponsorblock)
-            return;
+        if (!config.sponsorblock) return;
 
         const pageUrl = new URL(location.hash.substring(1), location.href);
 

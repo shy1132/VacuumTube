@@ -8,9 +8,9 @@
             "title": "Blokir Iklan",
             "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube"
         },
-        "sponsorblock": {
+        "sponsorblock_full_unused": {
             "title": "SponsorBlock",
-            "description": "Lewati segmen sponsor pada video YouTube berdasarkan basis data publik. Juga mendukung fitur lewati intro, outro, dan ajakan langganan (subscribe). Luncurkan ulang setelah mengubah."
+            "description": "Lewati segmen sponsor pada video YouTube berdasarkan basis data publik. Juga mendukung fitur lewati intro, outro, dan ajakan langganan (subscribe)"
         },
         "dearrow": {
             "title": "DeArrow",

@@ -138,26 +138,6 @@ module.exports = async () => {
             locale.settings.controller_support.title,
             locale.settings.controller_support.description,
             'controller_support'
-        ),
-        'exit': createSettingButtonRenderer(
-            locale.settings.exit.title,
-            locale.settings.exit.description,
-            () => {
-                rcMod.resolveCommand(ui.popupMenu({
-                    title: locale.settings.exit.confirmation,
-                    items: [
-                        ui.link({
-                            title: locale.settings.exit.yes,
-                            callback: () => window.close(),
-                            closeMenu: true
-                        }),
-                        ui.link({
-                           title: locale.settings.exit.no,
-                            closeMenu: true
-                         })
-                        ]    
-                }))
-            }
         )
     }
 
@@ -165,7 +145,7 @@ module.exports = async () => {
         if (input.vtConfigOption) {
             if (input.vtConfigOption === 'vt-button') {
                 input.vtConfigValue()
-                return false
+                return false;
             }
 
             let newConfig = {}

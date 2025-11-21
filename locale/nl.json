@@ -8,9 +8,9 @@
             "title": "Ad-blokker",
             "description": "Blokkeert naadloos video- en feed-advertenties en is niet onderhevig aan de blokkeermethoden van YouTube"
         },
-        "sponsorblock": {
+        "sponsorblock_full_unused": {
             "title": "Sponsorblok",
-            "description": "Slaat sponsorsegmenten in YouTube-video's over met behulp van een crowdsourced database. Ondersteunt ook het overslaan van intro's, outro's en herinneringen om je te abonneren. Start opnieuw op na het omschakelen."
+            "description": "Slaat sponsorsegmenten in YouTube-video's over met behulp van een crowdsourced database. Ondersteunt ook het overslaan van intro's, outro's en herinneringen om je te abonneren"
         },
         "dearrow": {
             "title": "DeArrow",

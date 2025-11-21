@@ -8,9 +8,9 @@
             "title": "Blokator Oglasa",
             "description": "Besprekorno blokira video i fid oglase, nije podložan YouTube metodama protiv blokiranja"
         },
-        "sponsorblock_unused": {
+        "sponsorblock_full_unused": {
             "title": "Sponzorski blokator",
-            "description": "Preskače segmente sponzora u YouTube video snimcima koristeći bazu podataka prikupljenu od strane korisnika. Takođe podržava preskakanje uvoda, završetaka i podsetnika za pretplatu. Ponovo pokrenite nakon prebacivanja."
+            "description": "Preskače segmente sponzora u YouTube video snimcima koristeći bazu podataka prikupljenu od strane korisnika. Takođe podržava preskakanje uvoda, završetaka i podsetnika za pretplatu"
         },
         "dearrow": {
             "title": "DeArrow",
