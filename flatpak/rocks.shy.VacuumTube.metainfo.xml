@@ -28,13 +28,12 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.4.0" date="2025-11-21" type="stable">
+    <release version="1.4.1" date="2025-11-29" type="stable">
       <description>
-        <p>v1.4.0</p>
+        <p>v1.4.1</p>
         <ul>
-          <li>Added basic SponsorBlock support (#16, implemented by Andicraft)</li>
-          <li>Added --enable-devtools launch flag</li>
-          <li>Fixed banner ads not being blocked by Ad Block</li>
+          <li>Fixed Ad Blocker in Shorts</li>
+          <li>Fixed Ctrl+Shift+C in Shorts</li>
         </ul>
       </description>
     </release>
