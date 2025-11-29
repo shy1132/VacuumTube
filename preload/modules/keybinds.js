@@ -39,16 +39,27 @@ module.exports = async () => {
     })
 
     document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') { //ctrl+shift+c to copy video url
-            if (!window.yt?.player?.utils?.videoElement_?.baseURI) return;
+        if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') {
+            let url;
 
-            let baseUri = window.yt.player.utils.videoElement_.baseURI;
-            if (!baseUri || !baseUri.includes('/watch?v=')) return;
+            let isShort = !!document.querySelector('ytlr-shorts-page')?.classList?.contains('zylon-focus')
+            if (isShort) { //very dumb, don't like it, but there doesn't seem to be a better way
+                let thumbnail = document.querySelector('ytlr-thumbnail-details[idomkey="ytLrShortsPageThumbnail"].ytLrThumbnailDetailsFocused').style.backgroundImage;
+                let id = thumbnail.split('/vi/')[1]?.slice(0, 11)
+                if (!id) return;
 
-            let id = baseUri.split('/watch?v=')[1].slice(0, 11)
-            let url = `https://youtu.be/${id}`
+                url = `https://youtube.com/shorts/${id}`
+            } else {
+                let baseUri = window.yt?.player?.utils?.videoElement_?.baseURI
+                if (!baseUri || !baseUri.includes('/watch?v=')) return;
+
+                let id = baseUri.split('/watch?v=')[1]?.slice(0, 11)
+                if (!id) return;
+
+                url = `https://youtu.be/${id}`
+            }
+
             navigator.clipboard.writeText(url)
-
             ui.toast('VacuumTube', locale.general.video_copied)
         }
     })

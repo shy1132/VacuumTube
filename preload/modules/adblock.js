@@ -45,7 +45,7 @@ module.exports = () => {
         return JSON.stringify(json);
     })
 
-    //video ads (i don't know where these appear in requests)
+    //video ads
     jsonMod.addModifier((json) => {
         if (!config.adblock) return json;
 
@@ -55,6 +55,17 @@ module.exports = () => {
 
         if (json.adSlots) {
             json.adSlots = []
+        }
+
+        return json;
+    })
+
+    //shorts ads
+    jsonMod.addModifier((json) => {
+        if (!config.adblock) return json;
+
+        if (json?.entries && Array.isArray(json.entries)) {
+            json.entries = json.entries.filter(e => !e?.command?.reelWatchEndpoint?.adClientParams?.isAd)
         }
 
         return json;
