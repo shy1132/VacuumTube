@@ -1,5 +1,9 @@
 /*css patches*/
 
+::-webkit-scrollbar { /*hide native scrollbars from enableTouchSupport in touch-support.js*/
+    display: none;
+}
+
 body {
     user-select: none; /*without this, you can accidentally ctrl+a and select everything, have to refresh to fix*/
 }

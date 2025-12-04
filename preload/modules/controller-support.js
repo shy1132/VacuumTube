@@ -1,4 +1,4 @@
-//controller support (normal leanback doesnt have this for some reason, not sure how the console apps do it...)
+//controller support with console parity (normal leanback doesn't have this for some reason, not sure how the console apps do it...)
 
 const { ipcRenderer } = require('electron')
 const ui = require('../util/ui')

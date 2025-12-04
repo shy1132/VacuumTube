@@ -1,6 +1,14 @@
-//onscreen touch controls
+//onscreen touch controls + native scrollbars
+
+const configOverrides = require('../util/configOverrides')
 
 module.exports = () => {
+    configOverrides.tectonicConfigOverrides.push({
+        featureSwitches: {
+            enableTouchSupport: true //native scrollbars
+        }
+    })
+
     window.addEventListener('load', () => {
         const touchKeyCodeMap = {
             'back':   27, //escape
@@ -57,8 +65,8 @@ module.exports = () => {
             button.style.zIndex = (zIndex + 1).toString()
             button.textContent = text;
 
-            button.onmousedown = () => simulateKeyDown(keyCode)
-            button.onmouseup = () => simulateKeyUp(keyCode)
+            button.ontouchstart = () => simulateKeyDown(keyCode)
+            button.ontouchend = () => simulateKeyUp(keyCode)
 
             if (margin) {
                 button.style.marginLeft = '1vw'
@@ -125,6 +133,6 @@ module.exports = () => {
                 e.preventDefault()
                 show()
             }
-        }, { passive: false })
+        })
     })
 }
