@@ -5,6 +5,12 @@
         "steam_controller_notice": "External controller isn't detected? Try the steamdeck-input-disabler plugin from Decky."
     },
     "settings": {
+        "generic": {
+            "title": "VacuumTube Settings",
+            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere using Ctrl/Cmd+O or R3 on controllers.",
+            "button_label": "Open VacuumTube Settings",
+            "hint": "Use arrow keys to navigate"
+        },
         "ad_block": {
             "title": "Ad Block",
             "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers"
@@ -51,7 +57,10 @@
         },
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
-            "description": "Enables injection of custom CSS styles. Place your .css files in the {path} folder"
+            "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically.",
+            "warn_empty": "No userstyles found",
+            "open_folder": "Open Userstyles folder",
+            "enable": "Enable Userstyles"
         },
         "controller_support": {
             "title": "Controller Support",

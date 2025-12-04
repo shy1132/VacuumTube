@@ -24,6 +24,7 @@ const defaults = {
     low_memory_mode: false, //enables env_isLimitedMemory
     keep_on_top: false, //whether or not to keep window on top
     userstyles: false, //whether or not to enable custom CSS injection
+    disabled_userstyles: [], //array of filenames that are disabled
     controller_support: true //whether or not to enable game controller support
 }
 
