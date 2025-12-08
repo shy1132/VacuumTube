@@ -91,14 +91,16 @@ VacuumTube has some settings that you can change, which are located directly in 
 - Controller Support
   - Allows toggling of controller support in VacuumTube (on by default, can be turned off to avoid conflicting with apps like JoyToKey)
 
-## Keybinds
+## Extra Input Mappings
 
-VacuumTube exposes a few custom keybinds for actions that may be desired on a desktop:
+VacuumTube exposes a few extra input mappings for actions that may be desired on a desktop:
 
 - `Ctrl+Shift+C`
   - Copy current video URL to clipboard
 - `Shift+Enter`
   - Simulate long-press of the Enter key
+- `Right Click`
+  - Go back
 
 ## Custom CSS (Userstyles)
 
