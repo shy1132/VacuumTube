@@ -14,6 +14,12 @@ let config = configManager.get()
 
 const scrollOffsets = {}
 
+// Settings that should apply instantly using IPC calls
+const dynamicFunction = {
+    fullscreen: (value) => ipcRenderer.invoke('set-fullscreen', value),
+    keep_on_top: (value) => ipcRenderer.invoke('set-on-top', value)
+}
+
 // Tab definitions - id must match config key and dataPanel attribute
 const tabs = [
     { id: 'adblock', localeKey: 'ad_block' },
@@ -966,6 +972,10 @@ function toggleSetting(configKey) {
         if (toggle) {
             toggle.classList.toggle('vt-toggle-on', newValue)
         }
+    }
+
+    if (dynamicFunction[configKey]) {
+        dynamicFunction[configKey](newValue)
     }
 }
 
