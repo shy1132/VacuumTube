@@ -6,6 +6,7 @@ const configManager = require('../config')
 const css = require('../util/css')
 const localeProvider = require('../util/localeProvider')
 const functions = require('../util/functions')
+const controller = require('../util/controller')
 
 let overlayVisible = false
 let currentTabIndex = 0
@@ -657,7 +658,7 @@ async function refreshUserstylesList() {
     const listContainer = document.getElementById('vt-userstyles-list')
     if (!listContainer) return
 
-    listContainer.innerHTML = ''
+    listContainer.replaceChildren() //clears children
 
     try {
         const styles = await ipcRenderer.invoke('get-userstyles')
@@ -707,7 +708,7 @@ async function refreshUserstylesList() {
 function showOverlay() {
     const overlay = getOverlay()
 
-    overlayVisible = true
+    overlayVisible = Date.now()
     overlay.classList.remove('vt-settings-hidden')
     overlay.style.opacity = '1'
     overlay.style.pointerEvents = 'auto'
@@ -1134,80 +1135,18 @@ function handleKeyDown(e) {
     }
 }
 
-function handleGamepadInput() {
-    if (!overlayVisible) return
+const gamepadKeyMap = {
+    0: 'Enter',        //a
+    1: 'Escape',       //b
+    12: 'ArrowUp',     //dpad up
+    13: 'ArrowDown',   //dpad down
+    14: 'ArrowLeft',   //dpad left
+    15: 'ArrowRight',  //dpad right
 
-    const gamepads = navigator.getGamepads()
-    for (const gamepad of gamepads) {
-        if (!gamepad) continue
-
-        // D-pad or left stick for navigation
-        const axes = gamepad.axes
-        const buttons = gamepad.buttons
-
-        // Check for button presses (with debounce handled by checking pressed state)
-        // A/Cross button (index 0) - Select
-        if (buttons[0]?.pressed) {
-            handleKeyDown({ key: 'Enter', preventDefault: () => { }, stopPropagation: () => { } })
-        }
-        // B/Circle button (index 1) - Back
-        if (buttons[1]?.pressed) {
-            handleKeyDown({ key: 'Escape', preventDefault: () => { }, stopPropagation: () => { } })
-        }
-
-        // D-pad
-        if (buttons[12]?.pressed) { // Up
-            handleKeyDown({ key: 'ArrowUp', preventDefault: () => { }, stopPropagation: () => { } })
-        }
-        if (buttons[13]?.pressed) { // Down
-            handleKeyDown({ key: 'ArrowDown', preventDefault: () => { }, stopPropagation: () => { } })
-        }
-        if (buttons[14]?.pressed) { // Left
-            handleKeyDown({ key: 'ArrowLeft', preventDefault: () => { }, stopPropagation: () => { } })
-        }
-        if (buttons[15]?.pressed) { // Right
-            handleKeyDown({ key: 'ArrowRight', preventDefault: () => { }, stopPropagation: () => { } })
-        }
-    }
-}
-
-let gamepadPollInterval = null
-let lastGamepadState = {}
-
-function startGamepadPolling() {
-    if (gamepadPollInterval) return
-
-    gamepadPollInterval = setInterval(() => {
-        if (!overlayVisible) return
-
-        const gamepads = navigator.getGamepads()
-        for (let i = 0; i < gamepads.length; i++) {
-            const gamepad = gamepads[i]
-            if (!gamepad) continue
-
-            const prevState = lastGamepadState[i] || {}
-            const buttons = gamepad.buttons
-
-            const checkButton = (index, key) => {
-                const isPressed = buttons[index]?.pressed
-                const wasPressed = prevState[index]
-                if (isPressed && !wasPressed) {
-                    handleKeyDown({ key, preventDefault: () => { }, stopPropagation: () => { } })
-                }
-                return isPressed
-            }
-
-            const newState = {}
-            newState[0] = checkButton(0, 'Enter')      // A/Cross
-            newState[1] = checkButton(1, 'Escape')     // B/Circle
-            newState[12] = checkButton(12, 'ArrowUp')  // D-pad Up
-            newState[13] = checkButton(13, 'ArrowDown') // D-pad Down
-            newState[14] = checkButton(14, 'ArrowLeft') // D-pad Left
-            newState[15] = checkButton(15, 'ArrowRight') // D-pad Right
-
-            lastGamepadState[i] = newState
-        }
-    }, 100)
+    1012: 'ArrowUp',   //left stick up
+    1014: 'ArrowDown', //left stick down
+    1011: 'ArrowLeft', //left stick left
+    1013: 'ArrowRight' //left stick right
 }
 
 function setupEventListeners() {
@@ -1293,7 +1232,14 @@ function setupEventListeners() {
         }
     }, true)
 
-    startGamepadPolling()
+    controller.on('down', (e) => {
+        if ((Date.now() - overlayVisible) < 100) return; //dumb way to fix accidental input
+
+        let key = gamepadKeyMap[e.code]
+        if (key) {
+            handleKeyDown({ key, preventDefault: () => {}, stopPropagation: () => {} })
+        }
+    })
 }
 
 function openSettingsOverlay() {

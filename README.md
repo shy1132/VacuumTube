@@ -62,7 +62,7 @@ Otherwise, you can use a distribution package or a portable one. If you don't kn
  
 ## Settings
 
-VacuumTube has some settings that you can change, which are located directly in the YouTube settings.
+VacuumTube has some settings that you can change, which are located directly in the YouTube settings. They can also be opened by pressing `Ctrl+O` on your keyboard or `R3` on your controller.
 
 - Ad Block
   - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
@@ -95,6 +95,8 @@ VacuumTube has some settings that you can change, which are located directly in 
 
 VacuumTube exposes a few extra input mappings for actions that may be desired on a desktop:
 
+- `Ctrl+O` or `R3`
+  - Open VacuumTube Settings
 - `Ctrl+Shift+C`
   - Copy current video URL to clipboard
 - `Shift+Enter`
@@ -104,7 +106,7 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
 
 ## Custom CSS (Userstyles)
 
-You can apply custom styles to VacuumTube by first enabling it in the settings, and then creating `.css` files in the userstyles folder. You can access the developer tools by pressing **Ctrl+Shift+I**, these are extremely useful for writing custom CSS.
+You can apply custom styles to VacuumTube by first enabling it in the settings, and then creating `.css` files in the userstyles folder. They can then be managed in VacuumTube settings. You can access the developer tools by pressing **Ctrl+Shift+I**, which are extremely helpful when writing custom CSS.
 
 ### File Location
 

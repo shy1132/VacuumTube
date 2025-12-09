@@ -6,11 +6,10 @@ const jsonMod = require('../util/jsonModifiers')
 const rcMod = require('../util/resolveCommandModifiers')
 const localeProvider = require('../util/localeProvider')
 const functions = require('../util/functions')
-const ui = require('../util/ui')
 
 let config = configManager.get()
 
-function createSettingButtonRenderer(title, summary, callback) {
+function createSettingButtonRenderer(title, summary, button, callback) {
     return {
         settingActionRenderer: {
             title: {
@@ -22,7 +21,7 @@ function createSettingButtonRenderer(title, summary, callback) {
             actionButton: {
                 buttonRenderer: {
                     text: {
-                        runs: [ { text: title } ]
+                        runs: [ { text: button } ]
                     },
                     navigationEndpoint: {
                         vtConfigOption: 'vt-button',
@@ -126,8 +125,9 @@ module.exports = async () => {
                         focused: false,
                         items: [
                             createSettingButtonRenderer(
-                                locale.settings.generic.button_label,
+                                locale.settings.generic.title,
                                 locale.settings.generic.description,
+                                locale.settings.generic.button_label,
                                 () => {
                                     if (window.vtOpenSettingsOverlay) {
                                         window.vtOpenSettingsOverlay()
@@ -137,7 +137,7 @@ module.exports = async () => {
                         ],
                         title: {
                             runs: [
-                                { text: locale.settings.generic.title }
+                                { text: 'VacuumTube' }
                             ]
                         }
                     }

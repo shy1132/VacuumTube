@@ -28,12 +28,13 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.4.2" date="2025-12-04" type="stable">
+    <release version="1.5.0" date="2025-12-08" type="stable">
       <description>
-        <p>v1.4.2</p>
+        <p>v1.5.0</p>
         <ul>
-          <li>Improved mouse support (right-click to go back)</li>
-          <li>Improved touch support (touch scrolling)</li>
+          <li>Split VacuumTube settings into a custom, more versatile menu</li>
+          <li>Upgraded to Electron v39.2.6</li>
+          <li>Internal improvements</li>
         </ul>
       </description>
     </release>
