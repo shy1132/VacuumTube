@@ -64,8 +64,8 @@
             "failed_to_load": "Gagal memuat CSS"
         },
         "controller_support": {
-            "title": "Controller Support",
-            "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox Controller."
+            "title": "Dukungan Pengontrol",
+            "description": "Mengaktifkan dukungan untuk pengontrol konsol eksternal, termasuk kontrol navigasi halaman dan pemutaran video."
         }
     },
     "sponsorblock": {
