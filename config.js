@@ -67,7 +67,7 @@ function init(overrides = {}) {
         try {
             fs.writeFileSync(configFile, JSON.stringify(config, null, 4))
         } catch (err) {
-            console.error('failed to write config file', err)
+            console.error('[config] failed to write config file', err)
         }
     }
 
@@ -110,7 +110,7 @@ function isValidJson(file) {
     try {
         let text = fs.readFileSync(file, 'utf-8')
         let json = JSON.parse(text)
-        if (typeof json != 'object') throw new Error('not an object');
+        if (typeof json !== 'object') throw new Error('not an object');
 
         return true;
     } catch {

@@ -9,7 +9,7 @@
   </developer>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
-  <update_contact>shy+vacuumtube@shy.rocks</update_contact>
+  <update_contact>shy@shy.rocks</update_contact>
   <description>
     <p>VacuumTube is an unofficial open source wrapper of YouTube Leanback (the console and Smart TV version of YouTube) for PCs, with a built-in adblocker and other enhancements. It is the best way to experience YouTube on your media center or handheld PC!</p>
   </description>
@@ -28,12 +28,17 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.5.0" date="2025-12-08" type="stable">
+    <release version="1.5.1" date="2025-12-12" type="stable">
       <description>
-        <p>v1.5.0</p>
+        <p>v1.5.1</p>
         <ul>
-          <li>Split VacuumTube settings into a custom, more versatile menu</li>
-          <li>Upgraded to Electron v39.2.6</li>
+          <li>Blocked "Sign in for the best YouTube experience" popup</li>
+          <li>Improved VacuumTube settings option in YouTube settings</li>
+          <li>Localized a few missed strings in settings overlay</li>
+          <li>Fixed macOS icon</li>
+          <li>Fixed --enable-devtools launch option</li>
+          <li>Fixed settings overlay breaking input on close</li>
+          <li>Fixed spacebar breaking the home feed</li>
           <li>Internal improvements</li>
         </ul>
       </description>

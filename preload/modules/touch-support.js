@@ -9,6 +9,13 @@ module.exports = () => {
         }
     })
 
+    //fix native scrollbars causing space to jump the page down and break everything
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault()
+        }
+    })
+
     window.addEventListener('load', () => {
         const touchKeyCodeMap = {
             'back':   27, //escape

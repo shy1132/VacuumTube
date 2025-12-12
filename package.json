@@ -1,6 +1,6 @@
 {
     "name": "vacuumtube",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "description": "YouTube for TV, on your PC",
     "main": "index.js",
     "scripts": {
@@ -19,14 +19,16 @@
         "productName": "VacuumTube",
         "artifactName": "VacuumTube-${arch}.${ext}",
         "linux": {
-            "icon": "./assets/icons",
+            "icon": "./assets/icon.svg",
             "synopsis": "Watch and explore videos on YouTube",
             "category": "AudioVideo",
             "desktop": {
-                "Name": "VacuumTube",
-                "Type": "Application",
-                "Categories": "AudioVideo;",
-                "Keywords": "YouTube;YT;"
+                "entry": {
+                    "Name": "VacuumTube",
+                    "Type": "Application",
+                    "Categories": "AudioVideo;",
+                    "Keywords": "YouTube;YT;"
+                }
             },
             "maintainer": "shy@shy.rocks",
             "target": [
@@ -82,7 +84,7 @@
             "perMachine": false
         },
         "mac": {
-            "icon": "./assets/AppIcon.appiconset",
+            "icon": "./assets/icon.icns",
             "category": "public.app-category.video",
             "target": [
                 {
@@ -101,7 +103,7 @@
     },
     "devDependencies": {
         "electron": "^39.2.6",
-        "electron-builder": "^25.1.8"
+        "electron-builder": "^26.0.12"
     },
     "dependencies": {
         "chokidar": "^4.0.3",

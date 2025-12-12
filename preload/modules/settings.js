@@ -667,7 +667,7 @@ async function refreshUserstylesList() {
         if (styles.length === 0) {
             const emptyMsg = el('div', {
                 className: 'vt-userstyles-empty',
-                textContent: cachedLocale?.settings_overlay?.userstyles.empty || 'No userstyles found'
+                textContent: cachedLocale.settings.userstyles.warn_empty
             })
             listContainer.appendChild(emptyMsg)
         } else {
@@ -699,7 +699,7 @@ async function refreshUserstylesList() {
         console.error('[VT Settings Overlay] Failed to load userstyles:', error)
         const errorMsg = el('div', {
             className: 'vt-userstyles-empty',
-            textContent: 'Failed to load userstyles'
+            textContent: cachedLocale.settings.userstyles.failed_to_load
         })
         listContainer.appendChild(errorMsg)
     }
@@ -729,6 +729,7 @@ function hideOverlay() {
     overlay.classList.add('vt-settings-hidden')
     overlay.style.opacity = '0'
     overlay.style.pointerEvents = 'none'
+    overlay.blur() //unfocus
 }
 
 function updateFocus(area) {

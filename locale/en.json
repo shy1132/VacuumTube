@@ -6,8 +6,8 @@
     },
     "settings": {
         "generic": {
-            "title": "VacuumTube Settings",
-            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere using Ctrl/Cmd+O or R3 on controllers.",
+            "title": "Settings",
+            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere by pressing Ctrl/Cmd+O on your keyboard, or R3 on your controller",
             "button_label": "Open VacuumTube Settings",
             "hint": "Use arrow keys to navigate"
         },
@@ -60,7 +60,8 @@
             "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically.",
             "warn_empty": "No userstyles found",
             "open_folder": "Open Userstyles folder",
-            "enable": "Enable Userstyles"
+            "enable": "Enable Userstyles",
+            "failed_to_load": "Failed to load userstyles"
         },
         "controller_support": {
             "title": "Controller Support",
@@ -69,5 +70,12 @@
     },
     "sponsorblock": {
         "sponsor_skipped": "Sponsor skipped"
+    },
+    "donate": {
+        "setting": {
+            "title": "Donate",
+            "description": "Support VacuumTube's development by making a donation! You can donate by visiting shy.rocks/donate, or by pressing the button below to open the donation page in your browser",
+            "button_label": "Donate"
+        }
     }
 }

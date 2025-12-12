@@ -218,7 +218,7 @@ async function main() {
 
     if (!fs.existsSync(userstylesDir)) {
         fs.mkdirSync(userstylesDir, { recursive: true })
-        console.log(`Created userstyles directory: ${userstylesDir}`)
+        console.log(`[Userstyles] Created userstyles directory: ${userstylesDir}`)
     }
 
     function getUserstyles() {
@@ -355,7 +355,8 @@ async function createWindow() {
             sandbox: false, //allows me to use node apis in preload, but doesn't allow youtube to do so (solely need node apis for requiring the modules)
             nodeIntegrationInSubFrames: true, //since nodeIntegration is already false, it doesn't actually enable nodeIntegration in frames, but it does enable the preload script in frames which is needed for some weird edgecases where youtube may place the entirety of leanback in a frame
             preload: path.join(__dirname, 'preload/index.js')
-        }
+        },
+        title: 'VacuumTube'
     })
 
     // Ensure the *content* area (excluding OS window borders) stays 16:9 on all platforms.
@@ -388,7 +389,7 @@ async function createWindow() {
             height: Math.round((outerW - extraWidth) / TARGET_RATIO) + extraHeight
         })
     } else {
-        // Built-in electron aspect ratio lock works fine on Linux.
+        // Built-in electron aspect ratio lock works fine elsewhere.
         win.setAspectRatio(TARGET_RATIO)
     }
 
@@ -408,12 +409,8 @@ async function createWindow() {
     }
 
     if (process.argv.includes('--enable-devtools')) {
-        console.log('Launching with devtools enabled')
-        win.webContents.on("before-input-event", (event, input) => {
-            if (input.type === 'keyUp' && input.key === 'F12') {
-                win.webContents.toggleDevTools();
-            }
-        }, true)
+        console.log('launching with devtools enabled')
+        win.webContents.toggleDevTools()
     }
 
     console.log('loading youtube')

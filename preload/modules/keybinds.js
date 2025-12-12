@@ -50,7 +50,7 @@ module.exports = async () => {
 
                 url = `https://youtube.com/shorts/${id}`
             } else {
-                let baseUri = window.yt?.player?.utils?.videoElement_?.baseURI
+                let baseUri = window.yt?.player?.utils?.videoElement_?.baseURI;
                 if (!baseUri || !baseUri.includes('/watch?v=')) return;
 
                 let id = baseUri.split('/watch?v=')[1]?.slice(0, 11)

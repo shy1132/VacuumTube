@@ -1,6 +1,6 @@
 //injects custom VacuumTube settings into the youtube settings page (and removes an irrelevant option from youtube settings)
 
-const { ipcRenderer } = require('electron')
+const { shell } = require('electron')
 const configManager = require('../config')
 const jsonMod = require('../util/jsonModifiers')
 const rcMod = require('../util/resolveCommandModifiers')
@@ -15,7 +15,7 @@ function createSettingButtonRenderer(title, summary, button, callback) {
             title: {
                 runs: [ { text: title } ]
             },
-            subtitle: {
+            summary: {
                 runs: [ { text: summary } ]
             },
             actionButton: {
@@ -109,7 +109,7 @@ module.exports = async () => {
                 category.items = category.items.filter(c => c.settingReadOnlyItemRenderer?.itemId !== 'ABOUT_OPEN_SOURCE_LICENSES') //this line looks really bad out of context
             }
 
-            if (isKids) return json; //don't show VacuumTube settings in youtube kids
+            if (isKids) return json; //don't show VacuumTube settings/donate in youtube kids
 
             json.items[0].settingCategoryCollectionRenderer.title = { //doesn't have a label by default
                 runs: [
@@ -117,7 +117,7 @@ module.exports = async () => {
                 ]
             }
 
-            // VacuumTube Settings overlay entry point
+            //VacuumTube entry point
             json.items.unshift(
                 {
                     settingCategoryCollectionRenderer: {
@@ -133,7 +133,18 @@ module.exports = async () => {
                                         window.vtOpenSettingsOverlay()
                                     }
                                 }
+                            ),
+                            /*
+                            //don't yet have a way to receive donations
+                            createSettingButtonRenderer(
+                                locale.donate.setting.title,
+                                locale.donate.setting.description,
+                                locale.donate.setting.button_label,
+                                () => {
+                                    shell.openExternal('https://shy.rocks/donate')
+                                }
                             )
+                            */
                         ],
                         title: {
                             runs: [
@@ -144,6 +155,7 @@ module.exports = async () => {
                 }
             )
         }
+
         return json;
     })
 }
