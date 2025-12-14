@@ -28,18 +28,12 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.5.1" date="2025-12-12" type="stable">
+    <release version="1.5.2" date="2025-12-14" type="stable">
       <description>
-        <p>v1.5.1</p>
+        <p>v1.5.2</p>
         <ul>
-          <li>Blocked "Sign in for the best YouTube experience" popup</li>
-          <li>Improved VacuumTube settings option in YouTube settings</li>
-          <li>Localized a few missed strings in settings overlay</li>
-          <li>Fixed macOS icon</li>
-          <li>Fixed --enable-devtools launch option</li>
-          <li>Fixed settings overlay breaking input on close</li>
-          <li>Fixed spacebar breaking the home feed</li>
-          <li>Internal improvements</li>
+          <li>Adblocker now blocks premium upsell in home feed</li>
+          <li>Updated Indonesian translation</li>
         </ul>
       </description>
     </release>
