@@ -117,7 +117,7 @@ async function main() {
                     header = header.replace(fontSrcPattern, updated)
                 }
 
-                //sponsorblock (not used at the moment) and return youtube dislike
+                //sponsorblock and return youtube dislike
                 let connectPattern = /connect-src\s([^;]*)/
                 let connectMatch = header.match(connectPattern)
                 if (connectMatch) {
