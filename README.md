@@ -41,7 +41,7 @@ If you don't know the difference, pick the Installer.
 
 ### macOS
 
-While macOS builds are available, they are completely untested since I don't have access to Mac hardware. If anything goes wrong at all, please make an issue!
+Note that macOS builds are not yet signed, so they do not auto-update. For now, please periodically check for updates.
 
 - [Universal](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-universal.dmg)
 
