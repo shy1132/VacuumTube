@@ -89,7 +89,9 @@ async function main() {
         let url = new URL(details.url)
         if (url.host !== 'www.youtube.com') return callback({ cancel: false });
 
-        // CSP override for userstyles and sponsorblock/dearrow support
+        delete details.responseHeaders['content-security-policy-report-only'];
+
+        // CSP override for userstyles and sponsorblock/dearrow support, and other minor fixes (like allowing data urls since they're used)
         if (details.responseHeaders['content-security-policy']) {
             for (let i = 0; i < details.responseHeaders['content-security-policy'].length; i++) {
                 let header = details.responseHeaders['content-security-policy'][i]
@@ -122,7 +124,7 @@ async function main() {
                 let connectMatch = header.match(connectPattern)
                 if (connectMatch) {
                     let existing = connectMatch[1]
-                    let additions = 'sponsor.ajay.app returnyoutubedislikeapi.com'
+                    let additions = 'sponsor.ajay.app returnyoutubedislikeapi.com data:'
                     let updated = `connect-src ${existing} ${additions}`
                     header = header.replace(connectPattern, updated)
                 }

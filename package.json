@@ -1,6 +1,6 @@
 {
     "name": "vacuumtube",
-    "version": "1.5.2",
+    "version": "1.5.3",
     "description": "YouTube for TV, on your PC",
     "main": "index.js",
     "scripts": {
@@ -108,7 +108,7 @@
         }
     },
     "devDependencies": {
-        "electron": "^39.2.6",
+        "electron": "^39.2.7",
         "electron-builder": "^26.0.12"
     },
     "dependencies": {

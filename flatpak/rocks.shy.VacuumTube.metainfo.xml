@@ -28,12 +28,13 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.5.2" date="2025-12-14" type="stable">
+    <release version="1.5.3" date="2025-12-27" type="stable">
       <description>
-        <p>v1.5.2</p>
+        <p>v1.5.3</p>
         <ul>
-          <li>Adblocker now blocks premium upsell in home feed</li>
-          <li>Updated Indonesian translation</li>
+          <li>Added built-in notice that movies and encrypted videos aren't supported</li>
+          <li>Fix some internal issues with playing Lottie animations</li>
+          <li>Updated to Electron 39.2.7</li>
         </ul>
       </description>
     </release>

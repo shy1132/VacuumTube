@@ -2,7 +2,13 @@
     "general": {
         "video_copied": "Video link copied to clipboard",
         "dislikes": "Dislikes",
-        "steam_controller_notice": "External controller isn't detected? Try the steamdeck-input-disabler plugin from Decky."
+        "steam_controller_notice": "External controller isn't detected? Try the steamdeck-input-disabler plugin from Decky.",
+        "encryption_error": {
+            "title": "Something went wrong",
+            "text": "This video couldn't be decoded. Movies aren't supported in VacuumTube due to encryption. If this happens on other videos, try logging in or switching accounts.",
+            "switch_accounts": "Switch Accounts",
+            "okay": "Okay"
+        }
     },
     "settings": {
         "generic": {
