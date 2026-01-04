@@ -81,6 +81,7 @@
             ]
         },
         "appx": {
+            "artifactName": "VacuumTube-UWP-${arch}.${ext}",
             "identityName": "rocks.shy.VacuumTube",
             "publisher": "CN=PinsAndPixels",
             "publisherDisplayName": "PinsAndPixels",
