@@ -57,8 +57,13 @@
         },
         "win": {
             "icon": "./assets/icon.ico",
-            "artifactName": "VacuumTube-${arch}-Portable.zip",
             "target": [
+                {
+                    "target": "appx",
+                    "arch": [
+                        "x64"
+                    ]
+                },
                 {
                     "target": "nsis",
                     "arch": [
@@ -74,6 +79,13 @@
                     ]
                 }
             ]
+        },
+        "appx": {
+            "identityName": "rocks.shy.VacuumTube",
+            "publisher": "CN=PinsAndPixels",
+            "publisherDisplayName": "PinsAndPixels",
+            "applicationId": "VacuumTube",
+            "backgroundColor": "#1e1e1e"
         },
         "nsis": {
             "artifactName": "VacuumTube-Setup.${ext}",
