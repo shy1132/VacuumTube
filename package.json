@@ -82,11 +82,12 @@
         },
         "appx": {
             "artifactName": "VacuumTube-UWP-${arch}.${ext}",
-            "identityName": "rocks.shy.VacuumTube",
-            "publisher": "CN=PinsAndPixels",
-            "publisherDisplayName": "PinsAndPixels",
+            "identityName": "VacuumTube", 
+            "publisher": "CN=VacuumTube",
+            "publisherDisplayName": "PinsPixels",
             "applicationId": "VacuumTube",
-            "backgroundColor": "#1e1e1e"
+            "backgroundColor": "#1e1e1e",
+            "languages": ["en-US"]
         },
         "nsis": {
             "artifactName": "VacuumTube-Setup.${ext}",
