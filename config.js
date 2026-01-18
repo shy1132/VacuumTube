@@ -25,7 +25,8 @@ const defaults = {
     keep_on_top: false, //whether or not to keep window on top
     userstyles: false, //whether or not to enable custom CSS injection
     disabled_userstyles: [], //array of filenames that are disabled
-    controller_support: true //whether or not to enable game controller support
+    controller_support: true, //whether or not to enable game controller support
+    wayland_color_management: false //whether or not to enable wayland color management (disable by default due to issues on some systems)
 }
 
 function init(overrides = {}) {
