@@ -8,7 +8,17 @@ const tectonicConfigOverrides = []
 
 function overrideEnv(key, value) {
     let params = new URLSearchParams(window.location.search)
-    params.set(String(key), String(value))
+
+    key = String(key)
+    value = String(value)
+
+    let existing = params.has(key)
+    if (existing) {
+        if (value === existing) return;
+        params.delete(key)
+    }
+
+    params.set(key, value)
 
     let newUrl = window.location.pathname + '?' + params.toString()
     history.replaceState(null, '', newUrl)

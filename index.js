@@ -4,6 +4,7 @@ const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const fs = require('fs')
 const chokidar = require('chokidar')
+const { parseArgs } = require('node:util')
 
 electron.app.setName('VacuumTube')
 
@@ -13,6 +14,8 @@ electron.app.setPath('sessionData', sessionData)
 
 const configManager = require('./config.js')
 const package = require('./package.json')
+
+const argv = parseArgs({ args: process.argv, strict: false })
 
 //code
 /*
@@ -40,7 +43,7 @@ let win;
 let config;
 
 async function main() {
-    if (process.argv.includes('--version') || process.argv.includes('-v')) {
+    if (argv.values['version'] || argv.values['v']) {
         process.stdout.write(`VacuumTube ${package.version}\n`, () => { //console.log then process.exit isn't safe since console.log is async, so that's why it's done with process.stdout instead
             process.exit(0)
         })
@@ -56,7 +59,7 @@ async function main() {
         fullscreen: !!runningOnSteam //if running on steam in game mode, override fullscreen to be on by default (note that this was broken from 1.3.0 until 1.3.6 due to config bug)
     })
 
-    if (process.platform === 'linux' && !config.wayland_color_management) {
+    if (process.platform === 'linux' && !config.wayland_hdr) {
         electron.app.commandLine.appendSwitch('--disable-features', 'WaylandWpColorManagerV1') //colors on wayland are super washed out in newer chromium versions for some reason, but this seems to fix it
     }
 
@@ -151,9 +154,9 @@ async function main() {
     electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
         let url = new URL(details.url)
         if (url.host === 'www.youtube.com') {
-            details.requestHeaders['user-agent'] = youtubeUserAgent;
+            details.requestHeaders['User-Agent'] = youtubeUserAgent;
         } else {
-            details.requestHeaders['user-agent'] = userAgent;
+            details.requestHeaders['User-Agent'] = userAgent;
         }
 
         callback({
@@ -211,6 +214,15 @@ async function main() {
     electron.ipcMain.handle('set-zoom', (e, amount) => {
         if (win) {
             win.webContents.setZoomLevel(amount)
+        }
+    })
+
+    electron.ipcMain.handle('get-deeplink', () => {
+        let deeplink = argv.positionals[argv.positionals.length - 1]
+        if (deeplink) {
+            return deeplink;
+        } else {
+            return null;
         }
     })
 
@@ -343,7 +355,7 @@ async function main() {
 }
 
 async function createWindow() {
-    let fullscreen = process.argv.includes('--fullscreen') || runningOnSteam || config.fullscreen || false;
+    let fullscreen = argv.values['fullscreen'] || runningOnSteam || config.fullscreen || false;
 
     win = new electron.BrowserWindow({
         width: 1200,
@@ -404,13 +416,13 @@ async function createWindow() {
         win.show()
     })
 
-    if (process.argv.includes('--debug-gpu')) {
+    if (argv.values['debug-gpu']) {
         console.log('loading chrome://gpu')
         win.loadURL('chrome://gpu', { userAgent })
         return;
     }
 
-    if (process.argv.includes('--enable-devtools')) {
+    if (argv.values['enable-devtools']) {
         console.log('launching with devtools enabled')
         win.webContents.toggleDevTools()
     }

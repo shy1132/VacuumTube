@@ -28,13 +28,14 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.5.3" date="2025-12-27" type="stable">
+    <release version="1.5.4.0" date="2026-01-18" type="stable">
       <description>
-        <p>v1.5.3</p>
+        <p>v1.5.4.0</p>
         <ul>
-          <li>Added built-in notice that movies and encrypted videos aren't supported</li>
-          <li>Fix some internal issues with playing Lottie animations</li>
-          <li>Updated to Electron 39.2.7</li>
+          <li>New versioning scheme</li>
+          <li>Added setting for HDR on Wayland</li>
+          <li>Added launch deeplink support (link after launch command)</li>
+          <li>Internal improvements</li>
         </ul>
       </description>
     </release>

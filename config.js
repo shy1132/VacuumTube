@@ -21,12 +21,12 @@ const defaults = {
     hide_shorts: false, //hide youtube shorts from homepage
     h264ify: false, //block non-h264 codecs for performance on slow devices
     hardware_decoding: true, //use hardware gpu video decoding
+    wayland_hdr: false, //whether or not to enable wayland color management, which allows hdr but sometimes has issues on non-hdr systems
     low_memory_mode: false, //enables env_isLimitedMemory
     keep_on_top: false, //whether or not to keep window on top
     userstyles: false, //whether or not to enable custom CSS injection
     disabled_userstyles: [], //array of filenames that are disabled
-    controller_support: true, //whether or not to enable game controller support
-    wayland_color_management: false //whether or not to enable wayland color management (disable by default due to issues on some systems)
+    controller_support: true //whether or not to enable game controller support
 }
 
 function init(overrides = {}) {

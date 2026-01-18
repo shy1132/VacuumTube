@@ -67,7 +67,7 @@ VacuumTube has some settings that you can change, which are located directly in 
 - Ad Block
   - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
 - Sponsorblock
-  - Automatically skips sponsored segments in videos based on a [community-contributed database](https://sponsor.ajay.app/). 
+  - Automatically skips sponsored segments in videos based on a [community-contributed database](https://sponsor.ajay.app/)
 - DeArrow
   - Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database
 - Return Dislikes
@@ -90,8 +90,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Enables injection of custom CSS styles. See the section below for more information
 - Controller Support
   - Allows toggling of controller support in VacuumTube (on by default, can be turned off to avoid conflicting with apps like JoyToKey)
-- Wayland Color Management
-  - Enables HDR on wayland (linux) platforms. Requires up to date drivers and a compatible wayland compositor. See [HDR - Arch Wiki](https://wiki.archlinux.org/title/HDR)
+- Wayland HDR (Linux)
+  - Enables HDR on Wayland (Linux) platforms, but can cause desaturated colors on unsupported platforms. Requires up to date drivers and a compatible Wayland compositor. See [HDR - Arch Wiki](https://wiki.archlinux.org/title/HDR)
 
 ## Extra Input Mappings
 

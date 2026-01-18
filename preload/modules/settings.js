@@ -22,7 +22,7 @@ const dynamicFunction = {
 }
 
 // Tab definitions - id must match config key and dataPanel attribute
-const tabs = [
+let tabs = [
     { id: 'adblock', localeKey: 'ad_block' },
     { id: 'sponsorblock', localeKey: 'sponsorblock' },
     { id: 'dearrow', localeKey: 'dearrow' },
@@ -31,13 +31,15 @@ const tabs = [
     { id: 'hide_shorts', localeKey: 'hide_shorts' },
     { id: 'h264ify', localeKey: 'h264ify' },
     { id: 'hardware_decoding', localeKey: 'hardware_decoding' },
+    { id: 'wayland_hdr', localeKey: 'wayland_hdr', hide: !(process.platform === 'linux') },
     { id: 'low_memory_mode', localeKey: 'low_memory_mode' },
     { id: 'fullscreen', localeKey: 'fullscreen' },
     { id: 'keep_on_top', localeKey: 'keep_on_top' },
     { id: 'userstyles', localeKey: 'userstyles' },
-    { id: 'controller_support', localeKey: 'controller_support' },
-    { id: 'wayland_color_management', localeKey: 'wayland_color_management' }
+    { id: 'controller_support', localeKey: 'controller_support' }
 ]
+
+tabs = tabs.filter(t => !t.hide)
 
 // Helper to create elements with attributes and children
 function el(tag, attrs = {}, children = []) {
@@ -167,7 +169,7 @@ function createOverlayDOM(locale) {
                         createTab('keep_on_top', locale.settings.keep_on_top.title, 10, false),
                         createTab('userstyles', locale.settings.userstyles.title, 11, false),
                         createTab('controller_support', locale.settings.controller_support.title, 12, false),
-                        createTab('wayland_color_management', locale.settings.wayland_color_management.title, 13, false)
+                        process.platform === 'linux' && createTab('wayland_hdr', locale.settings.wayland_hdr.title, 13, false)
                     ]),
                     el('div', { className: 'vt-scrollbar vt-tabs-scrollbar', id: 'vt-tabs-scrollbar' }, [
                         el('div', { className: 'vt-scrollbar-thumb', id: 'vt-tabs-scrollbar-thumb' })
@@ -247,8 +249,8 @@ function createOverlayDOM(locale) {
                     el('div', { className: 'vt-content-panel', dataPanel: 'controller_support' }, [
                         createSettingItem('controller_support', locale.settings.controller_support.title, locale.settings.controller_support.description, 0, true)
                     ]),
-                    el('div', { className: 'vt-content-panel', dataPanel: 'wayland_color_management' }, [
-                        createSettingItem('wayland_color_management', locale.settings.wayland_color_management.title, locale.settings.wayland_color_management.description, 0, true)
+                    process.platform === 'linux' && el('div', { className: 'vt-content-panel', dataPanel: 'wayland_hdr' }, [
+                        createSettingItem('wayland_hdr', locale.settings.wayland_hdr.title, locale.settings.wayland_hdr.description, 0, true)
                     ]),
                 ])
             ])

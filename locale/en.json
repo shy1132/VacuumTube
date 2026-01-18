@@ -73,9 +73,9 @@
             "title": "Controller Support",
             "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox Controller."
         },
-        "wayland_color_management": {
-            "title": "Wayland Color Management",
-            "description": "(Linux Only) Enables color management on Wayland sessions. Requires a restart to take effect."
+        "wayland_hdr": {
+            "title": "Wayland HDR",
+            "description": "Enables HDR when using Wayland, but can cause desaturated colors with unsupported platforms. Relaunch after toggling."
         }
     },
     "sponsorblock": {
