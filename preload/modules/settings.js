@@ -36,6 +36,7 @@ const tabs = [
     { id: 'keep_on_top', localeKey: 'keep_on_top' },
     { id: 'userstyles', localeKey: 'userstyles' },
     { id: 'controller_support', localeKey: 'controller_support' },
+    { id: 'wayland_color_management', localeKey: 'wayland_color_management' }
 ]
 
 // Helper to create elements with attributes and children
@@ -165,7 +166,8 @@ function createOverlayDOM(locale) {
                         createTab('fullscreen', locale.settings.fullscreen.title, 9, false),
                         createTab('keep_on_top', locale.settings.keep_on_top.title, 10, false),
                         createTab('userstyles', locale.settings.userstyles.title, 11, false),
-                        createTab('controller_support', locale.settings.controller_support.title, 12, false)
+                        createTab('controller_support', locale.settings.controller_support.title, 12, false),
+                        createTab('wayland_color_management', locale.settings.wayland_color_management.title, 13, false)
                     ]),
                     el('div', { className: 'vt-scrollbar vt-tabs-scrollbar', id: 'vt-tabs-scrollbar' }, [
                         el('div', { className: 'vt-scrollbar-thumb', id: 'vt-tabs-scrollbar-thumb' })
@@ -244,7 +246,10 @@ function createOverlayDOM(locale) {
                     ]),
                     el('div', { className: 'vt-content-panel', dataPanel: 'controller_support' }, [
                         createSettingItem('controller_support', locale.settings.controller_support.title, locale.settings.controller_support.description, 0, true)
-                    ])
+                    ]),
+                    el('div', { className: 'vt-content-panel', dataPanel: 'wayland_color_management' }, [
+                        createSettingItem('wayland_color_management', locale.settings.wayland_color_management.title, locale.settings.wayland_color_management.description, 0, true)
+                    ]),
                 ])
             ])
         ])

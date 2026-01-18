@@ -90,6 +90,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Enables injection of custom CSS styles. See the section below for more information
 - Controller Support
   - Allows toggling of controller support in VacuumTube (on by default, can be turned off to avoid conflicting with apps like JoyToKey)
+- Wayland Color Management
+  - Enables HDR on wayland (linux) platforms. Requires up to date drivers and a compatible wayland compositor. See [HDR - Arch Wiki](https://wiki.archlinux.org/title/HDR)
 
 ## Extra Input Mappings
 
