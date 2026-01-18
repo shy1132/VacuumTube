@@ -35,6 +35,7 @@
           <li>Added setting for HDR on Wayland</li>
           <li>Added launch deeplink support (link after launch command)</li>
           <li>Internal improvements</li>
+          <li>Upgraded to Electron v40.0.0</li>
         </ul>
       </description>
     </release>
