@@ -7,11 +7,11 @@
     "settings": {
         "generic": {
             "title": "Pengaturan",
-            "description": "Buka menu pengaturan VacuumTube. Akses menu ini dengan menekan Ctrl/Cmd+O pada papan ketik atau tombol R3 pada pengontrol konsol.",
+            "description": "Buka menu pengaturan VacuumTube. Akses menu ini dengan menekan Ctrl+O pada papan ketik atau tombol R3 pada pengontrol konsol.",
             "button_label": "Buka Pengaturan VacuumTube",
             "hint": "Gunakan tombol panah untuk menjelajah"
         },
-        "ad_block": {
+        "adblock": {
             "title": "Blokir Iklan",
             "description": "Blokir iklan beranda dan video, tanpa perlu khawatir terdeteksi YouTube"
         },

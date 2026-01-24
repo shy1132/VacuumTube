@@ -1,0 +1,388 @@
+/*settings overlay*/
+
+#vt-settings-overlay-root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+}
+
+#vt-settings-overlay-root.vt-settings-hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.vt-settings-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.vt-settings-container {
+    position: relative;
+    width: 100%;
+    max-width: 75vw;
+    height: 100%;
+    max-height: 75vh;
+    background: #212121;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.vt-settings-header {
+    display: flex;
+    align-items: center;
+    padding: 24px 32px;
+    background: #212121;
+}
+
+.vt-settings-title {
+    font-size: 28px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.vt-settings-hint {
+    font-size: 14px;
+    color: #aaa;
+    margin-left: auto;
+    margin-right: 24px;
+}
+
+.vt-settings-close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #aaa;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.vt-settings-close:hover,
+.vt-settings-close.vt-close-focused {
+    background: #333;
+    color: #fff;
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.vt-settings-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.vt-tabs-viewport {
+    width: 280px;
+    height: calc(100% - 50px);
+    background: #212121;
+    overflow: hidden;
+    position: relative;
+}
+
+.vt-settings-tabs {
+    padding: 16px;
+    transition: transform 0.15s ease-out;
+}
+
+.vt-tabs-scrollbar {
+    right: 4px;
+}
+
+.vt-tab {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+.vt-tab:hover {
+    background: #333;
+}
+
+.vt-tab.vt-tab-selected {
+    background: #fff;
+}
+
+.vt-tab.vt-tab-selected .vt-tab-label {
+    color: #212121;
+}
+
+.vt-tab.vt-tab-focused {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.vt-tab-label {
+    font-size: 18px;
+    color: #fff;
+}
+
+.vt-settings-content {
+    flex: 1;
+    padding: 24px 32px;
+    overflow: hidden;
+    background: #212121;
+    display: flex;
+    flex-direction: column;
+}
+
+.vt-content-panel {
+    display: none;
+}
+
+.vt-content-panel.vt-panel-active {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.vt-setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: #2a2a2a;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    transition: background 0.15s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.vt-setting-item:hover {
+    background: #333;
+}
+
+.vt-setting-item.vt-item-focused {
+    background: #3a3a3a;
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+}
+
+.vt-setting-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 24px;
+}
+
+.vt-setting-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.vt-setting-description {
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.4;
+}
+
+.vt-setting-control {
+    flex-shrink: 0;
+}
+
+.vt-toggle {
+    width: 56px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.vt-toggle-track {
+    width: 100%;
+    height: 100%;
+    background: #555;
+    border-radius: 16px;
+    position: relative;
+    transition: background 0.2s ease;
+}
+
+.vt-toggle.vt-toggle-on .vt-toggle-track {
+    background: #fff;
+}
+
+.vt-toggle-thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.vt-toggle.vt-toggle-on .vt-toggle-thumb {
+    transform: translateX(24px);
+    background: #212121;
+}
+
+.vt-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
+}
+
+.vt-placeholder-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+}
+
+.vt-placeholder-text {
+    font-size: 18px;
+    color: #888;
+    text-align: center;
+}
+
+.vt-userstyles-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.vt-userstyles-description {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    flex-shrink: 0;
+}
+
+.vt-userstyles-viewport {
+    flex: 1;
+    min-height: 0;
+    max-height: 280px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.vt-userstyles-list {
+    transition: transform 0.15s ease-out;
+    padding-right: 16px;
+}
+
+.vt-scrollbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.vt-userstyles-viewport:hover .vt-scrollbar,
+.vt-scrollbar.vt-scrollbar-visible {
+    opacity: 1;
+}
+
+.vt-scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 30px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    transition: transform 0.15s ease-out, background 0.15s ease;
+}
+
+.vt-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.vt-userstyle-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.vt-userstyle-item:hover {
+    background: #333;
+}
+
+.vt-userstyle-item.vt-item-focused {
+    background: #3a3a3a;
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+}
+
+.vt-userstyle-name {
+    font-size: 16px;
+    color: #fff;
+    flex: 1;
+}
+
+.vt-userstyle-toggle {
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+.vt-userstyles-empty {
+    font-size: 14px;
+    color: #666;
+    font-style: italic;
+    padding: 12px 0;
+}
+
+.vt-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 24px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    font-size: 16px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.vt-button:hover {
+    background: #333;
+}
+
+.vt-button.vt-item-focused {
+    background: #fff;
+    color: #212121;
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}

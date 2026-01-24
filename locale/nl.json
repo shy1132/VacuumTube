@@ -4,7 +4,7 @@
         "dislikes": "Afkeerknoppen"
     },
     "settings": {
-        "ad_block": {
+        "adblock": {
             "title": "Ad-blokker",
             "description": "Blokkeert naadloos video- en feed-advertenties en is niet onderhevig aan de blokkeermethoden van YouTube"
         },

@@ -4,7 +4,7 @@
 		"dislikes": "Beğenmeyenler"
     },
     "settings": {
-        "ad_block": {
+        "adblock": {
             "title": "Reklam Engelleyici",
             "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir"
         },

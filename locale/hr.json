@@ -4,7 +4,7 @@
         "dislikes": "Palac dolje"
     },
     "settings": {
-        "ad_block": {
+        "adblock": {
             "title": "Bloker Reklama",
             "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama protiv blokiranja"
         },

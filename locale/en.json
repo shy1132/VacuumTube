@@ -13,11 +13,11 @@
     "settings": {
         "generic": {
             "title": "Settings",
-            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere by pressing Ctrl/Cmd+O on your keyboard, or R3 on your controller",
+            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere by pressing Ctrl+O on your keyboard, or R3 on your controller",
             "button_label": "Open VacuumTube Settings",
             "hint": "Use arrow keys to navigate"
         },
-        "ad_block": {
+        "adblock": {
             "title": "Ad Block",
             "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers"
         },
@@ -25,7 +25,7 @@
             "title": "SponsorBlock",
             "description": "Skips sponsor segments in YouTube videos using a crowdsourced database. Currently only supports skipping sponsors"
         },
-        "dearrow": {
+        "dearrow": {    
             "title": "DeArrow",
             "description": "Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database. Slows down loading, as it has to fetch info from the server"
         },
@@ -43,19 +43,23 @@
         },
         "h264ify": {
             "title": "Force H.264 (h264ify)",
-            "description": "Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Relaunch after toggling."
+            "description": "Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Relaunch after toggling"
         },
         "hardware_decoding": {
             "title": "Hardware Decoding",
-            "description": "Uses your GPU to decode videos when possible. Disabling this may fix playback issues, but can cause lag depending on your CPU. Relaunch after toggling."
+            "description": "Uses your GPU to decode videos when possible. Disabling this may fix playback issues, but can cause lag depending on your CPU. Relaunch after toggling"
         },
         "low_memory_mode": {
             "title": "Low Memory Mode",
-            "description": "Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Relaunch after toggling."
+            "description": "Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Relaunch after toggling"
         },
         "fullscreen": {
             "title": "Fullscreen",
             "description": "Enables fullscreen, and makes VacuumTube always launch in fullscreen"
+        },
+        "no_window_decorations": {
+            "title": "No Window Decorations",
+            "description": "Disables window decorations, including the title bar and window border. Relaunch after toggling"
         },
         "keep_on_top": {
             "title": "Keep on Top",
@@ -63,7 +67,7 @@
         },
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
-            "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically.",
+            "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically",
             "warn_empty": "No userstyles found",
             "open_folder": "Open Userstyles folder",
             "enable": "Enable Userstyles",
@@ -71,11 +75,11 @@
         },
         "controller_support": {
             "title": "Controller Support",
-            "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox Controller."
+            "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox Controller"
         },
         "wayland_hdr": {
             "title": "Wayland HDR",
-            "description": "Enables HDR when using Wayland, but can cause desaturated colors with unsupported platforms. Relaunch after toggling."
+            "description": "Enables HDR when using Wayland, but can cause desaturated colors with unsupported platforms. Relaunch after toggling"
         }
     },
     "sponsorblock": {

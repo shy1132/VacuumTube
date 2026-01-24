@@ -6,13 +6,19 @@ if (location.host === 'www.youtube.com' && location.pathname === '/tv') {
     const path = require('path')
 
     let modulesPath = path.join(__dirname, 'modules')
-    let moduleFiles = fs.readdirSync(modulesPath)
+    let moduleFiles = fs.readdirSync(modulesPath, { withFileTypes: true })
 
     let modules = []
     for (let file of moduleFiles) {
-        if (!file.endsWith('.js')) continue;
+        let modulePath;
+        if (file.isDirectory()) {
+            modulePath = path.join(modulesPath, file.name + '/index.js')
+        } else if (file.name.endsWith('.js')) {
+            modulePath = path.join(modulesPath, file.name)
+        } else {
+            continue;
+        }
 
-        let modulePath = path.join(modulesPath, file)
         modules.push(require(modulePath))
     }
 

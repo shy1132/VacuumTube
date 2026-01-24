@@ -28,14 +28,12 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.5.4" date="2026-01-18" type="stable">
+    <release version="1.5.5" date="2026-01-23" type="stable">
       <description>
-        <p>v1.5.4</p>
+        <p>v1.5.5</p>
         <ul>
-          <li>Added setting for HDR on Wayland</li>
-          <li>Added launch deeplink support (link after launch command)</li>
+          <li>Added setting to disable window decorations (and --no-window-decorations command line flag)</li>
           <li>Internal improvements</li>
-          <li>Upgraded to Electron v40.0.0</li>
         </ul>
       </description>
     </release>

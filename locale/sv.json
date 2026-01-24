@@ -4,7 +4,7 @@
         "dislikes": "Ogillat"
     },
     "settings": {
-        "ad_block": {
+        "adblock": {
             "title": "Reklamblockering",
             "description": "Blockerar sömlöst reklam i videor och flödet. Påverkas ej av YouTube:s metoder för att förhindra reklamblockering"
         },

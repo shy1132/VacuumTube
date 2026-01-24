@@ -4,7 +4,7 @@
         "dislikes": "Palac dole"
     },
     "settings": {
-        "ad_block": {
+        "adblock": {
             "title": "Blokator Oglasa",
             "description": "Besprekorno blokira video i fid oglase, nije podložan YouTube metodama protiv blokiranja"
         },

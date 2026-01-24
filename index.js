@@ -356,13 +356,16 @@ async function main() {
 
 async function createWindow() {
     let fullscreen = argv.values['fullscreen'] || runningOnSteam || config.fullscreen || false;
+    let noWindowDecs = argv.values['no-window-decorations'] || config.no_window_decorations || false;
 
     win = new electron.BrowserWindow({
         width: 1200,
         height: 675,
         backgroundColor: '#282828',
         fullscreen, //this sometimes doesn't work for people, so it's repeated below
-        fullscreenable: true, //explicitly enable fullscreen functionality on MacOS
+        fullscreenable: true, //explicitly enable fullscreen functionality on macOS
+        titleBarStyle: noWindowDecs ? 'hidden' : 'default',
+        frame: noWindowDecs ? false : true,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: false,

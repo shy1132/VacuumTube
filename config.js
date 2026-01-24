@@ -11,7 +11,6 @@ let changed = false;
 let config = {}
 
 const defaults = {
-    fullscreen: false, //changes automatically depending on user's last preference
     adblock: true, //block ads
     sponsorblock: false, // Enable Sponsorblock
     sponsorblock_uuid: crypto.randomUUID(), // Sponsorblock wants to track this per user so you can ask it for stats later
@@ -23,6 +22,8 @@ const defaults = {
     hardware_decoding: true, //use hardware gpu video decoding
     wayland_hdr: false, //whether or not to enable wayland color management, which allows hdr but sometimes has issues on non-hdr systems
     low_memory_mode: false, //enables env_isLimitedMemory
+    fullscreen: false, //whether or not to launch in fullscreen, changes automatically if user enters/exits fullscreen
+    no_window_decorations: false, //whether or not to disable window decorations
     keep_on_top: false, //whether or not to keep window on top
     userstyles: false, //whether or not to enable custom CSS injection
     disabled_userstyles: [], //array of filenames that are disabled

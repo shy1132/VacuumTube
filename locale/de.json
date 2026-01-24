@@ -4,7 +4,7 @@
         "dislikes": "Abneigungsknöpfe"
     },
     "settings": {
-        "ad_block": {
+        "adblock": {
             "title": "Anzeigenblocker",
             "description": "Blockiert nahtlos Video- und Feed-Werbung und unterliegt nicht den Methoden von YouTube zur Verhinderung von Blockern"
         },
