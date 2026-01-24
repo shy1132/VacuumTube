@@ -25,7 +25,7 @@
             "title": "SponsorBlock",
             "description": "Skips sponsor segments in YouTube videos using a crowdsourced database. Currently only supports skipping sponsors"
         },
-        "dearrow": {    
+        "dearrow": {
             "title": "DeArrow",
             "description": "Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database. Slows down loading, as it has to fetch info from the server"
         },
