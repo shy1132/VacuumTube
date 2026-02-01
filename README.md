@@ -110,14 +110,22 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
 
 You can apply custom styles to VacuumTube by first enabling it in the settings, and then creating `.css` files in the userstyles folder. They can then be managed in VacuumTube settings. You can access the developer tools by pressing **Ctrl+Shift+I**, which are extremely helpful when writing custom CSS.
 
-### File Location
+The userstyles folder is located in the config folder mentioned below.
 
-Your userstyles folder is located at:
+## Command Line Flags
 
-- **Windows**: `%APPDATA%\VacuumTube\userstyles\`
-- **macOS**: `~/Library/Application Support/VacuumTube/userstyles/`
-- **Linux**: `~/.config/VacuumTube/userstyles/`
-- **Linux (Flatpak)**: `~/.var/app/rocks.shy.VacuumTube/config/VacuumTube/userstyles/`
+You can provide extra command line flags to Chromium via the `flags.txt` file located in the config folder.
+
+For example, putting `--disable-gpu` into the `flags.txt` file will cause VacuumTube to run with the GPU disabled. You can find more flags by searching for Chromium command line flags, but you likely won't need to mess with this.
+
+## Config Folder
+
+Your config folder is located at:
+
+- **Windows**: `%APPDATA%\VacuumTube\`
+- **macOS**: `~/Library/Application Support/VacuumTube/`
+- **Linux**: `~/.config/VacuumTube/`
+- **Linux (Flatpak)**: `~/.var/app/rocks.shy.VacuumTube/config/VacuumTube/`
 
 ## Building from Source
 
