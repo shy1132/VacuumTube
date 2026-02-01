@@ -4,7 +4,9 @@ const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const fs = require('fs')
 const chokidar = require('chokidar')
-const { parseArgs } = require('node:util')
+const minimist = require('minimist')
+const stringArgv = require('string-argv')
+const package = require('./package.json')
 
 electron.app.setName('VacuumTube')
 
@@ -13,9 +15,8 @@ const sessionData = path.join(userData, 'sessionData')
 electron.app.setPath('sessionData', sessionData)
 
 const configManager = require('./config.js')
-const package = require('./package.json')
 
-const argv = parseArgs({ args: process.argv, strict: false })
+const argv = minimist(process.argv)
 
 //code
 /*
@@ -43,7 +44,7 @@ let win;
 let config;
 
 async function main() {
-    if (argv.values['version'] || argv.values['v']) {
+    if (argv['version'] || argv['v']) {
         process.stdout.write(`VacuumTube ${package.version}\n`, () => { //console.log then process.exit isn't safe since console.log is async, so that's why it's done with process.stdout instead
             process.exit(0)
         })
@@ -65,6 +66,21 @@ async function main() {
 
     if (!config.hardware_decoding) {
         electron.app.commandLine.appendSwitch('--disable-accelerated-video-decode')
+    }
+
+    const flagsPath = path.join(userData, 'flags.txt')
+    if (fs.existsSync(flagsPath)) {
+        let extraFlags = fs.readFileSync(flagsPath, 'utf-8').trim()
+        let arg = stringArgv.parseArgsStringToArgv(extraFlags)
+        let parsed = minimist(arg)
+
+        for (let [ key, value ] of Object.entries(parsed)) {
+            if (key === '_') {
+                continue;
+            }
+
+            electron.app.commandLine.appendSwitch(key, value)
+        }
     }
 
     electron.app.on('window-all-closed', () => {
@@ -218,7 +234,7 @@ async function main() {
     })
 
     electron.ipcMain.handle('get-deeplink', () => {
-        let deeplink = argv.positionals[argv.positionals.length - 1]
+        let deeplink = argv._[argv._.length - 1]
         if (deeplink) {
             return deeplink;
         } else {
@@ -355,8 +371,8 @@ async function main() {
 }
 
 async function createWindow() {
-    let fullscreen = argv.values['fullscreen'] || runningOnSteam || config.fullscreen || false;
-    let noWindowDecs = argv.values['no-window-decorations'] || config.no_window_decorations || false;
+    let fullscreen = argv['fullscreen'] || runningOnSteam || config.fullscreen || false;
+    let noWindowDecs = argv['no-window-decorations'] || config.no_window_decorations || false;
 
     win = new electron.BrowserWindow({
         width: 1200,
@@ -419,13 +435,13 @@ async function createWindow() {
         win.show()
     })
 
-    if (argv.values['debug-gpu']) {
+    if (argv['debug-gpu']) {
         console.log('loading chrome://gpu')
         win.loadURL('chrome://gpu', { userAgent })
         return;
     }
 
-    if (argv.values['enable-devtools']) {
+    if (argv['enable-devtools']) {
         console.log('launching with devtools enabled')
         win.webContents.toggleDevTools()
     }
