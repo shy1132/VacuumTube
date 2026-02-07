@@ -44,6 +44,7 @@ let tabs = [
     { id: 'no_window_decorations' },
     { id: 'keep_on_top', func: (value) => ipcRenderer.invoke('set-on-top', value) },
     { id: 'userstyles' },
+    { id: 'touch_overlay' },
     { id: 'controller_support' }
 ]
 
@@ -750,7 +751,7 @@ function setupEventListeners() {
 
     // Mouse/touch events for the overlay
     document.addEventListener('click', (e) => {
-        if (!overlayVisible) return;
+        if ((Date.now() - overlayVisible) < 100) return;
 
         const overlay = getOverlay()
         if (!overlay) return;
@@ -803,7 +804,7 @@ function setupEventListeners() {
     }, true)
 
     controller.on('down', (e) => {
-        if ((Date.now() - overlayVisible) < 100) return; //dumb way to fix accidental input
+        if ((Date.now() - overlayVisible) < 100) return;
 
         let key = gamepadKeyMap[e.code]
         if (key) {

@@ -1,6 +1,8 @@
 //onscreen touch controls + native scrollbars
 
 const configOverrides = require('../util/configOverrides')
+const configManager = require('../config')
+const config = configManager.get()
 
 module.exports = () => {
     configOverrides.tectonicConfigOverrides.push({
@@ -128,12 +130,14 @@ module.exports = () => {
 
         setInterval(() => {
             if (!visible) return;
-            if ((Date.now() - lastTouch) >= 3000) {
+            if ((Date.now() - lastTouch) >= 3000 || !config.touch_overlay) {
                 hide()
             }
         }, 20)
 
         window.addEventListener('touchstart', (e) => {
+            if (!config.touch_overlay) return;
+
             lastTouch = Date.now()
 
             if (!visible) {

@@ -49,6 +49,10 @@
             "title": "Hardware Decoding",
             "description": "Uses your GPU to decode videos when possible. Disabling this may fix playback issues, but can cause lag depending on your CPU. Relaunch after toggling"
         },
+        "wayland_hdr": {
+            "title": "Wayland HDR",
+            "description": "Enables HDR when using Wayland, but can cause desaturated colors with unsupported platforms. Relaunch after toggling"
+        },
         "low_memory_mode": {
             "title": "Low Memory Mode",
             "description": "Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Relaunch after toggling"
@@ -73,13 +77,13 @@
             "enable": "Enable Userstyles",
             "failed_to_load": "Failed to load userstyles"
         },
+        "touch_overlay": {
+            "title": "Touch Overlay",
+            "description": "Enables on-screen touch controls for easier navigation when touch input is detected"
+        },
         "controller_support": {
             "title": "Controller Support",
             "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox Controller"
-        },
-        "wayland_hdr": {
-            "title": "Wayland HDR",
-            "description": "Enables HDR when using Wayland, but can cause desaturated colors with unsupported platforms. Relaunch after toggling"
         }
     },
     "sponsorblock": {
