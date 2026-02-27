@@ -29,7 +29,7 @@ module.exports = async () => {
 
     //allow shift+enter to do longpress
     patchFunction(window, 'setTimeout', function (setTimeout, callback, delay) {
-        if (callback.toString().includes('onLongPress') && shiftEnterHeld) { //feels weird lol
+        if (shiftEnterHeld && /^function\(\)\{[^.]+\.[^(]+\([^,]+,[^)]+\)\}$/.test(callback.toString())) { //very dumb, but it's "function(){x.x(x,x)}", this only is applied when shift and enter are held so it shouldn't cause any issues
             delay = 0;
         }
 

@@ -1,6 +1,6 @@
 {
     "name": "vacuumtube",
-    "version": "1.5.7",
+    "version": "1.5.8",
     "description": "YouTube for TV, on your PC",
     "main": "index.js",
     "scripts": {
@@ -113,7 +113,7 @@
     },
     "dependencies": {
         "chokidar": "^5.0.0",
-        "electron-updater": "^6.7.3",
+        "electron-updater": "^6.8.3",
         "minimist": "^1.2.8",
         "sponsorblock-api": "^0.2.4",
         "string-argv": "^0.3.2",

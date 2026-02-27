@@ -28,13 +28,12 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.5.7" date="2026-02-07" type="stable">
+    <release version="1.5.8" date="2026-02-27" type="stable">
       <description>
-        <p>v1.5.7</p>
+        <p>v1.5.8</p>
         <ul>
-          <li>Added setting to disable touch controls</li>
-          <li>Fixed settings not opening properly with touch controls</li>
-          <li>Fixed deleted userstyles causing potential bugs</li>
+          <li>Fixed Shift+Enter long-press</li>
+          <li>Updated dependencies</li>
         </ul>
       </description>
     </release>
