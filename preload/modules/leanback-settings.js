@@ -1,4 +1,4 @@
-//injects custom VacuumTube settings into the youtube settings page (and removes an irrelevant option from youtube settings)
+//injects custom VacuumTube settings button into the youtube settings page (and removes an irrelevant option from youtube settings)
 
 const { shell } = require('electron')
 const configManager = require('../config')
@@ -33,7 +33,7 @@ function createSettingButtonRenderer(title, summary, button, callback) {
     };
 }
 
-function createSettingBooleanRenderer(title, summary, configName, dynamicFunction) {
+function createSettingBooleanRenderer(title, summary, configName, dynamicFunction) { //unused since settings are now in custom menu, but just in case for future
     return {
         settingBooleanRenderer: {
             itemId: 'VOICE_AND_AUDIO_ACTIVITY', //this has to be here for it to listen to the 'enabled' flag, but it doesn't affect anything else
@@ -69,7 +69,7 @@ module.exports = async () => {
     let isKids = window.ytcfg.data_.INNERTUBE_CLIENT_NAME === 'TVHTML5_FOR_KIDS' //if you enter/exit kids mode, the page reloads (and therefore, the preload modules re-inject), so this is fine to do non-dynamically
     let locale = localeProvider.getLocale()
 
-    rcMod.addInputModifier((input) => {
+    rcMod.addInputModifier((input) => { //unused since settings are now in custom menu, but just in case for future
         if (input.vtConfigOption) {
             if (input.vtConfigOption === 'vt-button') {
                 input.vtConfigValue()

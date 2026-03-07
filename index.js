@@ -115,6 +115,13 @@ async function main() {
             for (let i = 0; i < details.responseHeaders['content-security-policy'].length; i++) {
                 let header = details.responseHeaders['content-security-policy'][i]
 
+                //allow eval (it's used occasionally by youtube)
+                let trustedTypesPattern = /require-trusted-types-for\s+'script'/
+                let trustedTypesMatch = header.match(trustedTypesPattern)
+                if (trustedTypesMatch) {
+                    header = header.replace(/require-trusted-types-for\s+'script';?\s*/g, '')
+                }
+
                 // Allow unsafe-inline, data URLs, and external stylesheets for userstyles
                 // Remove nonces since unsafe-inline is ignored when nonces are present
                 // this has to be done even if userstyles are disabled, since they can be enabled live
