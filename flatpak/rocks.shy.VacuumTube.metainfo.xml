@@ -33,6 +33,7 @@
         <p>v1.5.9</p>
         <ul>
           <li>Fixed direct sign-in appearing despite not working</li>
+          <li>Fixed some internal Leanback issues involving eval</li>
         </ul>
       </description>
     </release>
