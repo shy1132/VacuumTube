@@ -81,6 +81,7 @@ function el(tag, attrs = {}, children = []) {
     return element;
 }
 
+
 function createOverlayDOM() {
     const createToggle = (configKey) => {
         return el('div', { className: `vt-toggle ${config[configKey] ? 'vt-toggle-on' : ''}`, dataConfig: configKey }, [
@@ -729,6 +730,7 @@ function setupEventListeners() {
         }
     }, true)
 
+    
     // Keyboard events - capture phase to intercept before YouTube
     // Block ALL keyboard input when overlay is visible to prevent Leanback from receiving it
     document.addEventListener('keydown', (e) => {
@@ -831,9 +833,10 @@ module.exports = async () => {
 
     locale = localeProvider.getLocale()
 
-    //inject settings css
+    // inject settings css
     const cssPath = path.join(__dirname, 'style.css')
-    const text = fs.readFileSync(cssPath, 'utf-8')
+    let text = fs.readFileSync(cssPath, 'utf-8')
+
 
     css.inject('settings', text)
 
