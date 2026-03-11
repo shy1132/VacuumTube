@@ -51,7 +51,7 @@
         },
         "wayland_hdr": {
             "title": "Wayland HDR",
-            "description": "Enables HDR when using Wayland, but can cause desaturated colors with unsupported platforms. Relaunch after toggling"
+            "description": "Enables HDR when using Wayland, but can cause desaturated colors on unsupported platforms. Relaunch after toggling"
         },
         "low_memory_mode": {
             "title": "Low Memory Mode",
