@@ -28,13 +28,11 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.6.0" date="2026-03-11" type="stable">
+    <release version="1.6.1" date="2026-03-xx" type="stable">
       <description>
-        <p>v1.6.0</p>
+        <p>v1.6.1</p>
         <ul>
-          <li>Added built-in volume changing (+/-, M to mute)</li>
-          <li>Fixed direct sign-in appearing despite not working</li>
-          <li>Fixed some internal Leanback issues</li>
+          <li>Fixed dislike count not showing on dislike button when Return Dislikes is enabled</li>
         </ul>
       </description>
     </release>

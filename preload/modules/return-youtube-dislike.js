@@ -34,6 +34,9 @@ module.exports = async () => {
         let panel = json.engagementPanels.find(p => p.engagementPanelSectionListRenderer?.panelIdentifier === 'video-description-ep-identifier')
         if (!panel) return; //shouldn't happen
 
+        let engagementActions = json.transportControls?.transportControlsRenderer?.engagementActions;
+        let likesEngagement = engagementActions?.find(a => a.type === 'TRANSPORT_CONTROLS_BUTTON_TYPE_LIKE_BUTTON')
+
         let votes;
         try {
             votes = await fetchDislikes(videoId)
@@ -58,6 +61,11 @@ module.exports = async () => {
                 }
             }
         })
+
+        if (likesEngagement.button?.likeButtonRenderer) {
+            likesEngagement.button.likeButtonRenderer.dislikeCountText.simpleText = abbreviatedDislikes;
+            likesEngagement.button.likeButtonRenderer.dislikeCountWithUndislikeText.simpleText = abbreviatedDislikes;
+        }
 
         return JSON.stringify(json);
     })
