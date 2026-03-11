@@ -105,6 +105,12 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
   - Simulate long-press of the Enter key
 - `Right Click`
   - Go back
+- `+`
+  - Increase volume
+- `-`
+  - Decrease volume
+- `M`
+  - Toggle mute
 
 ## Custom CSS (Userstyles)
 

@@ -11,9 +11,10 @@ let changed = false;
 let config = {}
 
 const defaults = {
+    volume: 100, //video volume (0-100)
     adblock: true, //block ads
-    sponsorblock: false, // Enable Sponsorblock
-    sponsorblock_uuid: crypto.randomUUID(), // Sponsorblock wants to track this per user so you can ask it for stats later
+    sponsorblock: false, //enable sponsorblock
+    sponsorblock_uuid: crypto.randomUUID(), //sponsorblock wants to track this per user so you can ask it for stats later
     dearrow: false, //replaces titles and thumbnails with more accurate and less sensationalized versions from a crowdsourced database (https://dearrow.ajay.app/)
     dislikes: false, //readds youtube dislikes via https://www.returnyoutubedislike.com/
     remove_super_resolution: false, //block "super resolution" (ai upscaled qualities)

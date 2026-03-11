@@ -1,3 +1,26 @@
+function el(tag, attrs = {}, children = []) {
+    const element = document.createElement(tag)
+    for (const [ key, value ] of Object.entries(attrs)) {
+        if (key === 'className') {
+            element.className = value;
+        } else if (key === 'textContent') {
+            element.textContent = value;
+        } else if (key === 'style' && typeof value === 'object') {
+            Object.assign(element.style, value)
+        } else if (key.startsWith('data')) {
+            element.setAttribute(key.replace(/([A-Z])/g, '-$1').toLowerCase(), value)
+        } else {
+            element.setAttribute(key, value)
+        }
+    }
+
+    for (const child of children) {
+        if (child) element.appendChild(child)
+    }
+
+    return element;
+}
+
 async function waitForSelector(selector) {
     return new Promise((resolve) => {
         let observer = new MutationObserver(() => {
@@ -51,6 +74,7 @@ function deepMerge(current, updates) {
 }
 
 module.exports = {
+    el,
     waitForSelector,
     waitForCondition,
     deepMerge

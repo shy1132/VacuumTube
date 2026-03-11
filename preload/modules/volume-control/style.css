@@ -1,0 +1,64 @@
+#vt-volume-indicator {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    z-index: 999999;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+#vt-volume-indicator.visible {
+    opacity: 1;
+}
+
+.vt-volume-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 16px;
+    font-size: 24px;
+    font-family: 'YouTube Icons Outlined';
+}
+
+.vt-volume-icon.vt-volume-high::before {
+    content: '\ed89';
+}
+
+.vt-volume-icon.vt-volume-low::before {
+    content: '\ed8a';
+}
+
+.vt-volume-icon.vt-volume-muted::before {
+    content: '\e04e';
+}
+
+.vt-volume-bar-container {
+    width: 200px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.vt-volume-bar {
+    height: 100%;
+    width: 50%;
+    background-color: white;
+    border-radius: 4px;
+    transition: width 0.1s linear;
+}
+
+.vt-volume-text {
+    font-size: 18px;
+    font-weight: 500;
+    min-width: 55px;
+    text-align: right;
+    margin-left: 16px;
+}

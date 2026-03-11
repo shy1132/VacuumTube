@@ -23,6 +23,8 @@ const controller = require('../../util/controller')
 let locale = null; //gets set in exported function
 let config = configManager.get()
 
+const el = functions.el;
+
 const scrollOffsets = {}
 let overlayVisible = false;
 let currentTabIndex = 0;
@@ -56,31 +58,6 @@ for (let item of tabs) {
         dynamicFunction[item.id] = item.func;
     }
 }
-
-// Helper to create elements with attributes and children
-function el(tag, attrs = {}, children = []) {
-    const element = document.createElement(tag)
-    for (const [ key, value ] of Object.entries(attrs)) {
-        if (key === 'className') {
-            element.className = value;
-        } else if (key === 'textContent') {
-            element.textContent = value;
-        } else if (key === 'style' && typeof value === 'object') {
-            Object.assign(element.style, value)
-        } else if (key.startsWith('data')) {
-            element.setAttribute(key.replace(/([A-Z])/g, '-$1').toLowerCase(), value)
-        } else {
-            element.setAttribute(key, value)
-        }
-    }
-
-    for (const child of children) {
-        if (child) element.appendChild(child)
-    }
-
-    return element;
-}
-
 
 function createOverlayDOM() {
     const createToggle = (configKey) => {
@@ -833,10 +810,9 @@ module.exports = async () => {
 
     locale = localeProvider.getLocale()
 
-    // inject settings css
+    //inject settings css
     const cssPath = path.join(__dirname, 'style.css')
-    let text = fs.readFileSync(cssPath, 'utf-8')
-
+    const text = fs.readFileSync(cssPath, 'utf-8')
 
     css.inject('settings', text)
 
@@ -852,7 +828,7 @@ module.exports = async () => {
     setupEventListeners()
 
     ipcRenderer.on('config-update', (event, newConfig) => {
-        config = newConfig
+        config = newConfig;
         const overlay = getOverlay()
         if (overlay) {
             overlay.querySelectorAll('.vt-toggle').forEach(toggle => {
