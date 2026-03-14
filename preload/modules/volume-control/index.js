@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const rcMod = require('../../util/resolveCommandModifiers')
 const css = require('../../util/css')
 const functions = require('../../util/functions')
 const configManager = require('../../config')
@@ -33,7 +34,7 @@ module.exports = async () => {
     const volumeIndicatorElement = createVolumeIndicator()
     document.body.appendChild(volumeIndicatorElement)
 
-    function showVolumeIndicator(volume) {
+    function showVolumeIndicator() {
         const indicator = document.getElementById('vt-volume-indicator')
         const bar = document.getElementById('vt-volume-bar')
         const text = document.getElementById('vt-volume-text')
@@ -67,17 +68,14 @@ module.exports = async () => {
             configManager.set({ volume })
         }
 
-        let scaledVol = volume / 100;
-
         let players = document.querySelectorAll('.html5-video-player')
         for (let player of players) {
-            let video = player.querySelector('video')
-            if (!video) continue;
+            if (!player?.setVolume) continue;
 
             if (muted) {
-                video.volume = 0;
-            } else if (video.volume !== scaledVol) {
-                video.volume = scaledVol;
+                player.setVolume(0)
+            } else {
+                player.setVolume(volume)
             }
         }
     }
@@ -97,7 +95,7 @@ module.exports = async () => {
         }
     }
 
-    // Volume controls
+    //volume controls
     document.addEventListener('keydown', (e) => {
         if (!e.key || !isWatching()) return;
 
@@ -108,7 +106,6 @@ module.exports = async () => {
         } else if (e.key === '-') {
             volume = Math.max(0, volume - volumeStep)
         } else if (e.key.toLowerCase() === 'm') {
-            console.log(muted, e.key)
             muted = !muted;
         } else {
             return;
@@ -117,9 +114,30 @@ module.exports = async () => {
         e.preventDefault()
         e.stopPropagation()
         e.stopImmediatePropagation()
-        showVolumeIndicator(volume)
+        showVolumeIndicator()
         setVolume()
     }, true)
+
+    //cast allows you to control the volume, but it uses a different (VERY OLD LOOKING) ui, so we hook it up to our new one instead
+    rcMod.addInputModifier((c) => {
+        if (!c.volumeControlAction) return c;
+
+        let action = c.volumeControlAction;
+        let type = action.volumeControlType;
+
+        if (type === 'VOLUME_CONTROL_ACTION_TYPE_MUTE') {
+            muted = true;
+        } else if (type === 'VOLUME_CONTROL_ACTION_TYPE_UNMUTE') {
+            muted = false;
+        } else if (type === 'VOLUME_CONTROL_ACTION_TYPE_SET_ABSOLUTE') {
+            volume = action.volumeControlValue;
+        }
+
+        showVolumeIndicator()
+        setVolume()
+
+        return false;
+    })
 
     //player can change sometimes
     setInterval(() => {
