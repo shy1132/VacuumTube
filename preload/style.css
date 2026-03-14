@@ -7,7 +7,3 @@
 body {
     user-select: none; /*without this, you can accidentally ctrl+a and select everything, have to refresh to fix*/
 }
-
-div[idomkey="lazy-mdx-volume"] { /*hide ugly legacy volume indicator that appears when setVolume is called on player*/
-    display: none;
-}

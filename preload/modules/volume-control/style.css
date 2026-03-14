@@ -1,3 +1,7 @@
+div[idomkey="lazy-mdx-volume"] { /*hide ugly legacy volume indicator that appears when setVolume is called on player*/
+    display: none;
+}
+
 #vt-volume-indicator {
     position: fixed;
     bottom: 80px;
