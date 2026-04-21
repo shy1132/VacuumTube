@@ -39,6 +39,7 @@ const youtubeClientUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/19.lts.
 const userAgent = `VacuumTube/${package.version}` //for anything else
 
 const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI === '1'
+const shouldCheckForUpdates = process.platform !== 'linux'
 
 let win;
 let config;
@@ -93,7 +94,9 @@ async function main() {
 
     await electron.app.whenReady()
 
-    autoUpdater.checkForUpdatesAndNotify()
+    if (shouldCheckForUpdates) {
+        autoUpdater.checkForUpdatesAndNotify()
+    }
 
     //general request modification
     electron.session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
