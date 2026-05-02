@@ -86,6 +86,11 @@
         "mac": {
             "icon": "./assets/icon.icns",
             "category": "public.app-category.video",
+            "entitlements": "build/entitlements.mac.plist",
+            "entitlementsInherit": "build/entitlements.mac.inherit.plist",
+            "extendInfo": {
+                "NSMicrophoneUsageDescription": "VacuumTube uses the microphone only when you use YouTube voice search."
+            },
             "target": [
                 {
                     "target": "dmg",
