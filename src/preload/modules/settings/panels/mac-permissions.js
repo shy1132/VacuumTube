@@ -72,7 +72,7 @@ async function refresh() {
 }
 
 module.exports = {
-    id: 'permissions',
+    id: 'mac_permissions',
 
     init(ctx) {
         locale = ctx.locale;
