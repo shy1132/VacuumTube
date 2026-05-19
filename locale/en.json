@@ -73,6 +73,32 @@
             "title": "Pause on Blur",
             "description": "Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)"
         },
+        "permissions": {
+            "title": "Permissions",
+            "description": "Manage macOS permissions used by VacuumTube.",
+            "microphone_title": "Microphone",
+            "microphone_description": "Used only when you start YouTube voice search.",
+            "status_label": "Status",
+            "status_loading": "Checking microphone permission...",
+            "request_microphone": "Request Microphone Access",
+            "open_microphone_settings": "Open macOS Microphone Settings",
+            "reset_microphone": "Troubleshooting: Reset Permission Prompt",
+            "relaunch_app": "Relaunch VacuumTube",
+            "restart_required": "Changes made in macOS Settings require relaunching VacuumTube.",
+            "request_granted": "Microphone access is allowed. No permission prompt is needed.",
+            "request_not_determined": "macOS still has not shown a permission prompt. Use Reset Permission Prompt, then try again.",
+            "request_denied_help": "macOS will not show the permission prompt again while access is denied. Turn it on in macOS Settings, then relaunch VacuumTube.",
+            "request_failed": "VacuumTube could not request microphone access. Open macOS Settings and relaunch the app after changing access.",
+            "resetting_microphone": "Resetting the saved macOS microphone decision...",
+            "statuses": {
+                "not-determined": "Not Requested",
+                "granted": "Allowed",
+                "denied": "Denied",
+                "restricted": "Restricted",
+                "unknown": "Unknown",
+                "unsupported": "Unsupported"
+            }
+        },
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
             "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically",

@@ -260,6 +260,78 @@
     text-align: center;
 }
 
+.vt-permissions-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.vt-permissions-description {
+    font-size: 14px;
+    color: #aaa;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    flex-shrink: 0;
+}
+
+.vt-permission-card {
+    display: flex;
+    padding: 20px 24px;
+    background: #2a2a2a;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.vt-permission-status {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #3a3a3a;
+    color: #fff;
+    font-size: 14px;
+}
+
+.vt-permission-status[data-status="granted"] {
+    background: #1f5f3a;
+}
+
+.vt-permission-status[data-status="denied"],
+.vt-permission-status[data-status="restricted"] {
+    background: #703030;
+}
+
+.vt-permission-note {
+    margin-top: 12px;
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.vt-permission-message {
+    margin-top: 12px;
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.vt-permission-message[data-type="success"] {
+    color: #9ee0b5;
+}
+
+.vt-permission-message[data-type="warning"] {
+    color: #ffc777;
+}
+
+.vt-permissions-section .vt-button {
+    margin-bottom: 12px;
+}
+
 .vt-userstyles-section {
     display: flex;
     flex-direction: column;
