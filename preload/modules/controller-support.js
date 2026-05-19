@@ -16,8 +16,9 @@ module.exports = async () => {
         5:  116, //right bumper -> f5 (forward)
         6:  113, //left trigger -> f2 (seek backwards)
         7:  114, //right trigger -> f3 (seek forwards)
-        8:  13,  //select -> enter
-        9:  13,  //start -> enter
+        8:  189,  //select -> minus (volume down)
+        9:  187,  //start -> equals (volume up)
+        10:  77, //l3 (mute) 
         11: 'vt-settings', // r3 -> (vacuumtube settings)
         12: 38,  //dpad up -> arrow key up
         13: 40,  //dpad down -> arrow key down
