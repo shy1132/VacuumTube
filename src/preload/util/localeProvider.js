@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const functions = require('./functions')
 
-const localeFolder = path.join(__dirname, '../', '../', 'locale')
+const localeFolder = path.join(__dirname, '../', '../', '../', 'locale')
 
 let locale;
 

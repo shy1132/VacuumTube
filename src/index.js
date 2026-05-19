@@ -3,11 +3,11 @@ const electron = require('electron')
 const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const fs = require('fs')
-const childProcess = require('child_process')
-const chokidar = require('chokidar')
 const minimist = require('minimist')
 const stringArgv = require('string-argv')
-const package = require('./package.json')
+const package = require('../package.json')
+
+const appId = package.build?.appId || 'rocks.shy.VacuumTube'
 
 const argv = minimist(process.argv)
 
@@ -25,6 +25,8 @@ const sessionData = path.join(userData, 'sessionData')
 electron.app.setPath('sessionData', sessionData)
 
 const configManager = require('./config.js')
+const permissions = require('./permissions.js')
+const userstyles = require('./userstyles.js')
 
 //code
 /*
@@ -45,143 +47,12 @@ VacuumTube overrides some things to identify properly, but this user agent has t
 const youtubeUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/26.lts.0-qa; compatible; VacuumTube/${package.version}` //for youtube, sent in innertube calls
 const youtubeClientUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/19.lts.0-qa; compatible; VacuumTube/${package.version}` //for youtube, somewhere in client scripts this matters because it parses cobalt version explicitly from the user agent, which affects playability because cobalt 26 "should" work with widevine, when we can't support that
 const userAgent = `VacuumTube/${package.version}` //for anything else
-const youtubeOrigin = 'https://www.youtube.com'
-const microphonePrivacySettingsUrl = 'x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone'
-const appId = package.build?.appId || 'rocks.shy.VacuumTube'
 
+const youtubeUrl = 'https://www.youtube.com/tv'
 const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI === '1'
 
 let win;
 let config;
-let microphonePromptPromise = null;
-let lastDeniedMicrophoneLog = 0;
-
-function getUrlOrigin(value) {
-    if (!value) return null;
-
-    try {
-        const origin = new URL(value).origin
-        return origin === 'null' ? null : origin;
-    } catch {
-        return null;
-    }
-}
-
-function isYoutubePermissionRequest(webContents, requestingOrigin, details = {}) {
-    const requestingFrameOrigin = getUrlOrigin(details.requestingUrl)
-        || getUrlOrigin(details.securityOrigin)
-        || getUrlOrigin(requestingOrigin)
-
-    if (requestingFrameOrigin) {
-        return requestingFrameOrigin === youtubeOrigin
-    }
-
-    return getUrlOrigin(webContents?.getURL?.()) === youtubeOrigin
-}
-
-function isAudioMediaRequest(details = {}) {
-    if (Array.isArray(details.mediaTypes)) {
-        return details.mediaTypes.length > 0 && details.mediaTypes.every((type) => type === 'audio')
-    }
-
-    return details.mediaType === 'audio'
-}
-
-function getMicrophonePermissionStatus() {
-    if (process.platform !== 'darwin') return 'unsupported';
-
-    try {
-        return electron.systemPreferences.getMediaAccessStatus('microphone')
-    } catch (error) {
-        console.error('[Permissions] Failed to get microphone access status:', error)
-        return 'unknown'
-    }
-}
-
-async function requestMicrophonePermissionStatus() {
-    if (process.platform !== 'darwin') return 'unsupported';
-
-    const status = getMicrophonePermissionStatus()
-    if (status !== 'not-determined') return status;
-
-    if (!microphonePromptPromise) {
-        microphonePromptPromise = electron.systemPreferences.askForMediaAccess('microphone')
-        .catch((error) => {
-            console.error('[Permissions] Failed to request microphone access:', error)
-            return false
-        })
-        .finally(() => {
-            microphonePromptPromise = null;
-        })
-    }
-
-    await microphonePromptPromise
-
-    return getMicrophonePermissionStatus()
-}
-
-async function requestMicrophonePermission() {
-    const status = await requestMicrophonePermissionStatus()
-    return status === 'granted';
-}
-
-async function resetMicrophonePermissionStatus() {
-    if (process.platform !== 'darwin') return 'unsupported';
-
-    return await new Promise((resolve) => {
-        childProcess.execFile('/usr/bin/tccutil', [ 'reset', 'Microphone', appId ], (error) => {
-            if (error) {
-                console.error('[Permissions] Failed to reset microphone access:', error)
-                resolve('unknown')
-                return;
-            }
-
-            resolve(getMicrophonePermissionStatus())
-        })
-    })
-}
-
-function isMicrophonePermissionGranted() {
-    return getMicrophonePermissionStatus() === 'granted'
-}
-
-function logDeniedMicrophoneRequest(details = {}) {
-    const now = Date.now()
-    if ((now - lastDeniedMicrophoneLog) < 5000) return;
-
-    lastDeniedMicrophoneLog = now;
-    console.log('[Permissions] Denied microphone media request', {
-        status: getMicrophonePermissionStatus(),
-        requestingUrl: details.requestingUrl,
-        securityOrigin: details.securityOrigin
-    })
-}
-
-function setupMicrophonePermissionHandlers() {
-    if (process.platform !== 'darwin') return;
-
-    electron.session.defaultSession.setPermissionCheckHandler((webContents, permission, requestingOrigin, details = {}) => {
-        if (permission !== 'media') return false;
-        if (!isYoutubePermissionRequest(webContents, requestingOrigin, details)) return false;
-        if (!isAudioMediaRequest(details)) return false;
-
-        return isMicrophonePermissionGranted()
-    })
-
-    electron.session.defaultSession.setPermissionRequestHandler((webContents, permission, callback, details = {}) => {
-        if (permission !== 'media' || !isYoutubePermissionRequest(webContents, null, details) || !isAudioMediaRequest(details)) {
-            callback(false)
-            return;
-        }
-
-        const granted = isMicrophonePermissionGranted()
-        if (!granted) {
-            logDeniedMicrophoneRequest(details)
-        }
-
-        callback(granted)
-    })
-}
 
 async function main() {
     if (argv['version'] || argv['v']) {
@@ -234,7 +105,7 @@ async function main() {
     await electron.app.whenReady()
 
     autoUpdater.checkForUpdatesAndNotify()
-    setupMicrophonePermissionHandlers()
+    permissions.setup({ appId })
 
     //general request modification
     electron.session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
@@ -390,157 +261,16 @@ async function main() {
         }
     })
 
-    electron.ipcMain.handle('get-microphone-permission-status', () => {
-        return getMicrophonePermissionStatus()
-    })
-
-    electron.ipcMain.handle('request-microphone-permission', () => {
-        return requestMicrophonePermissionStatus()
-    })
-
-    electron.ipcMain.handle('reset-microphone-permission', () => {
-        return resetMicrophonePermissionStatus()
-    })
-
-    electron.ipcMain.handle('open-microphone-privacy-settings', async () => {
-        if (process.platform !== 'darwin') return false;
-
-        try {
-            await electron.shell.openExternal(microphonePrivacySettingsUrl)
-            return true;
-        } catch (error) {
-            console.error('[Permissions] Failed to open microphone privacy settings:', error)
-            return false;
-        }
-    })
-
     electron.ipcMain.handle('relaunch-app', () => {
         electron.app.relaunch()
         electron.app.quit()
     })
 
-    // Userstyles
-    const userstylesDir = path.join(userData, 'userstyles')
-    let userstylesWatcher = null;
-
-    if (!fs.existsSync(userstylesDir)) {
-        fs.mkdirSync(userstylesDir, { recursive: true })
-        console.log(`[Userstyles] Created userstyles directory: ${userstylesDir}`)
-    }
-
-    function getUserstyles() {
-        const styles = []
-
-        if (!fs.existsSync(userstylesDir)) {
-            return styles;
-        }
-
-        const files = fs.readdirSync(userstylesDir)
-
-        for (const file of files) {
-            if (file.endsWith('.css')) {
-                const filePath = path.join(userstylesDir, file)
-                try {
-                    const css = fs.readFileSync(filePath, 'utf-8')
-                    styles.push({ filename: file, css })
-                } catch (error) {
-                    console.error(`Failed to read userstyle ${file}:`, error)
-                }
-            }
-        }
-
-        return styles;
-    }
-
-    function setupUserstylesWatcher() {
-        if (userstylesWatcher) {
-            userstylesWatcher.close()
-        }
-
-        userstylesWatcher = chokidar.watch(userstylesDir, {
-            persistent: true,
-            ignoreInitial: true,
-            depth: 0 // Only watch files in the root directory
-        })
-
-        userstylesWatcher.on('add', (filePath) => {
-            const filename = path.basename(filePath)
-
-            if (!filename.endsWith('.css')) {
-                return
-            }
-
-            console.log(`[Userstyles] Added: ${filename}`)
-
-            try {
-                const css = fs.readFileSync(filePath, 'utf-8')
-                if (win) {
-                    win.webContents.send('userstyle-updated', { filename, css })
-                }
-            } catch (error) {
-                console.error(`Failed to read new userstyle ${filename}:`, error)
-            }
-        })
-
-        userstylesWatcher.on('change', (filePath) => {
-            const filename = path.basename(filePath)
-
-            if (!filename.endsWith('.css')) return;
-            
-            console.log(`[Userstyles] Changed: ${filename}`)
-
-            try {
-                const css = fs.readFileSync(filePath, 'utf-8')
-                console.log(`[Userstyles] CSS length: ${css.length}`)
-                if (win) {
-                    win.webContents.send('userstyle-updated', { filename, css })
-                    console.log(`[Userstyles] Sent update to renderer`)
-                } else {
-                    console.log(`[Userstyles] Window not available, cannot send update`)
-                }
-            } catch (error) {
-                console.error(`Failed to read changed userstyle ${filename}:`, error)
-            }
-        })
-
-        userstylesWatcher.on('unlink', (filePath) => {
-            const filename = path.basename(filePath)
-
-            if (!filename.endsWith('.css')) return;
-
-            console.log(`[Userstyles] Removed: ${filename}`)
-
-            if (win) {
-                win.webContents.send('userstyle-removed', { filename })
-            }
-        })
-
-        userstylesWatcher.on('ready', () => {
-            console.log(`[Userstyles] Watcher ready, watching: ${userstylesDir}`)
-        })
-
-        userstylesWatcher.on('error', (error) => {
-            console.error(`[Userstyles] Watcher error:`, error)
-        })
-
-        console.log(`[Userstyles] Setting up watcher for: ${userstylesDir}`)
-    }
-
-    electron.ipcMain.on('get-userstyles-path', (event) => {
-        event.returnValue = userstylesDir;
-    })
-
-    electron.ipcMain.handle('get-userstyles', () => {
-        return getUserstyles();
-    })
-
-    electron.ipcMain.handle('open-userstyles-folder', () => {
-        electron.shell.openPath(userstylesDir)
-    })
+    userstyles.setup({ userData, getWindow: () => win })
 
     await createWindow()
 
-    setupUserstylesWatcher()
+    userstyles.startWatcher()
 
     electron.app.on('activate', () => {
         if (electron.BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -614,18 +344,18 @@ async function createWindow() {
     })
 
     if (argv['debug-gpu']) {
-        console.log('loading chrome://gpu')
+        console.log('Loading chrome://gpu')
         win.loadURL('chrome://gpu', { userAgent })
         return;
     }
 
     if (argv['enable-devtools']) {
-        console.log('launching with devtools enabled')
+        console.log('Launching with developer tools enabled')
         win.webContents.toggleDevTools()
     }
 
-    console.log('loading youtube')
-    win.loadURL('https://www.youtube.com/tv', { userAgent: youtubeClientUserAgent })
+    console.log(`Loading ${youtubeUrl}`)
+    win.loadURL(youtubeUrl, { userAgent: youtubeClientUserAgent })
 
     //remember fullscreen preference
     win.on('enter-full-screen', () => {
@@ -682,7 +412,7 @@ function portable() {
 
         return portablePath;
     } catch (err) {
-        console.error('failed to detect portable mode, assuming non-portable', err)
+        console.error('Failed to detect portable mode, assuming non-portable', err)
         return null;
     }
 }

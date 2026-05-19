@@ -1,8 +1,8 @@
 {
     "name": "vacuumtube",
-    "version": "1.6.4",
+    "version": "1.7.0",
     "description": "YouTube for TV, on your PC",
-    "main": "index.js",
+    "main": "src/index.js",
     "scripts": {
         "start": "electron .",
         "windows:build": "electron-builder --win",

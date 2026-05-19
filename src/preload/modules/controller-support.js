@@ -9,21 +9,21 @@ const config = configManager.get()
 
 module.exports = async () => {
     const gamepadKeyCodeMap = { //aiming to maintain parity with the console versions of leanback
-        0:  13,  //a -> enter
-        1:  27,  //b -> escape
-        2:  170, //x -> asterisk (search)
-        4:  115, //left bumper -> f4 (back)
-        5:  116, //right bumper -> f5 (forward)
-        6:  113, //left trigger -> f2 (seek backwards)
-        7:  114, //right trigger -> f3 (seek forwards)
-        8:  189,  //select -> minus (volume down)
-        9:  187,  //start -> equals (volume up)
-        10:  77, //l3 (mute) 
-        11: 'vt-settings', // r3 -> (vacuumtube settings)
-        12: 38,  //dpad up -> arrow key up
-        13: 40,  //dpad down -> arrow key down
-        14: 37,  //dpad left -> arrow key left
-        15: 39,  //dpad right -> arrow key right
+        0:  13,   //a -> enter
+        1:  27,   //b -> escape
+        2:  170,  //x -> asterisk (search)
+        4:  115,  //left bumper -> f4 (back)
+        5:  116,  //right bumper -> f5 (forward)
+        6:  113,  //left trigger -> f2 (seek backwards)
+        7:  114,  //right trigger -> f3 (seek forwards)
+        8:  189,  //select -> minus (vacuumtube volume down)
+        9:  187,  //start -> equals (vacuumtube volume up)
+        10: 77,   //l3 (vacuumtube mute)
+        11: 'vt-settings', //r3 -> (vacuumtube settings)
+        12: 38,   //dpad up -> arrow key up
+        13: 40,   //dpad down -> arrow key down
+        14: 37,   //dpad left -> arrow key left
+        15: 39,   //dpad right -> arrow key right
 
         1012: 38,  //left stick up -> arrow key up
         1014: 40,  //left stick down -> arrow key down

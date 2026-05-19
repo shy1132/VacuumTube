@@ -73,7 +73,23 @@
             "title": "Pause on Blur",
             "description": "Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)"
         },
-        "permissions": {
+        "userstyles": {
+            "title": "Custom CSS (Userstyles)",
+            "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically",
+            "warn_empty": "No userstyles found",
+            "open_folder": "Open Userstyles folder",
+            "enable": "Enable Userstyles",
+            "failed_to_load": "Failed to load userstyles"
+        },
+        "touch_overlay": {
+            "title": "Touch Overlay",
+            "description": "Enables on-screen touch controls for easier navigation when touch input is detected"
+        },
+        "controller_support": {
+            "title": "Controller Support",
+            "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox controller"
+        },
+        "mac_permissions": {
             "title": "Permissions",
             "description": "Manage macOS permissions used by VacuumTube.",
             "microphone_title": "Microphone",
@@ -98,22 +114,6 @@
                 "unknown": "Unknown",
                 "unsupported": "Unsupported"
             }
-        },
-        "userstyles": {
-            "title": "Custom CSS (Userstyles)",
-            "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically",
-            "warn_empty": "No userstyles found",
-            "open_folder": "Open Userstyles folder",
-            "enable": "Enable Userstyles",
-            "failed_to_load": "Failed to load userstyles"
-        },
-        "touch_overlay": {
-            "title": "Touch Overlay",
-            "description": "Enables on-screen touch controls for easier navigation when touch input is detected"
-        },
-        "controller_support": {
-            "title": "Controller Support",
-            "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox controller"
         }
     },
     "sponsorblock": {

@@ -97,27 +97,27 @@ module.exports = async () => {
 
     //volume controls
     document.addEventListener('keydown', (e) => {
-    const key = e.key || e.keyCode; 
-    if (!key || !isWatching()) return;
+        const key = e.key || e.keyCode; 
+        if (!key || !isWatching()) return;
 
-    const volumeStep = 5;
+        const volumeStep = 5;
 
-    if (key === '+' || key === '=' || key === 187) {
-        volume = Math.min(100, volume + volumeStep)
-    } else if (key === '-' || key === 189 ) {
-        volume = Math.max(0, volume - volumeStep)
-    } else if (key === 'm' || key === 'M' || key === 77) {
-        muted = !muted;
-    } else {
-        return;
-    }
+        if (key === '+' || key === '=' || key === 187) {
+            volume = Math.min(100, volume + volumeStep)
+        } else if (key === '-' || key === 189) {
+            volume = Math.max(0, volume - volumeStep)
+        } else if (key === 'm' || key === 'M' || key === 77) {
+            muted = !muted;
+        } else {
+            return;
+        }
 
-    e.preventDefault()
-    e.stopPropagation()
-    e.stopImmediatePropagation()
-    showVolumeIndicator()
-    setVolume()
-}, true)
+        e.preventDefault()
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+        showVolumeIndicator()
+        setVolume()
+    }, true)
 
     //cast allows you to control the volume, but it uses a different (VERY OLD LOOKING) ui, so we hook it up to our new one instead
     rcMod.addInputModifier((c) => {

@@ -1,7 +1,7 @@
 //overrides various internal things to properly identify the client, os, and browser (it starts out with a ps4 user agent running on cobalt, so we override it to be correct values)
 
 const os = require('os')
-const package = require('../../package.json') //it feels weird that this works
+const package = require('../../../package.json') //it feels weird that this works
 const xhrModifiers = require('../util/xhrModifiers')
 const configOverrides = require('../util/configOverrides')
 const functions = require('../util/functions')

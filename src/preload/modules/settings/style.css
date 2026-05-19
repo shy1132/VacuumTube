@@ -268,6 +268,18 @@
     overflow: hidden;
 }
 
+.vt-permissions-viewport {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.vt-permissions-list {
+    transition: transform 0.15s ease-out;
+    padding-right: 16px;
+}
+
 .vt-permissions-description {
     font-size: 14px;
     color: #aaa;
@@ -375,6 +387,7 @@
 }
 
 .vt-userstyles-viewport:hover .vt-scrollbar,
+.vt-permissions-viewport:hover .vt-scrollbar,
 .vt-scrollbar.vt-scrollbar-visible {
     opacity: 1;
 }
@@ -453,8 +466,7 @@
 }
 
 .vt-button.vt-item-focused {
-    background: #fff;
-    color: #212121;
+    background: #3a3a3a;
     outline: 2px solid #fff;
-    outline-offset: 2px;
+    outline-offset: -2px;
 }

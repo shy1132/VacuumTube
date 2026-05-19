@@ -28,12 +28,14 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.6.4" date="2026-04-17" type="stable">
+    <release version="1.7.0" date="2026-05-19" type="stable">
       <description>
-        <p>v1.6.4</p>
+        <p>v1.7.0</p>
         <ul>
-          <li>Updated grammar of some settings in English to be grammatically correct</li>
+          <li>Added controller support for volume controls</li>
+          <li>Fixed deleting a userstyle CSS file not disabling the CSS</li>
           <li>Other changes not applicable to the Flatpak version</li>
+          <li>Internal improvements</li>
         </ul>
       </description>
     </release>

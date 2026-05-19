@@ -35,16 +35,16 @@ const defaults = {
 
 function init(overrides = {}) {
     if (fs.existsSync(legacyStateFile)) {
-        console.log('[config] migrating legacy state.json')
+        console.log('[config] Migrating legacy state.json')
         fs.renameSync(legacyStateFile, configFile)
     }
 
     if (fs.existsSync(configFile) && isValidJson(configFile)) {
-        console.log(`[config] reading config from ${configFile}`)
+        console.log(`[config] Reading config from ${configFile}`)
 
         let parsed = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
         if (parsed['0']) { //i was accidentally still passing the path of the config file to the init function before the overrides (old behavior), causing it to apply the path string as an override and ignore the actual overrides... oops
-            console.log('[config] fixing config bug')
+            console.log('[config] Fixing config bug')
 
             for (let key of Object.keys(parsed)) {
                 if (!isNaN(Number(key))) { //remove each character of the path string...
@@ -60,9 +60,9 @@ function init(overrides = {}) {
             ...parsed
         }
 
-        console.log('[config] loaded config', config)
+        console.log('[config] Loaded config', config)
     } else {
-        console.log('[config] initializing default config')
+        console.log('[config] Initializing default config')
 
         config = {
             ...defaults,
@@ -73,7 +73,7 @@ function init(overrides = {}) {
             fs.mkdirSync(userData, { recursive: true })
             fs.writeFileSync(configFile, JSON.stringify(config, null, 4))
         } catch (err) {
-            console.error('[config] failed to write config file', err)
+            console.error('[config] Failed to write config file', err)
         }
     }
 
@@ -84,13 +84,13 @@ function init(overrides = {}) {
 
 function save() {
     if (changed) {
-        console.log('[config] saving updated config to file')
+        console.log('[config] Saving updated config to file')
 
         try {
             fs.writeFileSync(configFile, JSON.stringify(config, null, 4))
             return true;
         } catch (err) {
-            console.error('[config] failed to write config file', err)
+            console.error('[config] Failed to write config file', err)
             return false;
         } finally {
             changed = false;
@@ -116,7 +116,7 @@ function isValidJson(file) {
     try {
         let text = fs.readFileSync(file, 'utf-8')
         let json = JSON.parse(text)
-        if (typeof json !== 'object') throw new Error('not an object');
+        if (typeof json !== 'object') throw new Error('Not an object');
 
         return true;
     } catch {

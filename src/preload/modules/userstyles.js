@@ -57,8 +57,8 @@ async function loadUserstyles() {
 		})
 
 		console.log(`[Userstyles] Loaded ${styles.length - config.disabled_userstyles.length} of ${styles.length} stylesheets`)
-	} catch (error) {
-		console.error('[Userstyles] Failed to load styles:', error)
+	} catch (err) {
+		console.error('[Userstyles] Failed to load styles:', err)
 	}
 }
 
@@ -95,8 +95,7 @@ module.exports = async () => {
 	})
 
 	ipcRenderer.on('userstyle-removed', (event, { filename }) => {
-		const id = getId(filename)
-		removeCSS(id, true)
+		removeCSS(filename, true)
 	})
 
 	window.addEventListener('vt-userstyle-toggle', async (event) => {
@@ -112,8 +111,8 @@ module.exports = async () => {
 				if (style) {
 					injectCSS(style.filename, style.css)
 				}
-			} catch (error) {
-				console.error(`[Userstyles] Failed to load ${filename}:`, error)
+			} catch (err) {
+				console.error(`[Userstyles] Failed to load ${filename}:`, err)
 			}
 		} else {
 			removeCSS(filename, true)

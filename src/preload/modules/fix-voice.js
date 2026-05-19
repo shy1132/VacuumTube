@@ -25,10 +25,10 @@ function createNotAllowedError(message) {
 
 async function getNativeMicrophoneStatus() {
     try {
-        return await ipcRenderer.invoke('request-microphone-permission')
-    } catch (error) {
-        console.error('[Voice] Failed to request microphone permission:', error)
-        return 'unknown'
+        return await ipcRenderer.invoke('request-microphone-permission');
+    } catch (err) {
+        console.error('[Voice] Failed to request microphone permission:', err)
+        return 'unknown';
     }
 }
 
@@ -40,21 +40,16 @@ function guardGetUserMedia() {
     const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices)
 
     const guardedGetUserMedia = (constraints) => {
-        if (!hasAudioConstraint(constraints)) {
-            return originalGetUserMedia(constraints)
-        }
-
-        if (pendingAudioCapture) {
-            return pendingAudioCapture;
-        }
+        if (!hasAudioConstraint(constraints)) return originalGetUserMedia(constraints);
+        if (pendingAudioCapture) return pendingAudioCapture;
 
         pendingAudioCapture = (async () => {
             const status = await getNativeMicrophoneStatus()
             if (status !== 'granted') {
-                throw createNotAllowedError(`Microphone permission is ${status}`)
+                throw createNotAllowedError(`Microphone permission is ${status}`);
             }
 
-            return originalGetUserMedia(constraints)
+            return originalGetUserMedia(constraints);
         })()
         .finally(() => {
             pendingAudioCapture = null;
@@ -67,8 +62,7 @@ function guardGetUserMedia() {
 
     try {
         navigator.mediaDevices.getUserMedia = guardedGetUserMedia;
-    } catch {
-    }
+    } catch {}
 
     if (navigator.mediaDevices.getUserMedia !== guardedGetUserMedia) {
         try {
@@ -77,8 +71,8 @@ function guardGetUserMedia() {
                 writable: true,
                 value: guardedGetUserMedia
             })
-        } catch (error) {
-            console.error('[Voice] Failed to install getUserMedia guard:', error)
+        } catch (err) {
+            console.error('[Voice] Failed to install getUserMedia guard:', err)
         }
     }
 }
