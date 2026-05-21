@@ -40,17 +40,22 @@ module.exports = async () => {
     })
 
     //ctrl+shift+c to copy video url
+    let lastShortId = null;
+    rcMod.addInputModifier((c) => {
+        if (c.reelWatchEndpoint) {
+            lastShortId = c.reelWatchEndpoint.videoId;
+        }
+
+        return c;
+    })
+
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.shiftKey && e.key?.toLowerCase() === 'c') {
             let url;
 
             let isShort = !!document.querySelector('ytlr-shorts-page')?.classList?.contains('zylon-focus')
-            if (isShort) { //very dumb, don't like it, but there doesn't seem to be a better way
-                let thumbnail = document.querySelector('ytlr-thumbnail-details[idomkey="ytLrShortsPageThumbnail"].ytLrThumbnailDetailsFocused').style.backgroundImage;
-                let id = thumbnail.split('/vi/')[1]?.slice(0, 11)
-                if (!id) return;
-
-                url = `https://youtube.com/shorts/${id}`
+            if (isShort && lastShortId) {
+                url = `https://youtube.com/shorts/${lastShortId}`
             } else {
                 let baseUri = window.yt?.player?.utils?.videoElement_?.baseURI;
                 if (!baseUri || !baseUri.includes('/watch?v=')) return;

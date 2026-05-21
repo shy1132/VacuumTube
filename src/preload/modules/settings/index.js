@@ -396,12 +396,12 @@ const gamepadKeyMap = {
 }
 
 function setupEventListeners() {
-    //global hotkey to open settings (Ctrl+O)
+    //global hotkey to toggle settings (Ctrl+O)
     document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key.toLowerCase() === 'o' && !overlayVisible) {
+        if (e.ctrlKey && e.key.toLowerCase() === 'o') {
             e.preventDefault()
             e.stopPropagation()
-            showOverlay()
+            toggleSettingsOverlay()
             return;
         }
     }, true)

@@ -28,14 +28,12 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.7.0" date="2026-05-19" type="stable">
+    <release version="1.7.1" date="2026-05-21" type="stable">
       <description>
-        <p>v1.7.0</p>
+        <p>v1.7.1</p>
         <ul>
-          <li>Added controller support for volume controls</li>
-          <li>Fixed deleting a userstyle CSS file not disabling the CSS</li>
-          <li>Other changes not applicable to the Flatpak version</li>
-          <li>Internal improvements</li>
+          <li>Fixed Ctrl+Shift+C keybind not working on Shorts</li>
+          <li>Settings keybind (Ctrl+O) can now also be used to close settings</li>
         </ul>
       </description>
     </release>

@@ -111,11 +111,11 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
   - Simulate long-press of the Enter key
 - `Right Click`
   - Go back
-- `+`
+- `+` or `Start`
   - Increase volume
-- `-`
+- `-` or `Select`
   - Decrease volume
-- `M`
+- `M` or `L3`
   - Toggle mute
 - `C`
   - Toggle captions
