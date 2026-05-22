@@ -142,8 +142,14 @@ The userstyles folder is located in the config folder mentioned below.
   - Opens chrome://gpu in VacuumTube, helpful for debugging issues
 - `[url]`
   - Opens a specific youtube URL(depending on your terminal/shell you may need to escape the symbols in the URL), useful if you like opening videos from the terminal. Also you'll see first a screen to log in, then the video.
+  - The `https://` part is optional
+  - The `youtube.com/` also is optional
+  - The smallest part working is `v=Something` 
   - `npm start 'https://www.youtube.com/watch?v=LuzXr3He9NI' --fullscreen`
   - `npm start --fullscreen 'https://www.youtube.com/watch?v=LuzXr3He9NI'`
+  - `npm start --fullscreen 'youtube.com/watch?v=LuzXr3He9NI'`
+  - `npm start --fullscreen 'watch?v=LuzXr3He9NI'`
+  - `npm start --fullscreen 'v=LuzXr3He9NI'`
 ## Chromium Flags
 
 You can provide extra command line flags to Chromium via the `flags.txt` file located in the config folder.
