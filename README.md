@@ -140,7 +140,10 @@ The userstyles folder is located in the config folder mentioned below.
   - Opens VacuumTube with the Chromium developer tools open
 - `--debug-gpu`
   - Opens chrome://gpu in VacuumTube, helpful for debugging issues
-
+- `[url]`
+  - Opens a specific youtube URL, useful if you like opening videos from the terminal. Also you'll see first a screen to log in, then the video.
+  - `npm start 'https://www.youtube.com/watch?v=LuzXr3He9NI' --fullscreen`
+  - `npm start --fullscreen 'https://www.youtube.com/watch?v=LuzXr3He9NI'`
 ## Chromium Flags
 
 You can provide extra command line flags to Chromium via the `flags.txt` file located in the config folder.
