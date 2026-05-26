@@ -1,4 +1,5 @@
-//built in h264ify (based on actual h264ify)
+//code adapted from https://github.com/erkserkserks/h264ify
+//Copyright (c) 2015 erkserkserks, The MIT License (MIT)
 
 const configManager = require('../config')
 const config = configManager.get()
