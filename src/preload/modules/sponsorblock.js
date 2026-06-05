@@ -24,7 +24,7 @@ module.exports = async () => {
             return;
         }
 
-        console.log("Sponsorblock attached to video ID ", activeVideoId)
+        console.log('[SponsorBlock] Attached to video ID', activeVideoId)
 
         activeVideo.addEventListener('timeupdate', checkForSponsorSkip)
     }
@@ -44,39 +44,36 @@ module.exports = async () => {
 
         if (matchingSegment.length === 0) return;
 
-        console.log("Skipping sponsor segment...")
+        console.log('[SponsorBlock] Skipping sponsor segment')
 
         activeVideo.currentTime = matchingSegment[0].endTime;
 
         ui.toast('VacuumTube', locale.sponsorblock.sponsor_skipped)
     }
 
-
     window.addEventListener('hashchange', () => {
         if (!config.sponsorblock) return;
 
-        const pageUrl = new URL(location.hash.substring(1), location.href);
+        const pageUrl = new URL(location.hash.substring(1), location.href)
 
         if (pageUrl.pathname === '/watch') {
-            const videoId = pageUrl.searchParams.get('v');
+            const videoId = pageUrl.searchParams.get('v')
 
             // TODO: Full SponsorBlock config so you can choose what categories to skip/show
             const categories = ['sponsor']
             sponsorBlock.getSegments(videoId, categories).then((segments) => {
-                sponsorBlockSegments = segments
-                activeVideoId = videoId
+                sponsorBlockSegments = segments;
+                activeVideoId = videoId;
                 attachToVideo()
-                console.log(segments)
             })
         } else {
-            activeVideo = null
-            activeVideoId = 0
+            activeVideo = null;
+            activeVideoId = 0;
             sponsorBlockSegments = []
             if (attachVideoTimeout != null) {
                 clearTimeout(attachVideoTimeout)
-                attachVideoTimeout = null
+                attachVideoTimeout = null;
             }
         }
-
     })
 }

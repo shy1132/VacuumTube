@@ -32,22 +32,22 @@ module.exports = async () => {
     }
 
     const fallbackKeyCode = 135; //f24, key isn't used by youtube but is picked up and brings up the menu thing (which all buttons do if they dont do anything else)
-    let hasPressedButton = false;
+    let hasPressedAnyButton = false;
 
     let runningOnSteam = await ipcRenderer.invoke('is-steam')
     if (runningOnSteam) {
         setTimeout(async () => {
-            if (!hasPressedButton) {
+            if (!hasPressedAnyButton) {
                 await localeProvider.waitUntilAvailable()
 
                 const locale = localeProvider.getLocale()
                 ui.toast('VacuumTube', locale.general.steam_controller_notice)
             }
-        }, 5000)
+        }, 15000)
     }
 
     controller.on('down', (e) => {
-        hasPressedButton = true;
+        hasPressedAnyButton = true;
 
         let keyCode = gamepadKeyCodeMap[e.code]
         if (!keyCode) keyCode = fallbackKeyCode;

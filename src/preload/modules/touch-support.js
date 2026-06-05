@@ -74,8 +74,8 @@ module.exports = () => {
             button.style.zIndex = (zIndex + 1).toString()
             button.textContent = text;
 
-            button.ontouchstart = () => simulateKeyDown(keyCode)
-            button.ontouchend = () => simulateKeyUp(keyCode)
+            button.addEventListener('touchstart', () => simulateKeyDown(keyCode))
+            button.addEventListener('touchend', () => simulateKeyUp(keyCode))
 
             if (margin) {
                 button.style.marginLeft = '1vw'
