@@ -17,12 +17,11 @@ module.exports = () => {
 
     function makeModifiedTypeChecker() {
         return (type) => {
-            let disallowedTypes = ['webm', 'vp8', 'vp9', 'av01']
-
-            for (let disallowedType of disallowedTypes) {
-                if (type.includes(disallowedType)) {
-                    return '';
-                }
+            if (config.h264ify_disable_webm && type.includes('webm') ||
+                config.h264ify_disable_vp8 && type.includes('vp8') ||
+                config.h264ify_disable_vp9 && type.includes('vp9') ||
+                config.h264ify_disable_av1 && type.includes('av01')) {
+                return '';
             }
 
             return canPlayType(type);
