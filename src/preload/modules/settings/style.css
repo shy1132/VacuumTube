@@ -181,6 +181,15 @@
     outline-offset: -2px;
 }
 
+.vt-setting-item.vt-setting-item-inactive {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.vt-setting-item.vt-setting-item-inactive:hover {
+    background: #2a2a2a;
+}
+
 .vt-setting-info {
     display: flex;
     flex-direction: column;

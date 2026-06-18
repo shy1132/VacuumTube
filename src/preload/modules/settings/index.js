@@ -72,6 +72,7 @@ for (let item of tabs) {
 
 //custom panels (settings with their own interface instead of a single toggle), keyed by tab id
 const panelModules = [
+    require('./panels/h264ify'),
     require('./panels/mac-permissions'),
     require('./panels/userstyles')
 ]
@@ -275,6 +276,7 @@ function activateFocusedItem() {
     if (!focused) return;
 
     if (focused.classList.contains('vt-setting-item')) {
+        if (focused.classList.contains('vt-setting-item-inactive')) return;
         if (focused.dataset.setting) toggleSetting(focused.dataset.setting)
     } else if (focused.classList.contains('vt-button')) {
         handleButtonAction(focused.dataset.action)
@@ -457,6 +459,7 @@ function setupEventListeners() {
 
         const item = e.target.closest('.vt-setting-item')
         if (item) {
+            if (item.classList.contains('vt-setting-item-inactive')) return;
             const configKey = item.dataset.setting;
             if (configKey) toggleSetting(configKey)
             return;
@@ -537,6 +540,10 @@ module.exports = async () => {
                     toggle.classList.toggle('vt-toggle-on', config[configKey])
                 }
             })
+
+            for (const panel of panelModules) {
+                panel.onConfigUpdate?.(config)
+            }
         }
     })
 

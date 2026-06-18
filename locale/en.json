@@ -42,8 +42,18 @@
             "description": "Hides YouTube Shorts from the homepage"
         },
         "h264ify": {
-            "title": "Force H.264 (h264ify)",
-            "description": "Forces YouTube to only stream videos in the H.264 codec. This can help with performance and battery life on slower devices, but prevents you from watching anything above 1080p. Relaunch after toggling"
+            "title": "Filter Video Codecs",
+            "description": "Codec filtering options. Relaunch after toggling any of the options.",
+            "enable_title": "Enable codec filter (h264ify)",
+            "enable_description": "Enables the codec filter. This can help with performance and battery life on slower devices, but may reduce the available resolutions.",
+            "disable_webm_title": "Disable WebM",
+            "disable_webm_description": "Block WebM container streams.",
+            "disable_vp8_title": "Disable VP8",
+            "disable_vp8_description": "Block VP8 streams.",
+            "disable_vp9_title": "Disable VP9",
+            "disable_vp9_description": "Block VP9 streams.",
+            "disable_av1_title": "Disable AV1",
+            "disable_av1_description": "Block AV1 streams."
         },
         "hardware_decoding": {
             "title": "Hardware Decoding",
