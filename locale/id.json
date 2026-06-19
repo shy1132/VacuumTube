@@ -35,10 +35,6 @@
             "title": "Sembunyikan Shorts",
             "description": "Sembunyikan Shorts YouTube dari halaman utama"
         },
-        "h264ify": {
-            "title": "Gunakan H.264 (h264ify)",
-            "description": "Memastikan YouTube hanya memutar video dalam enkripsi-penguraian (codec) H.264. Membantu meningkatkan performa dan optimasi daya baterai, namun akan membatasi pemutaran video di atas resolusi 1080p. Luncurkan ulang setelah mengubah."
-        },
         "hardware_decoding": {
             "title": "Optimasi Grafis",
             "description": "Gunakan kartu grafis (GPU) untuk mengurai pemutaran video jika sanggup. Mematikan opsi ini mungkin dapat menyelesaikan sebagian masalah pemutaran, namun dapat menghambat video jika prosesor tidak memadai. Luncurkan ulang setelah mengubah."

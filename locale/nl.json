@@ -20,10 +20,6 @@
             "title": "Afkeren teruggeven",
             "description": "Gebruikt de Return YouTube Dislike API (returnyoutubedislike.com) om afkeerknoppen opnieuw toe te voegen aan YouTube. Vertraagt het laden van video's, omdat het informatie van de server moet ophalen"
         },
-        "h264ify": {
-            "title": "H.264 forceren (h264ify)",
-            "description": "Dwingt YouTube om video's alleen in H.264 te streamen. Dit kan helpen bij de prestaties en de levensduur van de batterij op langzamere apparaten, maar voorkomt dat u iets boven 1080p kunt bekijken. Herstart na het omschakelen."
-        },
         "hardware_decoding": {
             "title": "Hardwaredecodering",
             "description": "Gebruikt waar mogelijk uw GPU om video's te decoderen. Als u dit uitschakelt, kunnen afspeelproblemen worden opgelost, maar kan er vertraging optreden, afhankelijk van uw CPU. Herstart na het omschakelen."

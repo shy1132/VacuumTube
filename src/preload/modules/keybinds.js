@@ -80,7 +80,8 @@ module.exports = async () => {
             if (Object.keys(c.selectSubtitlesTrackCommand).length === 0) {
                 captions = false;
             } else {
-                captions = c.selectSubtitlesTrackCommand;
+                captions = true;
+                captionSettings = c.selectSubtitlesTrackCommand;
             }
         }
 

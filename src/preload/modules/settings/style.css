@@ -269,7 +269,8 @@
     text-align: center;
 }
 
-.vt-permissions-section {
+.vt-permissions-section,
+.vt-h264ify-section {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -277,14 +278,16 @@
     overflow: hidden;
 }
 
-.vt-permissions-viewport {
+.vt-permissions-viewport,
+.vt-h264ify-viewport {
     flex: 1;
     min-height: 0;
     overflow: hidden;
     position: relative;
 }
 
-.vt-permissions-list {
+.vt-permissions-list,
+.vt-h264ify-list {
     transition: transform 0.15s ease-out;
     padding-right: 16px;
 }
@@ -397,6 +400,7 @@
 
 .vt-userstyles-viewport:hover .vt-scrollbar,
 .vt-permissions-viewport:hover .vt-scrollbar,
+.vt-h264ify-viewport:hover .vt-scrollbar,
 .vt-scrollbar.vt-scrollbar-visible {
     opacity: 1;
 }

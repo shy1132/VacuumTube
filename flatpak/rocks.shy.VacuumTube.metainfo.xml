@@ -28,13 +28,13 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.7.2" date="2026-06-04" type="stable">
+    <release version="1.7.3" date="2026-06-19" type="stable">
       <description>
-        <p>v1.7.2</p>
+        <p>v1.7.3</p>
         <ul>
-          <li>Fixed touch controls sometimes not working</li>
-          <li>Made Steam controller notice appear after 15 seconds of no input instead of 5</li>
-          <li>Internal improvements</li>
+          <li>Added "Filter Video Codecs" setting, expanding on "Force H.264 (h264ify)"</li>
+          <li>Fixed an issue with captions preferences not working properly</li>
+          <li>Updated to Electron v42.4.1</li>
         </ul>
       </description>
     </release>

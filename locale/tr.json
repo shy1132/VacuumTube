@@ -20,10 +20,6 @@
             "title": "Beğenmemeleri Göster",
             "description": "YouTube beğenmeyenleri göstermek için YouTube Beğenmeme API (returnyoutubedislike.com) kullanır. Sunucudan bilgi alması gerektiğinden video yüklemesini yavaşlatır"
         },
-        "h264ify": {
-            "title": "H.264 İçin Zorla (h264ify)",
-            "description": "YouTube üstünde H.264 biçimli videoların görünmesini sağlar. Yavaş cihazlarda performansa ve pil ömrüne yardımcı olabilir, ama 1080p üstündeki çözünürlükte video izlemenizi engeller. Değiştirdikten sonra yeniden başlatın."
-        },
         "hardware_decoding": {
             "title": "Donanımsal Kod Çözücü",
             "description": "Mümkünse videoları çözmek için GPU kullanır. Bu özelliği devre dışı bırakmak oynatma sorunlarını çözebilir, ancak CPU üstünde gecikmeye neden olabilir. Değiştirdikten sonra yeniden başlatın."

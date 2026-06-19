@@ -20,10 +20,6 @@
             "title": "Abneigungen zurückgeben",
             "description": "Verwendet die YouTube Abneigungen zurückgeben API (returnyoutubedislike.com), um Abneigungsknöpfe wieder zu YouTube hinzuzufügen. Verlangsamt das Laden von Videos, da Informationen vom Server abgerufen werden müssen"
         },
-        "h264ify": {
-            "title": "H.264 erzwingen (h264ify)",
-            "description": "Erzwingt, dass YouTube nur Videos im H.264-Codec streamt. Dies kann die Leistung und Akkulaufzeit auf langsameren Geräten verbessern, verhindert aber, dass Sie Videos mit mehr als 1080p ansehen können. Starten Sie nach dem Umschalten neu."
-        },
         "hardware_decoding": {
             "title": "Hardware-Dekodierung",
             "description": "Verwendet Ihren Grafikprozessor zur Dekodierung von Videos, wenn möglich. Die Deaktivierung dieser Funktion kann Wiedergabeprobleme beheben, kann aber je nach CPU zu Verzögerungen führen. Starten Sie nach dem Umschalten neu."

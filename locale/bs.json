@@ -20,10 +20,6 @@
             "title": "Vratite donji palac",
             "description": "Koristi YouTube API za vraćanje palca prema dolje (returnyoutubedislike.com) za ponovno dodavanje oznake 'nesviđa mi se' na YouTube. Usporava učitavanje videa jer mora preuzeti informacije sa servera"
         },
-        "h264ify": {
-            "title": "Prisili H.264 (h264ify)",
-            "description": "Prisiljava YouTube da emituje samo video zapise u H.264 kodeku. Ovo može poboljšati pokretanje i trajanje baterije na sporijim uređajima, ali vas sprječava da gledate bilo šta iznad 1080p. Ponovo pokrenite nakon prebacivanja."
-        },
         "hardware_decoding": {
             "title": "Hardversko Dekodiranje",
             "description": "Koristi vašu grafičku karticu za dekodiranje videa kada je to moguće. Onemogućavanje ove opcije može riješiti probleme s reprodukcijom, ali može uzrokovati kašnjenje ovisno o vašem procesoru. Ponovo pokrenite nakon prebacivanja."

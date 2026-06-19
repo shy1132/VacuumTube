@@ -76,8 +76,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Removes \"Super resolution\" (AI upscaled) qualities from low quality videos
 - Hide Shorts
   - Hides YouTube Shorts from the homepage
-- Force H.264
-  - Forces YouTube to only stream videos in the H.264 codec (like [h264ify](https://github.com/erkserkserks/h264ify))
+- Filter Video Codecs
+  - Allows you to block specific video codecs, forcing YouTube to pick an alternative. Similiar to [h264ify](https://github.com/erkserkserks/h264ify), but more powerful
 - Hardware Decoding
   - Uses your GPU to decode videos when possible
 - Wayland HDR (Linux)

@@ -20,10 +20,6 @@
             "title": "Återinför Ogillningar",
             "description": "Använder Return YouTube Dislike API (returnyoutubedislike.com) för att återinföra ogillningar till YouTube. Saktar ner videoladdning, eftersom information måste hämtas från servern"
         },
-        "h264ify": {
-            "title": "Tvinga H.264 (h264ify)",
-            "description": "Tvingar YouTube att enbart strömma videor med kodningen H.264. Detta kan underlätta prestanda och batteritid på långsammare enheter, men hindrar dig från att se videor i högre upplösning än 1080p. Starta om appen efter du har ändrat inställningen."
-        },
         "hardware_decoding": {
             "title": "Hårdvaruavkodning",
             "description": "Använder din enhets grafikkort för att avkoda videor när det är möjligt. Att avaktivera den här funktionen kan hjälpa med uppspelningsproblem, men kan orsaka lagg beroende på din processor. Starta om appen efter du har ändrat inställningen."
