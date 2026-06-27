@@ -1,4 +1,3 @@
-const os = require('os')
 const http = require('./http')
 const constants = require('./constants')
 const package = require('../../../../../package.json')
@@ -8,7 +7,7 @@ const doc = new DOMParser().parseFromString('<root/>', 'text/xml')
 function el(tag, children, attrs) {
     let node = doc.createElement(tag)
     if (attrs) {
-        for (let [key, value] of Object.entries(attrs)) {
+        for (let [ key, value ] of Object.entries(attrs)) {
             node.setAttribute(key, value)
         }
     }
@@ -24,24 +23,29 @@ function el(tag, children, attrs) {
     return node;
 }
 
-doc.documentElement.replaceWith(el('root', [
-    el('specVersion', [
-        el('major', '1'),
-        el('minor', '0')
-    ]),
-    el('URLBase', http.base),
-    el('device', [
-        el('deviceType', 'urn:dial-multiscreen-org:device:dial:1'),
-        el('friendlyName', `VacuumTube on ${constants.hostname}`),
-        el('manufacturer', 'VacuumTube'),
-        el('modelName', package.version),
-        el('UDN', `uuid:${constants.uuid()}`)
-    ])
-], { xmlns: 'urn:schemas-upnp-org:device-1-0' }))
+let deviceDesc = null;
+function buildDeviceDesc() {
+    doc.documentElement.replaceWith(el('root', [
+        el('specVersion', [
+            el('major', '1'),
+            el('minor', '0')
+        ]),
+        el('URLBase', http.base),
+        el('device', [
+            el('deviceType', 'urn:dial-multiscreen-org:device:dial:1'),
+            el('friendlyName', `VacuumTube on ${constants.hostname}`),
+            el('manufacturer', 'VacuumTube'),
+            el('modelName', package.version),
+            el('UDN', `uuid:${constants.uuid()}`)
+        ])
+    ], { xmlns: 'urn:schemas-upnp-org:device-1-0' }))
 
-const deviceDesc = '<?xml version="1.0"?>' + new XMLSerializer().serializeToString(doc)
+    return '<?xml version="1.0"?>' + new XMLSerializer().serializeToString(doc);
+}
 
 http.route('GET', '/', (req, res) => {
+    if (!deviceDesc) deviceDesc = buildDeviceDesc()
+
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/xml; charset="utf-8"')
     res.setHeader('Application-URL', `${http.base}/apps`)

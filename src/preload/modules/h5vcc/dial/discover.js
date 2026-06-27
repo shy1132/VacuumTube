@@ -1,4 +1,3 @@
-const os = require('os')
 const dgram = require('dgram')
 const http = require('./http')
 const constants = require('./constants')
