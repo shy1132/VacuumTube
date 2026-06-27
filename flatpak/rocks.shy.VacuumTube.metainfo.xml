@@ -28,13 +28,13 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.7.3" date="2026-06-19" type="stable">
+    <release version="1.8.0" date="" type="stable">
       <description>
-        <p>v1.7.3</p>
+        <p>v1.8.0</p>
         <ul>
-          <li>Added "Filter Video Codecs" setting, expanding on "Force H.264 (h264ify)"</li>
-          <li>Fixed an issue with captions preferences not working properly</li>
-          <li>Updated to Electron v42.4.1</li>
+          <li>Casting from phone to VacuumTube now works without a TV code</li>
+          <li>Fixed login screen jumping on launch</li>
+          <li>Fixed maximum video resolution being higher than screen size</li>
         </ul>
       </description>
     </release>

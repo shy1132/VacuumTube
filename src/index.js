@@ -35,7 +35,7 @@ leanback is extremely weird about user agents, a lot of ones do really different
 but, this is using the most optimal one i've been able to create
 
 Mozilla/5.0 makes youtube think it's a "DESKTOP" device
-(PS4; Leanback Shell) is part of the user agent of the ps4 youtube app, i chose ps4 because it's the most versatile in this situation since it gives the most up-to-date ui, and allows the zoom hack to work for some reason (can't replicate this on any other uas???)
+(PS4; Leanback Shell) is part of the user agent of the ps4 youtube app, i chose ps4 because it's the most versatile in this situation since it gives the most up-to-date ui
 Cobalt/26.lts.0-qa is the latest cobalt version, cobalt is the browser the tv youtube app tends to run in internally
 ON CLIENT SIDE: Cobalt/19.lts.0-qa is an older cobalt version so that youtube doesn't automatically assume widevine is supported
 the actual ps4 ua has more to it, but this is all that's needed for it to work here
@@ -127,7 +127,7 @@ async function main() {
             for (let i = 0; i < details.responseHeaders['content-security-policy'].length; i++) {
                 let header = details.responseHeaders['content-security-policy'][i]
 
-                //allow eval (it's used occasionally by youtube)
+                //allow eval (it's used by youtube for bot checks)
                 let trustedTypesPattern = /require-trusted-types-for\s+'script'/
                 let trustedTypesMatch = header.match(trustedTypesPattern)
                 if (trustedTypesMatch) {
@@ -243,12 +243,6 @@ async function main() {
     electron.ipcMain.handle('set-on-top', (e, value) => {
         if (win) {
             win.setAlwaysOnTop(value)
-        }
-    })
-
-    electron.ipcMain.handle('set-zoom', (e, amount) => {
-        if (win) {
-            win.webContents.setZoomLevel(amount)
         }
     })
 
