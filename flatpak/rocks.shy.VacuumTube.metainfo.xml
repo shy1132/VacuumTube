@@ -33,6 +33,7 @@
         <p>v1.8.0</p>
         <ul>
           <li>Casting from phone to VacuumTube now works without a TV code</li>
+          <li>Fixed some video playback issues, particularly on NVIDIA GPUs</li>
           <li>Fixed settings being able to be opened in Kids mode</li>
           <li>Fixed login screen jumping on launch</li>
           <li>Fixed maximum video resolution being higher than screen size</li>
