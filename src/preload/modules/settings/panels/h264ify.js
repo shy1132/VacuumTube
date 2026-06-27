@@ -56,8 +56,8 @@ module.exports = {
                         ariaDisabled: config.h264ify ? 'false' : 'true'
                     }, [
                         el('div', { className: 'vt-setting-info' }, [
-                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_webm_title }),
-                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_webm_description })
+                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_codec_title.replaceAll('{codec}', 'WebM') }),
+                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_codec_description.replaceAll('{codec}', 'WebM') })
                         ]),
                         el('div', { className: 'vt-setting-control' }, [
                             createToggle('h264ify_disable_webm', config.h264ify_disable_webm)
@@ -71,8 +71,8 @@ module.exports = {
                         ariaDisabled: config.h264ify ? 'false' : 'true'
                     }, [
                         el('div', { className: 'vt-setting-info' }, [
-                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_vp8_title }),
-                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_vp8_description })
+                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_codec_title.replaceAll('{codec}', 'VP8') }),
+                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_codec_description.replaceAll('{codec}', 'VP8') })
                         ]),
                         el('div', { className: 'vt-setting-control' }, [
                             createToggle('h264ify_disable_vp8', config.h264ify_disable_vp8)
@@ -86,8 +86,8 @@ module.exports = {
                         ariaDisabled: config.h264ify ? 'false' : 'true'
                     }, [
                         el('div', { className: 'vt-setting-info' }, [
-                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_vp9_title }),
-                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_vp9_description })
+                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_codec_title.replaceAll('{codec}', 'VP9') }),
+                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_codec_description.replaceAll('{codec}', 'VP9') })
                         ]),
                         el('div', { className: 'vt-setting-control' }, [
                             createToggle('h264ify_disable_vp9', config.h264ify_disable_vp9)
@@ -101,8 +101,8 @@ module.exports = {
                         ariaDisabled: config.h264ify ? 'false' : 'true'
                     }, [
                         el('div', { className: 'vt-setting-info' }, [
-                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_av1_title }),
-                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_av1_description })
+                            el('span', { className: 'vt-setting-title', textContent: locale.settings.h264ify.disable_codec_title.replaceAll('{codec}', 'AV1') }),
+                            el('span', { className: 'vt-setting-description', textContent: locale.settings.h264ify.disable_codec_description.replaceAll('{codec}', 'AV1') })
                         ]),
                         el('div', { className: 'vt-setting-control' }, [
                             createToggle('h264ify_disable_av1', config.h264ify_disable_av1)
