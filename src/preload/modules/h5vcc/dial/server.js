@@ -32,7 +32,7 @@ doc.documentElement.replaceWith(el('root', [
     el('URLBase', http.base),
     el('device', [
         el('deviceType', 'urn:dial-multiscreen-org:device:dial:1'),
-        el('friendlyName', `VacuumTube on ${os.hostname()}`),
+        el('friendlyName', `VacuumTube on ${constants.hostname}`),
         el('manufacturer', 'VacuumTube'),
         el('modelName', package.version),
         el('UDN', `uuid:${constants.uuid()}`)

@@ -1,12 +1,20 @@
+const os = require('os')
 const crypto = require('crypto')
 const package = require('../../../../../package.json')
 
 const fallbackUUID = crypto.randomUUID()
 
+let hostname = os.hostname()
+if (process.platform === 'darwin' && hostname.endsWith('.local')) {
+    hostname = hostname.slice(0, -6)
+}
+
 module.exports = {
     address: '239.255.255.250',
     port: 1900,
-    agent: `VacuumTube/${package.version}`,
+    osAgent: `${os.platform()}/${os.release()}`,
+    appAgent: `VacuumTube/${package.version}`,
+    hostname,
     uuid: () => {
         try {
             let json = localStorage.getItem('yt.leanback.default::mdx-device-id')

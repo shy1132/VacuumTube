@@ -5,7 +5,7 @@ const constants = require('./constants')
 const handlers = []
 
 const server = http.createServer((req, res) => {
-    res.setHeader('Server', constants.agent)
+    res.setHeader('Server', constants.appAgent)
 
     for (let [ method, path, handler ] of handlers) {
         if (req.method === method && req.url === path) {

@@ -23,7 +23,7 @@ socket.on('message', (msg, rinfo) => {
                     'DATE': `${new Date().toGMTString()}`,
                     'EXT': '',
                     'LOCATION': `${http.base}/`,
-                    'SERVER': `${os.platform()}/${os.release()} UPnP/1.0 ${constants.agent}`,
+                    'SERVER': `${constants.osAgent} UPnP/1.0 ${constants.appAgent}`,
                     'ST': 'urn:dial-multiscreen-org:service:dial:1',
                     'USN': `uuid:${constants.uuid()}::urn:dial-multiscreen-org:service:dial:1`
                 }

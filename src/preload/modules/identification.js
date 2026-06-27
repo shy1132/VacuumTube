@@ -8,7 +8,11 @@ const functions = require('../util/functions')
 
 const osPlatform = os.platform()
 const osRelease = os.release()
-const hostname = os.hostname() //still the same in flatpak
+
+let hostname = os.hostname() //still the same in flatpak
+if (process.platform === 'darwin' && hostname.endsWith('.local')) {
+    hostname = hostname.slice(0, -6)
+}
 
 const platformMap = {
     'win32': 'Windows',
