@@ -489,6 +489,9 @@ function setupEventListeners() {
 }
 
 function openSettingsOverlay() {
+    let isKids = window.ytcfg.data_.INNERTUBE_CLIENT_NAME === 'TVHTML5_FOR_KIDS'
+    if (isKids) return;
+
     showOverlay()
 }
 
@@ -496,6 +499,9 @@ function toggleSettingsOverlay() {
     if (overlayVisible) {
         hideOverlay()
     } else {
+        let isKids = window.ytcfg.data_.INNERTUBE_CLIENT_NAME === 'TVHTML5_FOR_KIDS'
+        if (isKids) return;
+
         showOverlay()
     }
 }
