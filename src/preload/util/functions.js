@@ -58,7 +58,7 @@ async function waitForCondition(func) {
 }
 
 function deepMerge(current, updates) {
-    for (key of Object.keys(updates)) {
+    for (let key of Object.keys(updates)) {
         if (!current.hasOwnProperty(key) || typeof updates[key] !== 'object') {
             if (updates[key] === '__DELETE__') {
                 delete current[key];
