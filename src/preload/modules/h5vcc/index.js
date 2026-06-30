@@ -1,6 +1,8 @@
 const { ipcRenderer } = require('electron')
 const http = require('./dial/http')
 const DialServer = require('./dial/server')
+const configManager = require('../../config')
+const config = configManager.get()
 
 async function waitForDeviceId() {
     let start = Date.now()
@@ -18,6 +20,8 @@ async function waitForDeviceId() {
 }
 
 async function startDial() {
+    if (!config.device_discoverability) return;
+
     try {
         await waitForDeviceId()
         await http.listen()

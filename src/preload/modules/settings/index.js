@@ -58,6 +58,7 @@ let tabs = [
     { id: 'userstyles' },
     { id: 'touch_overlay' },
     { id: 'controller_support' },
+    { id: 'device_discoverability' },
     { id: 'mac_permissions', hide: process.platform !== 'darwin' }
 ]
 

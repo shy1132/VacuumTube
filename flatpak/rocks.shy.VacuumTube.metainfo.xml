@@ -28,11 +28,11 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.8.0" date="" type="stable">
+    <release version="1.8.0" date="2026-06-30" type="stable">
       <description>
         <p>v1.8.0</p>
         <ul>
-          <li>Casting from phone to VacuumTube now works without a TV code</li>
+          <li>Casting from phone to VacuumTube now works without a TV code ("Device Discoverability" setting)</li>
           <li>Fixed some video playback issues, particularly on NVIDIA GPUs</li>
           <li>Fixed settings being able to be opened in Kids mode</li>
           <li>Fixed login screen jumping on launch</li>

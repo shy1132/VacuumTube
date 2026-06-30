@@ -93,6 +93,10 @@
             "title": "Controller Support",
             "description": "Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox controller"
         },
+        "device_discoverability": {
+            "title": "Device Discoverability",
+            "description": "Allows VacuumTube to be discovered by the YouTube mobile app on devices within the same local network. Relaunch after toggling"
+        },
         "mac_permissions": {
             "title": "Permissions",
             "description": "Manage macOS permissions used by VacuumTube.",
