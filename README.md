@@ -98,6 +98,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Enables on-screen touch controls for easier navigation when touch input is detected
 - Controller Support
   - Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox controller. Can be turned off to avoid conflicting with apps like JoyToKey
+- Device Discoverability
+  - Allows VacuumTube to be discovered by the YouTube mobile app on devices within the same local network (DIAL)
 
 ## Extra Input Mappings
 
