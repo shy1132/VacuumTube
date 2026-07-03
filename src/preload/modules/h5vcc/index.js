@@ -4,6 +4,18 @@ const DialServer = require('./dial/server')
 const configManager = require('../../config')
 const config = configManager.get()
 
+function getMaxResolution() {
+    let resolutions = [ '256x144', '426x240', '640x360', '854x480', '1280x720', '1920x1080', '2560x1440', '3840x2160', '7680x4320' ]
+    let screenSize = Math.max(window.screen.width, window.screen.height)
+
+    for (let i = 0; i < resolutions.length; i++) {
+        let width = Number(resolutions[i].split('x')[0])
+        if (screenSize <= width) return resolutions[i];
+    }
+
+    return `${window.screen.width}x${window.screen.height}`;
+}
+
 async function waitForDeviceId() {
     let start = Date.now()
     while ((Date.now() - start) < 10000) {
@@ -35,6 +47,7 @@ async function startDial() {
 
 module.exports = async () => {
     const initialDeepLink = await ipcRenderer.invoke('get-deeplink')
+    const maxResolution = getMaxResolution()
 
     window.h5vcc = {
         dial: { DialServer },
@@ -43,7 +56,7 @@ module.exports = async () => {
         },
         system: {
             getVideoContainerSizeOverride: () => { //unlock high res
-                return `${window.screen.width}x${window.screen.height}`;
+                return maxResolution;
             }
         }
     }
