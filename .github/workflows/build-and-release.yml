@@ -59,6 +59,7 @@ jobs:
         if: matrix.platform == 'mac'
         run: |
           gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-universal.dmg --clobber
+          gh release upload ${{ github.event.release.tag_name }} dist/VacuumTube-universal.zip --clobber
           gh release upload ${{ github.event.release.tag_name }} dist/latest-mac.yml --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
