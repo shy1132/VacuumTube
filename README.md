@@ -43,6 +43,8 @@ If you don't know the difference, pick the Installer.
 
 Note that macOS builds are not yet signed, so they do not auto-update. For now, please periodically check for updates.
 
+- [Apple Silicon / M-series](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.dmg)
+- [Intel](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-x64.dmg)
 - [Universal](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-universal.dmg)
 
 ### Linux
