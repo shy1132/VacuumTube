@@ -56,7 +56,7 @@ module.exports = async () => {
         },
         system: {
             getVideoContainerSizeOverride: () => { //unlock high res
-                return maxResolution;
+                return config.unlock_resolution ? '7680x4320' : maxResolution;
             }
         }
     }

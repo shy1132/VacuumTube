@@ -32,6 +32,7 @@
       <description>
         <p>v1.8.1</p>
         <ul>
+          <li>Added "Unlock Resolution" setting</li>
           <li>Fixed maximum video resolution rounding down instead of up</li>
         </ul>
       </description>

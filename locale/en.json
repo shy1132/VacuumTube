@@ -41,6 +41,10 @@
             "title": "Hide Shorts",
             "description": "Hides YouTube Shorts from the homepage"
         },
+        "unlock_resolution": {
+            "title": "Unlock Resolution",
+            "description": "Removes monitor resolution cap and allows you to watch videos at any resolution. Relaunch after toggling"
+        },
         "h264ify": {
             "title": "Filter Video Codecs",
             "description": "Codec filtering options. Relaunch after toggling any of the options.",

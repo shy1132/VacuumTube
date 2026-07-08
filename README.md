@@ -76,6 +76,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Removes \"Super resolution\" (AI upscaled) qualities from low quality videos
 - Hide Shorts
   - Hides YouTube Shorts from the homepage
+- Unlock Resolution
+  - Removes monitor resolution cap and allows you to watch videos at any resolution
 - Filter Video Codecs
   - Allows you to block specific video codecs, forcing YouTube to pick an alternative. Similiar to [h264ify](https://github.com/erkserkserks/h264ify), but more powerful
 - Hardware Decoding

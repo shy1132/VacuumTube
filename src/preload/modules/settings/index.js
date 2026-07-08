@@ -47,6 +47,7 @@ let tabs = [
     { id: 'dislikes' },
     { id: 'remove_super_resolution' },
     { id: 'hide_shorts' },
+    { id: 'unlock_resolution' },
     { id: 'h264ify' },
     { id: 'hardware_decoding' },
     { id: 'wayland_hdr', hide: process.platform !== 'linux' },
