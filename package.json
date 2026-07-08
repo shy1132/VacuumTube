@@ -86,6 +86,16 @@
         "mac": {
             "icon": "./assets/icon.icns",
             "category": "public.app-category.video",
+            "electronLanguages": [
+                "en",
+                "de",
+                "nl",
+                "tr",
+                "hr",
+                "sv",
+                "id",
+                "sr"
+            ],
             "entitlements": "build/entitlements.mac.plist",
             "entitlementsInherit": "build/entitlements.mac.inherit.plist",
             "extendInfo": {
