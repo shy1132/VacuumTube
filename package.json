@@ -96,6 +96,11 @@
                 "id",
                 "sr"
             ],
+            "files": [
+                "src/**",
+                "locale/*.json",
+                "assets/icon.png"
+            ],
             "entitlements": "build/entitlements.mac.plist",
             "entitlementsInherit": "build/entitlements.mac.inherit.plist",
             "extendInfo": {
@@ -105,12 +110,16 @@
                 {
                     "target": "dmg",
                     "arch": [
+                        "x64",
+                        "arm64",
                         "universal"
                     ]
                 },
                 {
                     "target": "zip",
                     "arch": [
+                        "x64",
+                        "arm64",
                         "universal"
                     ]
                 }
