@@ -6,11 +6,12 @@ const config = configManager.get()
 
 function getMaxResolution() {
     let resolutions = [ '256x144', '426x240', '640x360', '854x480', '1280x720', '1920x1080', '2560x1440', '3840x2160', '7680x4320' ]
-    let screenSize = Math.max(window.screen.width, window.screen.height)
+    let screenWidth = Math.max(window.screen.width, window.screen.height)
+    let screenHeight = Math.min(window.screen.width, window.screen.height)
 
     for (let i = 0; i < resolutions.length; i++) {
-        let width = Number(resolutions[i].split('x')[0])
-        if (screenSize <= width) return resolutions[i];
+        let [ width, height ] = resolutions[i].split('x').map(Number)
+        if (screenWidth <= width && screenHeight <= height) return resolutions[i];
     }
 
     return `${window.screen.width}x${window.screen.height}`;
