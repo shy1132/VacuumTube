@@ -39,7 +39,7 @@ const defaults = {
 }
 
 function init(overrides = {}) {
-    if (fs.existsSync(legacyStateFile)) {
+    if (fs.existsSync(legacyStateFile) && !fs.existsSync(configFile)) {
         console.log('[config] Migrating legacy state.json')
         fs.renameSync(legacyStateFile, configFile)
     }
