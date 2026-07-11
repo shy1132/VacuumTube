@@ -10,6 +10,10 @@
             "okay": "Okay"
         }
     },
+    "music_mode": {
+        "title": "No Video",
+        "subtitle": "Audio only"
+    },
     "settings": {
         "generic": {
             "title": "Settings",
