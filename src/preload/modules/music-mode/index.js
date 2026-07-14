@@ -1,201 +1,27 @@
-//experimental audio-only playback with the video's thumbnail in place of video
-
-const fs = require('fs')
-const path = require('path')
 const { ipcRenderer } = require('electron')
 const configManager = require('../../config')
-const css = require('../../util/css')
 const functions = require('../../util/functions')
 const jsonModifiers = require('../../util/jsonModifiers')
 const localeProvider = require('../../util/localeProvider')
 const resolveCommandModifiers = require('../../util/resolveCommandModifiers')
-const { enableAudioOnly, getThumbnail, isPlayerResponse } = require('./player-response')
+const { enableAudioOnly, enableNativeMusicRenderer, isPlayerResponse } = require('./player-response')
 
-const STYLE_ID = 'music-mode'
-const VISUAL_ID = 'vt-music-mode-visual'
 const NO_VIDEO_SIGNAL = 'VT_MUSIC_MODE'
 const QUALITY_OVERLAY_TYPE = 'CLIENT_OVERLAY_TYPE_VIDEO_QUALITY'
 const PLAYBACK_QUALITY_SETTING = 'PLAYBACK_QUALITY'
 
+let featureEnabled = false;
 let enabled = false;
+let lastThumbnail = null;
 let qualityInjectionTimer = null;
 let qualityMenuObserver = null;
-let playerMetadataTimer = null;
-let playerVisualState = {
-    active: false,
-    thumbnailUrl: null,
-    title: '',
-    byline: '',
-    useNativeArtwork: false
-}
 let labels = {
     title: 'No Video',
     subtitle: 'Audio only'
 }
 
-function normalizeThumbnailUrl(url) {
-    if (!url) return null;
-
-    try {
-        return new URL(url, location.href).href;
-    } catch {
-        return null;
-    }
-}
-
-function createPlayerVisual() {
-    const backdrop = functions.el('div', {
-        className: 'vt-music-mode-visual__backdrop'
-    })
-    const scrim = functions.el('div', {
-        className: 'vt-music-mode-visual__scrim'
-    })
-    const artwork = functions.el('img', {
-        className: 'vt-music-mode-visual__artwork',
-        alt: '',
-        draggable: 'false'
-    })
-    const title = functions.el('div', {
-        className: 'vt-music-mode-visual__title'
-    })
-    const byline = functions.el('div', {
-        className: 'vt-music-mode-visual__byline'
-    })
-    const content = functions.el('div', {
-        className: 'vt-music-mode-visual__content'
-    }, [ artwork, title, byline ])
-
-    return functions.el('div', {
-        id: VISUAL_ID,
-        'aria-hidden': 'true'
-    }, [ backdrop, scrim, content ]);
-}
-
-function ensurePlayerVisual() {
-    if (!document.body) return null;
-
-    let visual = document.getElementById(VISUAL_ID)
-    if (!visual) visual = createPlayerVisual();
-    if (visual.parentElement !== document.body) document.body.appendChild(visual);
-
-    return visual;
-}
-
-function renderPlayerVisual() {
-    const root = document.documentElement
-    if (!root) return;
-
-    const state = playerVisualState
-    const customVisualActive = state.active && !state.useNativeArtwork;
-    const normalizedUrl = normalizeThumbnailUrl(state.thumbnailUrl)
-
-    root.classList.toggle('vt-music-mode-active', state.active)
-    root.classList.toggle('vt-music-mode-custom-visual', customVisualActive)
-
-    if (state.active && normalizedUrl) {
-        root.style.setProperty('--vt-music-mode-thumbnail', `url(${JSON.stringify(normalizedUrl)})`)
-    } else {
-        root.style.removeProperty('--vt-music-mode-thumbnail')
-    }
-
-    let visual = document.getElementById(VISUAL_ID)
-    if (customVisualActive) visual = ensurePlayerVisual();
-    if (!visual) return;
-
-    visual.hidden = !customVisualActive;
-    if (!customVisualActive) return;
-
-    const artwork = visual.querySelector('.vt-music-mode-visual__artwork')
-    const title = visual.querySelector('.vt-music-mode-visual__title')
-    const byline = visual.querySelector('.vt-music-mode-visual__byline')
-
-    if (normalizedUrl) {
-        if (artwork.src !== normalizedUrl) artwork.src = normalizedUrl;
-        artwork.hidden = false;
-    } else {
-        artwork.removeAttribute('src')
-        artwork.hidden = true;
-    }
-
-    title.textContent = state.title
-    title.hidden = !state.title;
-    byline.textContent = state.byline
-    byline.hidden = !state.byline;
-}
-
-function getFormattedStringText(element) {
-    const data = element?.__instance?.props?.data
-    if (typeof data?.simpleText === 'string') return data.simpleText;
-    if (Array.isArray(data?.runs)) return data.runs.map((run) => run.text || '').join('');
-
-    return element?.textContent?.trim() || '';
-}
-
-function readNativePlayerMetadata() {
-    const title = getFormattedStringText(
-        document.querySelector('ytlr-video-title-tray yt-formatted-string')
-    )
-    const byline = getFormattedStringText(
-        document.querySelector('ytlr-watch-metadata ytlr-video-metadata-line yt-formatted-string')
-    )
-
-    return { title, byline };
-}
-
-function schedulePlayerMetadataRefresh() {
-    if (playerMetadataTimer != null) clearTimeout(playerMetadataTimer);
-
-    let attempts = 0;
-    const refresh = () => {
-        playerMetadataTimer = null;
-        if (!playerVisualState.active || playerVisualState.useNativeArtwork) return;
-
-        const metadata = readNativePlayerMetadata()
-        const title = metadata.title || playerVisualState.title;
-        const byline = metadata.byline || playerVisualState.byline;
-
-        if (title !== playerVisualState.title || byline !== playerVisualState.byline) {
-            playerVisualState = { ...playerVisualState, title, byline }
-            renderPlayerVisual()
-        }
-
-        attempts++;
-        if (attempts < 50) {
-            playerMetadataTimer = setTimeout(refresh, 100)
-        }
-    }
-
-    playerMetadataTimer = setTimeout(refresh, 0)
-}
-
-function setPlayerVisual(active, metadata = {}) {
-    playerVisualState = {
-        active,
-        thumbnailUrl: metadata.thumbnailUrl || null,
-        title: metadata.title || '',
-        byline: metadata.byline || '',
-        useNativeArtwork: metadata.useNativeArtwork === true
-    }
-
-    renderPlayerVisual()
-    if (active && !playerVisualState.useNativeArtwork) {
-        schedulePlayerMetadataRefresh()
-    } else if (playerMetadataTimer != null) {
-        clearTimeout(playerMetadataTimer)
-        playerMetadataTimer = null;
-    }
-}
-
-function getPlayerVisualMetadata(playerResponse) {
-    const thumbnail = getThumbnail(playerResponse)
-    const videoDetails = playerResponse.videoDetails || {}
-
-    return {
-        thumbnailUrl: thumbnail?.url || null,
-        title: typeof videoDetails.title === 'string' ? videoDetails.title : '',
-        byline: typeof videoDetails.author === 'string' ? videoDetails.author : '',
-        useNativeArtwork: videoDetails.musicVideoType === 'MUSIC_VIDEO_TYPE_ATV'
-    };
+function isFeatureEnabled(config) {
+    return config.features_enabled === true && config.music_mode_feature === true;
 }
 
 function getPlayerResponses(json) {
@@ -269,16 +95,36 @@ function isQualityItem(item) {
     return !!getPlaybackQuality(item?.compactLinkRenderer?.serviceEndpoint);
 }
 
-function injectQualityMenuItem() {
+function updateQualityPanel(instance, data, items, selectedIndex) {
+    instance.props.data = { ...data, items, selectedIndex }
+    const nextState = typeof instance.j === 'function' ? instance.j(items) : {};
+    nextState.selectedIndex = selectedIndex;
+    instance.K(nextState)
+}
+
+function syncQualityMenuItem() {
     const panels = document.querySelectorAll('ytlr-overlay-panel-item-list-renderer')
     const panel = [ ...panels ].find((candidate) =>
-        candidate.__instance?.props?.data?.items?.some(isQualityItem)
+        candidate.__instance?.props?.data?.items?.some((item) => isQualityItem(item) || isNoVideoItem(item))
     )
     if (!panel) return false;
 
     const instance = panel.__instance
     const data = instance.props.data
     const existingNoVideoIndex = data.items.findIndex(isNoVideoItem)
+    const nativeItems = data.items.filter((item) => !isNoVideoItem(item))
+
+    if (!featureEnabled) {
+        if (existingNoVideoIndex === -1) return true;
+
+        const checkedNativeIndex = nativeItems.findIndex((item) =>
+            item.compactLinkRenderer?.secondaryIcon?.iconType === 'CHECK'
+        )
+        const selectedIndex = checkedNativeIndex === -1 ? 0 : checkedNativeIndex;
+        updateQualityPanel(instance, data, nativeItems, selectedIndex)
+        return true;
+    }
+
     if (existingNoVideoIndex !== -1) {
         const renderer = data.items[existingNoVideoIndex].compactLinkRenderer
         const expectedIcon = enabled ? 'CHECK' : 'RADIO_BUTTON_UNCHECKED';
@@ -298,8 +144,6 @@ function injectQualityMenuItem() {
         }
     }
 
-    const nativeItems = data.items.filter((item) => !isNoVideoItem(item))
-
     const items = nativeItems.map((item) => {
         const renderer = item.compactLinkRenderer
         if (!enabled || renderer?.secondaryIcon?.iconType !== 'CHECK') return item;
@@ -315,15 +159,7 @@ function injectQualityMenuItem() {
 
     const noVideoIndex = items.length;
     items.push(createNoVideoItem())
-
-    instance.props.data = {
-        ...data,
-        items,
-        selectedIndex: enabled ? noVideoIndex : data.selectedIndex
-    }
-    const nextState = typeof instance.j === 'function' ? instance.j(items) : {};
-    if (enabled) nextState.selectedIndex = noVideoIndex;
-    instance.K(nextState)
+    updateQualityPanel(instance, data, items, enabled ? noVideoIndex : data.selectedIndex)
 
     return true;
 }
@@ -343,7 +179,7 @@ function startQualityMenuObserver() {
             );
         })
 
-        if (qualityPanelChanged) scheduleQualityMenuInjection();
+        if (qualityPanelChanged) scheduleQualityMenuSync();
     })
 
     qualityMenuObserver.observe(document.documentElement, {
@@ -352,21 +188,21 @@ function startQualityMenuObserver() {
     })
 }
 
-function scheduleQualityMenuInjection() {
+function scheduleQualityMenuSync() {
     if (qualityInjectionTimer != null) clearTimeout(qualityInjectionTimer);
 
     let attempts = 0;
-    const tryInjection = () => {
+    const trySync = () => {
         qualityInjectionTimer = null;
-        if (injectQualityMenuItem()) return;
+        if (syncQualityMenuItem()) return;
 
         attempts++;
         if (attempts < 20) {
-            qualityInjectionTimer = setTimeout(tryInjection, 25)
+            qualityInjectionTimer = setTimeout(trySync, 25)
         }
     }
 
-    qualityInjectionTimer = setTimeout(tryInjection, 0)
+    qualityInjectionTimer = setTimeout(trySync, 0)
 }
 
 function reloadCurrentVideo() {
@@ -402,6 +238,8 @@ function closeQualityMenu() {
 }
 
 function enableMusicMode() {
+    if (!featureEnabled) return;
+
     const changed = !enabled;
     enabled = true;
     configManager.set({ music_mode: true })
@@ -412,56 +250,39 @@ function enableMusicMode() {
     }, 0)
 }
 
-function disableMusicModeForQualitySelection() {
+function disableMusicMode({ reload = true } = {}) {
     if (!enabled) return;
 
     enabled = false;
+    lastThumbnail = null;
     configManager.set({ music_mode: false })
-    setTimeout(reloadCurrentVideo, 0)
-}
-
-function isPlaybackRoute() {
-    try {
-        const pageUrl = new URL(location.hash.substring(1), location.href)
-        return pageUrl.pathname === '/watch' || pageUrl.pathname.startsWith('/shorts');
-    } catch {
-        return false;
-    }
+    if (reload) setTimeout(reloadCurrentVideo, 0);
 }
 
 module.exports = () => {
-    enabled = configManager.get().music_mode === true;
+    const config = configManager.get()
+    featureEnabled = isFeatureEnabled(config)
+    enabled = featureEnabled && config.music_mode === true;
 
-    const stylePath = path.join(__dirname, 'style.css')
-    css.inject(STYLE_ID, fs.readFileSync(stylePath, 'utf-8'))
+    if (!featureEnabled && config.music_mode === true) {
+        configManager.set({ music_mode: false })
+    }
+
     functions.waitForCondition(() => !!document.documentElement).then(startQualityMenuObserver)
-    functions.waitForCondition(() => !!document.body).then(renderPlayerVisual)
 
     jsonModifiers.addModifier((json) => {
-        const playerResponses = getPlayerResponses(json)
-        if (playerResponses.length === 0) return json;
+        if (!featureEnabled || !enabled) return json;
 
-        if (!enabled) {
-            setPlayerVisual(false)
-            return json;
+        for (const playerResponse of getPlayerResponses(json)) {
+            lastThumbnail = enableAudioOnly(playerResponse) || lastThumbnail;
         }
 
-        let visualMetadata = {}
-        for (const playerResponse of playerResponses) {
-            const candidateMetadata = getPlayerVisualMetadata(playerResponse)
-            if (!visualMetadata.thumbnailUrl || candidateMetadata.thumbnailUrl) {
-                visualMetadata = candidateMetadata
-            }
-
-            enableAudioOnly(playerResponse)
-        }
-
-        setPlayerVisual(true, visualMetadata)
+        enableNativeMusicRenderer(json, lastThumbnail)
         return json;
     })
 
     resolveCommandModifiers.addInputModifier((command) => {
-        if (opensQualityMenu(command)) scheduleQualityMenuInjection();
+        if (opensQualityMenu(command)) scheduleQualityMenuSync();
 
         if (hasSignal(command, NO_VIDEO_SIGNAL)) {
             enableMusicMode()
@@ -469,7 +290,7 @@ module.exports = () => {
         }
 
         if (getPlaybackQuality(command)) {
-            disableMusicModeForQualitySelection()
+            disableMusicMode()
         }
 
         return command;
@@ -483,13 +304,21 @@ module.exports = () => {
         }
     })
 
-    ipcRenderer.on('config-update', (event, config) => {
-        enabled = config.music_mode === true;
-        injectQualityMenuItem()
-    })
+    ipcRenderer.on('config-update', (event, nextConfig) => {
+        const wasEnabled = enabled;
+        featureEnabled = isFeatureEnabled(nextConfig)
+        enabled = featureEnabled && nextConfig.music_mode === true;
 
-    // The existing audio-only stream remains active until navigation away from playback.
-    window.addEventListener('hashchange', () => {
-        if (!isPlaybackRoute()) setPlayerVisual(false)
+        if (!featureEnabled && nextConfig.music_mode === true) {
+            enabled = false;
+            configManager.set({ music_mode: false })
+        }
+
+        if (wasEnabled && !enabled) {
+            lastThumbnail = null;
+            setTimeout(reloadCurrentVideo, 0)
+        }
+
+        syncQualityMenuItem()
     })
 }

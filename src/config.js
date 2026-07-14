@@ -28,7 +28,9 @@ const defaults = {
     wayland_hdr: false, //whether or not to enable wayland color management, which allows hdr but sometimes has issues on non-hdr systems
     low_memory_mode: false, //enables env_isLimitedMemory
     fullscreen: false, //whether or not to launch in fullscreen, changes automatically if user enters/exits fullscreen
-    music_mode: false, //experimental audio-only playback that shows the video thumbnail
+    features_enabled: false,
+    music_mode_feature: false,
+    music_mode: false,
     no_window_decorations: false, //whether or not to disable window decorations
     keep_on_top: false, //whether or not to keep window on top
     pause_on_blur: false, //whether or not to pause video when out of focus (such as tabbing out)

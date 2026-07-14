@@ -28,10 +28,6 @@ function getThumbnail(playerResponse) {
     return null;
 }
 
-function getThumbnailUrl(playerResponse) {
-    return getThumbnail(playerResponse)?.url || null;
-}
-
 function enableAudioOnly(playerResponse) {
     if (!isPlayerResponse(playerResponse)) return null;
 
@@ -43,16 +39,83 @@ function enableAudioOnly(playerResponse) {
         playerResponse.playerConfig.audioConfig = {}
     }
 
-    // Set this before the player consumes the response. Unlike hiding the video with
-    // CSS, YouTube's native audio-only path does not create a video SourceBuffer.
     playerResponse.playerConfig.audioConfig.playAudioOnly = true;
+    playerResponse.videoDetails.musicVideoType = 'MUSIC_VIDEO_TYPE_ATV';
 
-    return getThumbnailUrl(playerResponse);
+    return getThumbnail(playerResponse);
+}
+
+function getWatchMetadataItem(json) {
+    const contents = json.contents?.singleColumnWatchNextResults?.results?.results?.contents
+    if (!Array.isArray(contents)) return null;
+
+    for (const result of contents) {
+        const items = result?.itemSectionRenderer?.contents
+        if (!Array.isArray(items)) continue;
+
+        const item = items.find((candidate) => candidate?.videoMetadataRenderer)
+        if (item) return item;
+    }
+
+    return null;
+}
+
+function asThumbnailModel(currentVideoThumbnail, fallbackThumbnail) {
+    if (Array.isArray(currentVideoThumbnail?.thumbnails) && currentVideoThumbnail.thumbnails.length > 0) {
+        return { thumbnails: currentVideoThumbnail.thumbnails };
+    }
+
+    if (typeof fallbackThumbnail?.url === 'string') {
+        return { thumbnails: [ fallbackThumbnail ] };
+    }
+
+    return null;
+}
+
+function enableNativeMusicRenderer(json, fallbackThumbnail = null) {
+    if (!isObject(json)) return false;
+
+    const metadataItem = getWatchMetadataItem(json)
+    const videoMetadata = metadataItem?.videoMetadataRenderer
+    if (!videoMetadata) return false;
+
+    const currentVideoThumbnail = isObject(json.currentVideoThumbnail)
+        ? json.currentVideoThumbnail
+        : null;
+    const thumbnailModel = asThumbnailModel(currentVideoThumbnail, fallbackThumbnail)
+    const musicMetadata = {
+        title: videoMetadata.title,
+        byline: videoMetadata.owner?.videoOwnerRenderer?.title,
+        secondaryTitle: videoMetadata.title,
+        viewCountText: videoMetadata.viewCount?.videoViewCountRenderer?.shortViewCount,
+        mayTruncateChannelName: true,
+        trackingParams: videoMetadata.trackingParams
+    }
+
+    if (thumbnailModel) {
+        musicMetadata.blurredBackgroundThumbnail = thumbnailModel;
+
+        if (!currentVideoThumbnail) {
+            json.currentVideoThumbnail = thumbnailModel;
+        }
+    }
+
+    if (isObject(currentVideoThumbnail?.darkColorPalette)) {
+        musicMetadata.darkColorPalette = currentVideoThumbnail.darkColorPalette;
+    }
+
+    for (const key of Object.keys(musicMetadata)) {
+        if (musicMetadata[key] === undefined) delete musicMetadata[key];
+    }
+
+    delete metadataItem.videoMetadataRenderer;
+    metadataItem.musicWatchMetadataRenderer = musicMetadata;
+    return true;
 }
 
 module.exports = {
     enableAudioOnly,
+    enableNativeMusicRenderer,
     getThumbnail,
-    getThumbnailUrl,
     isPlayerResponse
 }
