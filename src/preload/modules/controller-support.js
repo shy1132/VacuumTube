@@ -12,6 +12,7 @@ module.exports = async () => {
         0:  13,   //a -> enter
         1:  27,   //b -> escape
         2:  170,  //x -> asterisk (search)
+        3:  'vt-keyboard', //y -> focus VacuumTube's optional search keyboard trigger
         4:  115,  //left bumper -> f4 (back)
         5:  116,  //right bumper -> f5 (forward)
         6:  113,  //left trigger -> f2 (seek backwards)
@@ -73,6 +74,11 @@ module.exports = async () => {
             return;
         }
 
+        if (keyCode === 'vt-keyboard') {
+            window.vtFocusVirtualKeyboardTrigger?.()
+            return;
+        }
+
         let event = new Event('keydown')
         event.keyCode = keyCode;
         document.dispatchEvent(event)
@@ -81,7 +87,7 @@ module.exports = async () => {
     function simulateKeyUp(keyCode) {
         if (!config.controller_support) return;
 
-        if (keyCode === 'vt-settings') {
+        if (keyCode === 'vt-settings' || keyCode === 'vt-keyboard') {
             return;
         }
 

@@ -1,0 +1,119 @@
+#vt-virtual-keyboard-root {
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+    pointer-events: none;
+    font-family: Roboto, Arial, sans-serif;
+}
+
+#vt-virtual-keyboard-root.vt-keyboard-hidden {
+    display: none;
+}
+
+#vt-keyboard-trigger {
+    position: absolute;
+    top: 19vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1.2vh;
+    min-height: 6.5vh;
+    padding: 0 2.4vh;
+    border: 0.35vh solid transparent;
+    border-radius: 0.8vh;
+    background: rgba(39, 39, 39, 0.96);
+    color: #fff;
+    font-size: 2.4vh;
+    pointer-events: auto;
+}
+
+#vt-keyboard-trigger:hover,
+#vt-keyboard-trigger:focus-visible {
+    border-color: #fff;
+    background: #fff;
+    color: #0f0f0f;
+    outline: none;
+}
+
+.vt-keyboard-trigger-icon {
+    font-size: 3.1vh;
+}
+
+#vt-keyboard-overlay {
+    position: absolute;
+    inset: auto 7vw 5vh;
+    display: none;
+    padding: 2.2vh 2.6vw 2.8vh;
+    border-radius: 1.5vh;
+    background: rgba(15, 15, 15, 0.98);
+    box-shadow: 0 1.5vh 5vh rgba(0, 0, 0, 0.55);
+    pointer-events: auto;
+}
+
+#vt-virtual-keyboard-root.vt-keyboard-open {
+    pointer-events: auto;
+}
+
+#vt-virtual-keyboard-root.vt-keyboard-open #vt-keyboard-trigger {
+    display: none;
+}
+
+#vt-virtual-keyboard-root.vt-keyboard-open #vt-keyboard-overlay {
+    display: block;
+}
+
+.vt-keyboard-heading {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 1.8vh;
+    color: #fff;
+    font-size: 2.5vh;
+    font-weight: 500;
+}
+
+.vt-keyboard-hint {
+    color: #aaa;
+    font-size: 2vh;
+    font-weight: 400;
+}
+
+#vt-keyboard-overlay .simple-keyboard {
+    background: transparent;
+    font-family: inherit;
+}
+
+#vt-keyboard-overlay .hg-row {
+    justify-content: center;
+}
+
+#vt-keyboard-overlay .hg-row:last-child {
+    margin-top: 2.2vh;
+    padding-top: 2.2vh;
+    border-top: 0.2vh solid #3f3f3f;
+}
+
+#vt-keyboard-overlay .hg-button {
+    height: 8.3vh;
+    max-width: 8.3vh;
+    border: none;
+    border-radius: 0.8vh;
+    background: #3f3f3f;
+    box-shadow: none;
+    color: #fff;
+    font-size: 2.8vh;
+}
+
+#vt-keyboard-overlay .hg-button.hg-functionBtn,
+#vt-keyboard-overlay .hg-row:last-child .hg-button,
+#vt-keyboard-overlay .hg-button[data-skbtn="{space}"],
+#vt-keyboard-overlay .hg-button[data-skbtn="{enter}"] {
+    max-width: none;
+}
+
+#vt-keyboard-overlay .hg-button.hg-keyMarker {
+    border-radius: 0.8vh;
+    background: #fff;
+    color: #0f0f0f;
+    box-shadow: 0 0 0 0.35vh #fff;
+}

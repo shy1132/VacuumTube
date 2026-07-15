@@ -102,6 +102,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Enables on-screen touch controls for easier navigation when touch input is detected
 - Controller Support
   - Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox controller. Can be turned off to avoid conflicting with apps like JoyToKey
+- Search Keyboard
+  - Adds a controller-navigable search keyboard with frequency-ordered English and Arabic layouts. Open Search, press `Tab` or `Y`, then activate the QWERTY keyboard button
 - Device Discoverability
   - Allows VacuumTube to be discovered by the YouTube mobile app on devices within the same local network (DIAL)
 
@@ -111,6 +113,8 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
 
 - `Ctrl+O` or `R3`
   - Open VacuumTube Settings
+- `Tab` or `Y` (on the Search page)
+  - Focus the VacuumTube search keyboard button
 - `Ctrl+Shift+C`
   - Copy current video URL to clipboard
 - `Shift+Enter`
