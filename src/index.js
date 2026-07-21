@@ -36,7 +36,7 @@ but, this is using the most optimal one i've been able to create
 
 Mozilla/5.0 makes youtube think it's a "DESKTOP" device
 (PS4; Leanback Shell) is part of the user agent of the ps4 youtube app, i chose ps4 because it's the most versatile in this situation since it gives the most up-to-date ui
-Cobalt/26.lts.0-qa is the latest cobalt version, cobalt is the browser the tv youtube app tends to run in internally
+Cobalt/25.lts.40.1035033 is a fairly new cobalt version, cobalt is the browser the tv youtube app tends to run in internally, using the latest seems to trigger playback issues
 ON CLIENT SIDE: Cobalt/19.lts.0-qa is an older cobalt version so that youtube doesn't automatically assume widevine is supported
 the actual ps4 ua has more to it, but this is all that's needed for it to work here
 the "compatible" and "VacuumTube" part are just for transparency's sake, and to make sure they can detect it so i'm not screwing up any internal logging/analytics
@@ -44,11 +44,8 @@ the "compatible" and "VacuumTube" part are just for transparency's sake, and to 
 this is only used because you have to have a good user agent to be "allowed" onto leanback, and many innertube endpoints check the user agent specifically to know what to send (e.g. high quality thumbnails)
 VacuumTube overrides some things to identify properly, but this user agent has to be sent with every request to youtube sadly
 */
-const youtubeClientUserAgent =
-  `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/19.lts.0-qa; compatible; VacuumTube/${package.version}`
-// Cobalt 25 appears to resolve issue #198 while preserving HQ thumbnails. 
-const youtubeUserAgent =
-  `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/25.lts.40.1035033; compatible; VacuumTube/${package.version}`
+const youtubeClientUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/19.lts.0-qa; compatible; VacuumTube/${package.version}`
+const youtubeUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/25.lts.40.1035033; compatible; VacuumTube/${package.version}`
 const userAgent = `VacuumTube/${package.version}` //for anything else
 
 const youtubeUrl = 'https://www.youtube.com/tv'
