@@ -88,7 +88,7 @@
         "features": {
             "title": "Features",
             "notice_title": "Not part of the default experience",
-            "notice_description": "These optional features extend VacuumTube beyond the standard YouTube TV experience. Enable them below to acknowledge that they rely on private YouTube behavior and may change or stop working without notice.",
+            "notice_description": "These optional features extend VacuumTube beyond the standard TV YouTube experience. Enable them below to acknowledge that they rely on internal YouTube behavior and may change or stop working without notice.",
             "enable_title": "Enable optional features",
             "enable_description": "I understand that these features are outside VacuumTube's default experience and may change or break.",
             "music_mode_title": "Music Mode",
