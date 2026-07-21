@@ -171,6 +171,79 @@
     flex-shrink: 0;
 }
 
+.vt-features-notice {
+    display: flex;
+    gap: 14px;
+    margin: 0 0 12px;
+    padding: 12px 14px;
+    border: 1px solid #6f5a25;
+    border-radius: 12px;
+    background: #332b18;
+}
+
+.vt-features-notice-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 26px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f5c451;
+    color: #212121;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.vt-features-notice-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.vt-features-notice-title {
+    margin-bottom: 4px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.vt-features-notice-description {
+    margin: 0;
+    color: #d2c6a7;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.vt-features-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.vt-features-viewport {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.vt-features-list {
+    padding-right: 16px;
+    transition: transform 0.15s ease-out;
+}
+
+.vt-features-list .vt-setting-item {
+    margin-bottom: 10px;
+    padding: 16px 20px;
+}
+
+.vt-features-list .vt-setting-title {
+    margin-bottom: 4px;
+}
+
 .vt-setting-item:hover {
     background: #333;
 }
@@ -401,6 +474,7 @@
 .vt-userstyles-viewport:hover .vt-scrollbar,
 .vt-permissions-viewport:hover .vt-scrollbar,
 .vt-h264ify-viewport:hover .vt-scrollbar,
+.vt-features-viewport:hover .vt-scrollbar,
 .vt-scrollbar.vt-scrollbar-visible {
     opacity: 1;
 }

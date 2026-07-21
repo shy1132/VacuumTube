@@ -56,6 +56,7 @@ let tabs = [
     { id: 'no_window_decorations' },
     { id: 'keep_on_top', func: (value) => ipcRenderer.invoke('set-on-top', value) },
     { id: 'pause_on_blur' },
+    { id: 'features' },
     { id: 'userstyles' },
     { id: 'touch_overlay' },
     { id: 'controller_support' },
@@ -74,6 +75,7 @@ for (let item of tabs) {
 
 //custom panels (settings with their own interface instead of a single toggle), keyed by tab id
 const panelModules = [
+    require('./panels/features'),
     require('./panels/h264ify'),
     require('./panels/mac-permissions'),
     require('./panels/userstyles')
