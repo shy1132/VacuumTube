@@ -139,6 +139,76 @@
                 "unknown": "Unknown",
                 "unsupported": "Unsupported"
             }
+        },
+        "about": {
+            "title": "About",
+            "description": "YouTube for TV on your desktop, with controller support and thoughtful enhancements.",
+            "version": "Version {version}",
+            "platform_label": "Platform",
+            "installation_label": "Installation",
+            "update_method_label": "Update method",
+            "view_github": "View on GitHub",
+            "latest_releases": "Latest releases",
+            "platforms": {
+                "darwin": "macOS",
+                "win32": "Windows",
+                "linux": "Linux"
+            },
+            "architectures": {
+                "apple_silicon": "Apple silicon",
+                "arm64": "ARM64",
+                "x64": "x64",
+                "ia32": "x86"
+            },
+            "installations": {
+                "application": "Application",
+                "installer": "Installed application",
+                "portable": "Portable application",
+                "flatpak": "Flatpak",
+                "appimage": "AppImage",
+                "package": "System package",
+                "development": "Development build",
+                "unknown": "Unknown"
+            },
+            "update_methods": {
+                "automatic": "Automatic installer",
+                "manual": "Manual download",
+                "flatpak": "Flatpak"
+            },
+            "updates": {
+                "idle_title": "Updates",
+                "idle_detail": "Check whether a newer version of VacuumTube is available.",
+                "check_now": "Check for updates",
+                "checking_title": "Checking for updates…",
+                "checking_detail": "Looking for the newest VacuumTube release.",
+                "checking_button": "Checking…",
+                "current_title": "You’re up to date",
+                "current_detail": "VacuumTube {version} is the newest version available.",
+                "checked_badge": "Checked just now",
+                "check_again": "Check again",
+                "available_title": "VacuumTube {version} is available",
+                "available_automatic_detail": "Download the update now, then restart VacuumTube when it is ready.",
+                "available_manual_detail": "Download the latest build and replace your current copy.",
+                "current_badge": "Current version: {version}",
+                "download_update": "Download update",
+                "download_latest": "Download latest version",
+                "downloading_title": "Downloading update…",
+                "downloading_detail": "The update is {percent}% downloaded.",
+                "downloading_button": "Downloading… {percent}%",
+                "ready_title": "Update ready to install",
+                "ready_detail": "Restart VacuumTube to install version {version}.",
+                "ready_badge": "Download complete",
+                "install_update": "Restart and install",
+                "error_title": "Couldn’t check for updates",
+                "error_detail": "Check your connection and try again, or open the releases page.",
+                "try_again": "Try again",
+                "development_title": "Development build",
+                "development_detail": "Automatic update checks are available in packaged builds.",
+                "unsupported_title": "Update check unavailable",
+                "unsupported_detail": "Use the update method shown below to check for a newer version.",
+                "view_update_source": "View update source",
+                "view_releases": "View latest releases"
+            }
         }
     },
     "sponsorblock": {

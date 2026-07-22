@@ -26,6 +26,7 @@ electron.app.setPath('sessionData', sessionData)
 
 const configManager = require('./config.js')
 const permissions = require('./permissions.js')
+const updater = require('./updater.js')
 const userstyles = require('./userstyles.js')
 
 //code
@@ -126,7 +127,7 @@ async function main() {
 
     await electron.app.whenReady()
 
-    autoUpdater.checkForUpdatesAndNotify()
+    updater.setup({ electron, autoUpdater, getWindow: () => win })
     permissions.setup({ appId })
 
     //general request modification
@@ -194,7 +195,7 @@ async function main() {
                 let imgMatch = header.match(imgPattern)
                 if (imgMatch) {
                     let existing = imgMatch[1]
-                    let additions = 'dearrow-thumb.ajay.app'
+                    let additions = 'dearrow-thumb.ajay.app data:'
                     let updated = `img-src ${existing} ${additions}`
                     header = header.replace(imgPattern, updated)
                 }

@@ -66,6 +66,10 @@ Otherwise, you can use a distribution package or a portable one. If you don't kn
 
 VacuumTube has some settings that you can change, which are located directly in the YouTube settings. They can also be opened by pressing `Ctrl+O` on your keyboard or `R3` on your controller.
 
+- About
+  - Shows the installed version, platform, installation type, and update method
+  - Checks for new releases and links to the appropriate update source when an in-app update is unavailable
+  - Includes direct links to the project and its latest releases
 - Ad Block
   - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
 - SponsorBlock
@@ -186,6 +190,9 @@ npm i
 
 # Run without packaging
 npm run start
+
+# Run the automated tests
+npm test
 
 # Or package builds for your operating system
 npm run windows:build
