@@ -557,3 +557,154 @@
     outline: 2px solid #fff;
     outline-offset: -2px;
 }
+
+.vt-about-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    gap: 10px;
+}
+
+.vt-about-heading {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 64px;
+}
+
+.vt-about-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+
+.vt-about-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.vt-about-name {
+    color: #fff;
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.vt-about-description,
+.vt-about-update-detail {
+    color: #aaa;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.vt-about-version {
+    align-self: flex-start;
+    margin-left: auto;
+    padding: 7px 11px;
+    background: #333;
+    border-radius: 7px;
+    color: #fff;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.vt-about-update-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: #2a2a2a;
+    border-radius: 12px;
+}
+
+.vt-about-update-copy {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.vt-about-update-title {
+    color: #fff;
+    font-size: 19px;
+    font-weight: 500;
+    margin-bottom: 7px;
+}
+
+.vt-about-update-status {
+    width: fit-content;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #3a3a3a;
+    color: #fff;
+    font-size: 13px;
+}
+
+.vt-about-update-status[data-tone="success"] {
+    background: #1f5f3a;
+    color: #9ee0b5;
+}
+
+.vt-about-update-status[data-tone="warning"] {
+    background: #5c421f;
+    color: #ffc777;
+}
+
+.vt-about-update-status[data-tone="error"] {
+    background: #703030;
+    color: #ffb4b4;
+}
+
+.vt-about-update-card .vt-button {
+    min-width: 185px;
+}
+
+.vt-about-details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.vt-about-detail {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 13px 15px;
+    background: #2a2a2a;
+    border-radius: 8px;
+}
+
+.vt-about-detail-label {
+    color: #aaa;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.vt-about-detail-value {
+    color: #fff;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vt-about-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.vt-about-primary-button {
+    background: #fff;
+    color: #212121;
+}
+
+.vt-button.vt-button-inactive {
+    cursor: default;
+    opacity: 0.55;
+}

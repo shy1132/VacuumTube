@@ -61,7 +61,8 @@ let tabs = [
     { id: 'touch_overlay' },
     { id: 'controller_support' },
     { id: 'device_discoverability' },
-    { id: 'mac_permissions', hide: process.platform !== 'darwin' }
+    { id: 'mac_permissions', hide: process.platform !== 'darwin' },
+    { id: 'about' }
 ]
 
 tabs = tabs.filter(t => !t.hide)
@@ -76,6 +77,7 @@ for (let item of tabs) {
 //custom panels (settings with their own interface instead of a single toggle), keyed by tab id
 const panelModules = [
     require('./panels/features'),
+    require('./panels/about'),
     require('./panels/h264ify'),
     require('./panels/mac-permissions'),
     require('./panels/userstyles')
