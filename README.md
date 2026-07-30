@@ -98,6 +98,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window
 - Pause on Blur
   - Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)
+- Features
+  - Contains extra experimental features that add functionality: **Music Mode**
 - Custom CSS (Userstyles)
   - Enables injection of custom CSS styles. See the section below for more information
 - Touch Overlay
