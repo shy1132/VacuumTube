@@ -137,7 +137,7 @@
     },
     "dependencies": {
         "chokidar": "^5.0.0",
-        "electron-updater": "^6.8.3",
+        "electron-updater": "^6.8.9",
         "minimist": "^1.2.8",
         "sponsorblock-api": "^0.2.4",
         "string-argv": "^0.3.2",
