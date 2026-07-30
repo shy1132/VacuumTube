@@ -45,6 +45,24 @@
             "title": "Hide Shorts",
             "description": "Hides YouTube Shorts from the homepage"
         },
+        "guide_tabs": {
+            "title": "Guide Tabs",
+            "description": "Choose which sidebar guide tabs are shown. Turn a tab off to hide it. Relaunch after changing",
+            "tabs": {
+                "search": "Search",
+                "home": "Home",
+                "shorts": "Shorts",
+                "subscriptions": "Subscriptions",
+                "library": "Library",
+                "gaming": "Gaming",
+                "music": "Music",
+                "news": "News",
+                "podcasts": "Podcasts",
+                "movies_and_tv": "Movies & TV",
+                "live": "Live",
+                "sports": "Sports"
+            }
+        },
         "unlock_resolution": {
             "title": "Unlock Resolution",
             "description": "Removes monitor resolution cap and allows you to watch videos at any resolution. Relaunch after toggling"

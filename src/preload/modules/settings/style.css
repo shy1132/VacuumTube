@@ -343,7 +343,8 @@
 }
 
 .vt-permissions-section,
-.vt-h264ify-section {
+.vt-h264ify-section,
+.vt-guide-tabs-section {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -352,7 +353,8 @@
 }
 
 .vt-permissions-viewport,
-.vt-h264ify-viewport {
+.vt-h264ify-viewport,
+.vt-guide-tabs-viewport {
     flex: 1;
     min-height: 0;
     overflow: hidden;
@@ -360,12 +362,14 @@
 }
 
 .vt-permissions-list,
-.vt-h264ify-list {
+.vt-h264ify-list,
+.vt-guide-tabs-list {
     transition: transform 0.15s ease-out;
     padding-right: 16px;
 }
 
-.vt-permissions-description {
+.vt-permissions-description,
+.vt-guide-tabs-description {
     font-size: 14px;
     color: #aaa;
     margin-bottom: 20px;
@@ -475,6 +479,7 @@
 .vt-permissions-viewport:hover .vt-scrollbar,
 .vt-h264ify-viewport:hover .vt-scrollbar,
 .vt-features-viewport:hover .vt-scrollbar,
+.vt-guide-tabs-viewport:hover .vt-scrollbar,
 .vt-scrollbar.vt-scrollbar-visible {
     opacity: 1;
 }
@@ -494,7 +499,8 @@
     background: rgba(255, 255, 255, 0.7);
 }
 
-.vt-userstyle-item {
+.vt-userstyle-item,
+.vt-guide-tab-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -506,23 +512,27 @@
     transition: background 0.15s ease;
 }
 
-.vt-userstyle-item:hover {
+.vt-userstyle-item:hover,
+.vt-guide-tab-item:hover {
     background: #333;
 }
 
-.vt-userstyle-item.vt-item-focused {
+.vt-userstyle-item.vt-item-focused,
+.vt-guide-tab-item.vt-item-focused {
     background: #3a3a3a;
     outline: 2px solid #fff;
     outline-offset: -2px;
 }
 
-.vt-userstyle-name {
+.vt-userstyle-name,
+.vt-guide-tab-name {
     font-size: 16px;
     color: #fff;
     flex: 1;
 }
 
-.vt-userstyle-toggle {
+.vt-userstyle-toggle,
+.vt-guide-tab-toggle {
     flex-shrink: 0;
     margin-left: 16px;
 }

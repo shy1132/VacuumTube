@@ -78,6 +78,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Removes \"Super resolution\" (AI upscaled) qualities from low quality videos
 - Hide Shorts
   - Hides YouTube Shorts from the homepage
+- Guide Tabs
+  - Allows you to choose which guide tabs are shown on the sidebar
 - Unlock Resolution
   - Removes monitor resolution cap and allows you to watch videos at any resolution
 - Filter Video Codecs
