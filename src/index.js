@@ -3,6 +3,7 @@ const electron = require('electron')
 const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const fs = require('fs')
+const http = require('http')
 const minimist = require('minimist')
 const stringArgv = require('string-argv')
 const package = require('../package.json')
@@ -53,6 +54,9 @@ const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI
 
 let win;
 let config;
+let previewView; //WebContentsView for the autoplay preview feature, see setup below
+let previewServer; //local http server that serves the autoplay preview's embed wrapper page, see setup below
+let previewServerPort; //port previewServer ended up listening on
 
 async function main() {
     if (argv['version'] || argv['v']) {
@@ -77,7 +81,7 @@ async function main() {
         let arg = stringArgv.parseArgsStringToArgv(extraFlags)
         let parsed = minimist(arg)
 
-        for (let [ key, value ] of Object.entries(parsed)) {
+        for (let [key, value] of Object.entries(parsed)) {
             if (key === '_') {
                 continue;
             }
@@ -105,8 +109,8 @@ async function main() {
         }
     }
 
-    enabledFeatures = [ ...new Set(enabledFeatures.filter(f => f)) ]
-    disabledFeatures = [ ...new Set(disabledFeatures.filter(f => f && !enabledFeatures.includes(f))) ]
+    enabledFeatures = [...new Set(enabledFeatures.filter(f => f))]
+    disabledFeatures = [...new Set(disabledFeatures.filter(f => f && !enabledFeatures.includes(f)))]
 
     if (enabledFeatures.length > 0) {
         electron.app.commandLine.appendSwitch('enable-features', enabledFeatures.join(','))
@@ -122,9 +126,19 @@ async function main() {
 
     electron.app.on('before-quit', () => {
         configManager.save()
+        if (previewServer) previewServer.close()
     })
 
+    //the autoplay preview feature's local http server and WebContentsView (see startPreviewServer()/getPreviewView()
+    //below) are only ever created if the feature was enabled at app startup - checked once here, rather than
+    //created unconditionally on every launch, so nothing extra is spun up for people who don't use this feature.
+    //this does mean toggling the setting on requires restarting VacuumTube to actually take effect (surfaced to
+    //the user via the setting's description in locale/en.json), since nothing here reacts to a live config change.
+    const autoplayPreviewEnabled = config.features_enabled === true && config.autoplay_preview_feature === true;
+
     await electron.app.whenReady()
+
+    if (autoplayPreviewEnabled) await startPreviewServer()
 
     autoUpdater.checkForUpdatesAndNotify()
     permissions.setup({ appId })
@@ -210,6 +224,7 @@ async function main() {
 
     electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
         let url = new URL(details.url)
+
         if (url.host === 'www.youtube.com') {
             details.requestHeaders['User-Agent'] = youtubeUserAgent;
         } else {
@@ -282,6 +297,140 @@ async function main() {
         electron.app.quit()
     })
 
+    //autoplay preview: shows a real youtube.com/embed/ player over a focused tile's thumbnail via a dedicated
+    //WebContentsView. this needs its own session (rather than reusing the main window's webContents) because the
+    //main session's cookies/UA identify it as a TV/console client, and youtube's embed player refuses to serve
+    //those (`embedder.identity.denied`) - a fresh, ordinary-looking session doesn't hit that block, since none of
+    //the webRequest handlers above are registered against it.
+
+    //the embed also refuses to play at all when it's not "really" embedded (error 153, checks window.top !==
+    //window.self) - a data: url wrapper technically satisfies that, but data: pages have an opaque/null origin and
+    //send no referrer, which still isn't what a real embedding website looks like and silently results in a
+    //never-playing player. serving the wrapper page from an actual (local) http origin avoids all of that.
+    function startPreviewServer() {
+        return new Promise((resolve, reject) => {
+            previewServer = http.createServer((req, res) => {
+                let url = new URL(req.url, 'http://127.0.0.1')
+                if (url.pathname !== '/preview') {
+                    res.writeHead(404)
+                    res.end()
+                    return;
+                }
+
+                let videoId = url.searchParams.get('v') || ''
+                let muted = url.searchParams.get('mute') === '1'
+
+                let ringRadius = url.searchParams.get('ringRadius') || '0px'
+                if (!/^[\d.\s%pxem/]+$/i.test(ringRadius)) ringRadius = '0px'; //defensive: only allow plain css <length>/percentage tokens through into the stylesheet below
+
+                let maskColor = url.searchParams.get('maskColor') || '#fff'
+                if (!/^[\w.\s#(),%-]+$/.test(maskColor)) maskColor = '#fff'; //defensive allowlist before this gets interpolated into the stylesheet below
+
+                let embedUrl = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&controls=0&modestbranding=1&rel=0&playsinline=1&mute=${muted ? 1 : 0}`
+                //plain overflow:hidden+border-radius on the wrapper doesn't reliably clip the iframe's video content -
+                //chromium can promote a playing <video> to a hardware overlay layer that bypasses normal compositor
+                //clipping, and no css clipping technique (border-radius/overflow/clip-path) can reach through that.
+                //instead of trying to clip the video (impossible) or drawing a border ring on top of it (visually
+                //eats into the video), .mask uses a box-shadow with a huge spread (100vmax): a non-inset box-shadow
+                //only ever paints OUTSIDE its element's own (rounded) border-box, so this fills everything outside
+                //the rounded rect - i.e. exactly the 4 square corner notches that would otherwise stick out beyond
+                //a rounded shape - with the tile's own real border color (maskColor, matching its white focus ring)
+                //while leaving the rounded rect's own interior (the video) completely untouched. `.wrap`'s
+                //overflow:hidden keeps that huge shadow from bleeding out over the rest of the window (a plain
+                //box-shadow paint is not video, so it clips normally, unlike the video itself).
+                let wrapperHtml = `<!doctype html><html><head><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}.wrap{position:relative;width:100%;height:100%;overflow:hidden}iframe{border:0;width:100%;height:100%;display:block}.mask{position:absolute;inset:0;border-radius:${ringRadius};box-shadow:0 0 0 100vmax ${maskColor};pointer-events:none}</style></head><body><div class="wrap"><iframe src="${embedUrl}" allow="autoplay"></iframe><div class="mask"></div></div></body></html>`
+
+                res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' })
+                res.end(wrapperHtml)
+            })
+
+            previewServer.on('error', reject)
+            previewServer.listen(0, '127.0.0.1', () => {
+                previewServerPort = previewServer.address().port;
+                resolve();
+            })
+        })
+    }
+
+    //creates the dedicated WebContentsView the first time a preview is actually shown (called only from the
+    //'autoplay-preview-show' handler below, which itself bails out early if autoplayPreviewEnabled is false) -
+    //so, in total, nothing autoplay-preview-related exists at all (no http server, no extra WebContentsView/
+    //session) unless the feature was both enabled AND actually used at least once during this run of the app.
+    function getPreviewView() {
+        if (previewView) return previewView;
+
+        previewView = new electron.WebContentsView({
+            webPreferences: {
+                session: electron.session.fromPartition('persist:autoplay-preview')
+            }
+        })
+
+        win.contentView.addChildView(previewView)
+        previewView.setBounds({ x: 0, y: 0, width: 0, height: 0 })
+        previewView.setBackgroundColor('#00000000') //transparent, so nothing (e.g. a flash of black) shows through before the wrapper page (see startPreviewServer) has painted its own content
+
+        return previewView;
+    }
+
+    //rounds the (fractional-pixel) target rect to whole device pixels. x/y/width/height are rounded independently
+    //(rather than e.g. always rounding outward) since that's simplest and unbiased - any of the alternatives
+    //tried here ended up just moving a occasional +/-1px seam against the tile's real edge from one side to
+    //another, rather than actually eliminating it, since the real source is the tile's own fractional-pixel
+    //layout, not a systematic bias in one particular direction.
+    function previewBounds(rect) {
+        return {
+            x: Math.round(rect.x),
+            y: Math.round(rect.y),
+            width: Math.max(0, Math.round(rect.width)),
+            height: Math.max(0, Math.round(rect.height))
+        }
+    }
+
+    let previewToken = 0; //bumped on every show/hide, so a late 'media-started-playing' from an abandoned show() can't reveal a stale preview
+    let previewLastRect = null; //the target rect passed to the current show(), remembered so it's still available once 'media-started-playing' actually fires and reveals the view
+
+    electron.ipcMain.on('autoplay-preview-show', (event, { videoId, rect, ringRadius, maskColor } = {}) => {
+        if (!autoplayPreviewEnabled || !win || !videoId || !rect) return;
+
+        let view = getPreviewView()
+        let token = ++previewToken;
+        previewLastRect = rect;
+
+        view.webContents.removeAllListeners('media-started-playing') //drop any listener left over from a still-loading previous show()
+        view.webContents.setAudioMuted(config.autoplay_preview_muted === true)
+
+        view.setBounds({ x: 0, y: 0, width: 0, height: 0 }) //stays hidden until the video actually starts playing, so we never flash youtube's own loading/error state over the thumbnail
+
+        let muted = config.autoplay_preview_muted === true;
+        let params = new URLSearchParams({
+            v: videoId,
+            mute: muted ? '1' : '0',
+            ringRadius: ringRadius || '0px',
+            maskColor: maskColor || '#fff'
+        })
+        let wrapperUrl = `http://127.0.0.1:${previewServerPort}/preview?${params.toString()}`
+
+        view.webContents.loadURL(wrapperUrl)
+
+        view.webContents.once('media-started-playing', () => {
+            if (token !== previewToken) return; //superseded by a newer show()/hide() while this one was still loading
+            if (previewLastRect) view.setBounds(previewBounds(previewLastRect))
+        })
+    })
+
+    electron.ipcMain.on('autoplay-preview-hide', () => {
+        if (!autoplayPreviewEnabled) return;
+
+        previewToken++; //invalidates any still-pending media-started-playing listener from the last show()
+        previewLastRect = null;
+
+        if (!previewView) return;
+
+        previewView.webContents.removeAllListeners('media-started-playing')
+        previewView.setBounds({ x: 0, y: 0, width: 0, height: 0 })
+        previewView.webContents.loadURL('about:blank') //stop playback/decoding rather than just hiding it
+    })
+
     userstyles.setup({ userData, getWindow: () => win })
 
     await createWindow()
@@ -317,8 +466,8 @@ async function createWindow() {
     })
 
     // Ensure the *content* area (excluding OS window borders) stays 16:9 on all platforms.
-    const [ outerW, outerH ] = win.getSize()
-    const [ innerW, innerH ] = win.getContentSize()
+    const [outerW, outerH] = win.getSize()
+    const [innerW, innerH] = win.getContentSize()
     const extraWidth = outerW - innerW;
     const extraHeight = outerH - innerH;
 
@@ -395,9 +544,24 @@ async function createWindow() {
         win.webContents.send('blur')
     })
 
+    //maximizing/unmaximizing resizes the content area without necessarily firing a DOM 'resize' event at a point
+    //where layout has actually settled yet (autoplay preview positioning relies on tile rects being accurate) -
+    //forward these explicitly so the renderer can re-sync the preview's position once things have settled
+    win.on('maximize', () => {
+        win.webContents.send('window-bounds-changed')
+    })
+
+    win.on('unmaximize', () => {
+        win.webContents.send('window-bounds-changed')
+    })
+
     //keep window title as VacuumTube
     win.webContents.on('page-title-updated', () => {
         win.setTitle('VacuumTube')
+    })
+
+    win.on('closed', () => {
+        previewView = null; //the view itself gets torn down along with the window, just drop our reference to it
     })
 }
 
@@ -419,7 +583,7 @@ function portable() {
                 portablePath = path.join(exeDir, 'data')
             }
         } else if (argv['portable'] === true || argv['p'] === true) { //arg specified, but not set to any particular path 
-            portablePath = path.join(exeDir , 'data')
+            portablePath = path.join(exeDir, 'data')
         } else if (argv['portable']) { //--portable arg specified, set to particular path
             portablePath = argv['portable']
         } else if (argv['p']) { //-p arg specified, set to particular path

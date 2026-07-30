@@ -11,11 +11,27 @@ function updateFeatureState(config = configManager.get()) {
     if (!root) return;
 
     const musicModeItem = root.querySelector('.vt-setting-item[data-setting="music_mode_feature"]')
-    if (!musicModeItem) return;
+    const autoplayPreviewItem = root.querySelector('.vt-setting-item[data-setting="autoplay_preview_feature"]')
+    const autoplayPreviewMutedItem = root.querySelector('.vt-setting-item[data-setting="autoplay_preview_muted"]')
+    if (!musicModeItem && !autoplayPreviewItem && !autoplayPreviewMutedItem) return;
 
     const enabled = config.features_enabled === true;
-    musicModeItem.classList.toggle('vt-setting-item-inactive', !enabled)
-    musicModeItem.setAttribute('aria-disabled', enabled ? 'false' : 'true')
+
+    if (musicModeItem) {
+        musicModeItem.classList.toggle('vt-setting-item-inactive', !enabled)
+        musicModeItem.setAttribute('aria-disabled', enabled ? 'false' : 'true')
+    }
+
+    if (autoplayPreviewItem) {
+        autoplayPreviewItem.classList.toggle('vt-setting-item-inactive', !enabled)
+        autoplayPreviewItem.setAttribute('aria-disabled', enabled ? 'false' : 'true')
+    }
+
+    if (autoplayPreviewMutedItem) {
+        const autoplayPreviewEnabled = enabled && config.autoplay_preview_feature === true;
+        autoplayPreviewMutedItem.classList.toggle('vt-setting-item-inactive', !autoplayPreviewEnabled)
+        autoplayPreviewMutedItem.setAttribute('aria-disabled', autoplayPreviewEnabled ? 'false' : 'true')
+    }
 }
 
 module.exports = {
@@ -45,6 +61,31 @@ module.exports = {
         musicModeItem.classList.toggle('vt-setting-item-inactive', config.features_enabled !== true)
         musicModeItem.setAttribute('aria-disabled', config.features_enabled === true ? 'false' : 'true')
 
+        const autoplayPreviewItem = createSettingItem(
+            'autoplay_preview_feature',
+            locale.settings.features.autoplay_preview_title,
+            locale.settings.features.autoplay_preview_description,
+            config.autoplay_preview_feature,
+            false,
+            locale.settings.features.autoplay_preview_restart_note
+        )
+
+        autoplayPreviewItem.dataset.index = '2';
+        autoplayPreviewItem.classList.toggle('vt-setting-item-inactive', config.features_enabled !== true)
+        autoplayPreviewItem.setAttribute('aria-disabled', config.features_enabled === true ? 'false' : 'true')
+
+        const autoplayPreviewMutedItem = createSettingItem(
+            'autoplay_preview_muted',
+            locale.settings.features.autoplay_preview_muted_title,
+            locale.settings.features.autoplay_preview_muted_description,
+            config.autoplay_preview_muted
+        )
+
+        const autoplayPreviewEnabled = config.features_enabled === true && config.autoplay_preview_feature === true;
+        autoplayPreviewMutedItem.dataset.index = '3';
+        autoplayPreviewMutedItem.classList.toggle('vt-setting-item-inactive', !autoplayPreviewEnabled)
+        autoplayPreviewMutedItem.setAttribute('aria-disabled', autoplayPreviewEnabled ? 'false' : 'true')
+
         return el('div', { className: 'vt-features-section' }, [
             el('div', { className: 'vt-features-viewport' }, [
                 el('div', { className: 'vt-features-list', id: 'vt-features-list' }, [
@@ -66,7 +107,9 @@ module.exports = {
                         ])
                     ]),
                     enableFeaturesItem,
-                    musicModeItem
+                    musicModeItem,
+                    autoplayPreviewItem,
+                    autoplayPreviewMutedItem
                 ]),
                 el('div', { className: 'vt-scrollbar', id: 'vt-features-scrollbar' }, [
                     el('div', {

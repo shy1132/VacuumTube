@@ -283,6 +283,14 @@
     line-height: 1.4;
 }
 
+.vt-setting-note {
+    margin-top: 6px;
+    color: #f5c451;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
 .vt-setting-control {
     flex-shrink: 0;
 }
