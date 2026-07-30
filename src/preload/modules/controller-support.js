@@ -19,7 +19,7 @@ module.exports = async () => {
         8:  189,  //select -> minus (vacuumtube volume down)
         9:  187,  //start -> equals (vacuumtube volume up)
         10: 77,   //l3 (vacuumtube mute)
-        11: 'vt-settings', //r3 -> (vacuumtube settings)
+        //11: 'vt-settings', //r3 -> (vacuumtube settings)
         12: 38,   //dpad up -> arrow key up
         13: 40,   //dpad down -> arrow key down
         14: 37,   //dpad left -> arrow key left
