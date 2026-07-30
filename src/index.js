@@ -57,6 +57,7 @@ let config;
 let previewView; //WebContentsView for the autoplay preview feature, see setup below
 let previewServer; //local http server that serves the autoplay preview's embed wrapper page, see setup below
 let previewServerPort; //port previewServer ended up listening on
+let previewServerFailed = false; //set if startPreviewServer() couldn't bind a port - the feature is then silently treated as unavailable rather than crashing startup
 
 async function main() {
     if (argv['version'] || argv['v']) {
@@ -138,7 +139,16 @@ async function main() {
 
     await electron.app.whenReady()
 
-    if (autoplayPreviewEnabled) await startPreviewServer()
+    if (autoplayPreviewEnabled) {
+        try {
+            await startPreviewServer()
+        } catch (err) {
+            //failing to bind a loopback port is unusual but not fatal to the rest of the app - just log it and
+            //leave the feature inert for this run rather than letting the rejection propagate out of main()
+            console.error('[autoplay-preview] Failed to start local preview server, feature disabled for this session:', err)
+            previewServerFailed = true;
+        }
+    }
 
     autoUpdater.checkForUpdatesAndNotify()
     permissions.setup({ appId })
@@ -361,13 +371,22 @@ async function main() {
 
         previewView = new electron.WebContentsView({
             webPreferences: {
-                session: electron.session.fromPartition('persist:autoplay-preview')
+                //deliberately in-memory (no 'persist:' prefix) - this session doesn't authenticate as the user
+                //and only ever loads our own wrapper page plus youtube's embed player, so there's nothing worth
+                //keeping around on disk between runs; it's recreated fresh every time VacuumTube starts anyway.
+                session: electron.session.fromPartition('autoplay-preview')
             }
         })
 
         win.contentView.addChildView(previewView)
         previewView.setBounds({ x: 0, y: 0, width: 0, height: 0 })
         previewView.setBackgroundColor('#00000000') //transparent, so nothing (e.g. a flash of black) shows through before the wrapper page (see startPreviewServer) has painted its own content
+
+        //the embed has no legitimate reason to open new windows/tabs or navigate itself away from our wrapper
+        //page/the embed player - deny both outright rather than letting some unexpected click/redirect inside
+        //the iframe (e.g. a end-of-video overlay) take over this view
+        previewView.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
+        previewView.webContents.on('will-navigate', (event) => event.preventDefault())
 
         return previewView;
     }
@@ -390,7 +409,7 @@ async function main() {
     let previewLastRect = null; //the target rect passed to the current show(), remembered so it's still available once 'media-started-playing' actually fires and reveals the view
 
     electron.ipcMain.on('autoplay-preview-show', (event, { videoId, rect, ringRadius, maskColor } = {}) => {
-        if (!autoplayPreviewEnabled || !win || !videoId || !rect) return;
+        if (!autoplayPreviewEnabled || previewServerFailed || !win || !videoId || !rect) return;
 
         let view = getPreviewView()
         let token = ++previewToken;
@@ -544,9 +563,9 @@ async function createWindow() {
         win.webContents.send('blur')
     })
 
-    //maximizing/unmaximizing resizes the content area without necessarily firing a DOM 'resize' event at a point
-    //where layout has actually settled yet (autoplay preview positioning relies on tile rects being accurate) -
-    //forward these explicitly so the renderer can re-sync the preview's position once things have settled
+    //maximizing/unmaximizing resizes the content area without necessarily firing a DOM 'resize' event - forward
+    //these explicitly so the renderer can tear down any active autoplay preview (see 'window-bounds-changed' in
+    //src/preload/modules/autoplay-preview.js), since its position would otherwise no longer match the tile
     win.on('maximize', () => {
         win.webContents.send('window-bounds-changed')
     })
