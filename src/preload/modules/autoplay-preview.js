@@ -133,8 +133,14 @@ module.exports = async () => {
         ipcRenderer.send('autoplay-preview-hide')
     }
 
+    //treated the same as "nothing is focused" - the settings overlay renders on top of the tile grid, so a
+    //preview left running underneath it would still be visible/audible through/around the overlay
+    function isSettingsOverlayOpen() {
+        return !!document.querySelector('#vt-settings-overlay-root:not(.vt-settings-hidden)')
+    }
+
     function handleFocusChange() {
-        let focused = getFocusedElement()
+        let focused = isSettingsOverlayOpen() ? null : getFocusedElement()
         if (focused === focusedTile) return;
 
         focusedTile = focused;
@@ -156,6 +162,11 @@ module.exports = async () => {
         }, DWELL_MS)
     }
 
+    //isEnabled() only ever changes across a restart (see the settings UI's restart note), so it's safe to check
+    //once here rather than on every mutation - nothing below (observer, resize/blur listeners) is set up at all
+    //unless the feature is actually on, keeping it truly zero-cost while disabled.
+    if (!isEnabled()) return;
+
     let observer = new MutationObserver(handleFocusChange)
     observer.observe(document.documentElement, {
         attributes: true,
@@ -172,4 +183,8 @@ module.exports = async () => {
     //maximize/unmaximize don't reliably fire a DOM 'resize' event - see the corresponding
     //win.on('maximize'/'unmaximize', ...) handlers in src/index.js
     ipcRenderer.on('window-bounds-changed', destroyPreview)
+
+    //the main process sends this when the whole app window loses focus (alt-tab, minimize, etc) - the preview
+    //has its own sound, so it shouldn't keep playing in the background once the app itself isn't
+    ipcRenderer.on('blur', destroyPreview)
 }
