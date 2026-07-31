@@ -437,7 +437,7 @@ async function main() {
         })
     })
 
-    electron.ipcMain.on('autoplay-preview-hide', () => {
+    function hidePreview() {
         if (!autoplayPreviewEnabled) return;
 
         previewToken++; //invalidates any still-pending media-started-playing listener from the last show()
@@ -448,11 +448,17 @@ async function main() {
         previewView.webContents.removeAllListeners('media-started-playing')
         previewView.setBounds({ x: 0, y: 0, width: 0, height: 0 })
         previewView.webContents.loadURL('about:blank') //stop playback/decoding rather than just hiding it
-    })
+    }
+
+    electron.ipcMain.on('autoplay-preview-hide', hidePreview)
 
     userstyles.setup({ userData, getWindow: () => win })
 
     await createWindow()
+
+    //covers both an actual navigation away from the tv page and a plain reload - either discards the preload
+    //module's state (the preview view lives here in the main process instead, so it needs its own teardown)
+    if (autoplayPreviewEnabled) win.webContents.on('did-start-navigation', hidePreview)
 
     userstyles.startWatcher()
 
