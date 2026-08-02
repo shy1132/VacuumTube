@@ -19,7 +19,6 @@ const functions = require('../util/functions')
 
 const DWELL_MS = 1000 //how long a tile needs to stay focused before the preview starts
 const MAX_ANCESTOR_SEARCH = 8 //how many parent elements to walk up while looking for tile data
-const RING_RADIUS_SCALE = 0.65 //tuning knob: the tile's own computed border-radius made the mask's rounding look too round compared to the tile's real corner - scale it down until it visually matches
 
 module.exports = async () => {
     const config = configManager.get()
@@ -55,10 +54,6 @@ module.exports = async () => {
 
     //the tile's thumbnail is only ever the top portion of the tile (title/metadata sits below it), so try to find
     //that specific sub-element instead of just falling back to the whole tile (which would cover the title too).
-    //ytlr-tile-header-renderer is checked first (rather than img) because that's the element leanback's own
-    //rounded-corner styling is actually drawn on/around (see getRingStyle() below) - using its rect keeps the
-    //preview's position/size and its corner-rounding mask pixel-perfectly aligned with each other, instead of
-    //drifting apart because they were each measured against a different, slightly-differently-sized element.
     function getThumbnailElement(tileElement) {
         let header = tileElement.querySelector('ytlr-tile-header-renderer')
         if (header) return header;
@@ -87,37 +82,12 @@ module.exports = async () => {
         return { x: rect.left, y: rect.top, width: rect.width, height: rect.height }
     }
 
-    //the video itself can't actually be clipped to rounded corners (windows renders playing video via a hardware
-    //overlay that bypasses css clipping entirely - see src/index.js). rather than drawing a border ring on top
-    //(which visually eats into the video's own visible area), this masks out just the 4 square corner notches
-    //that would otherwise stick out beyond a rounded shape - see the .mask css in src/index.js's wrapper page for
-    //how the actual masking works (a box-shadow with a huge spread, confined by overflow:hidden). that needs the
-    //correct radius plus a color to mask with - both read from the same place below.
-    //confirmed via devtools: the tile's own border-radius isn't set on the focused element (`.zylon-focus`)
-    //itself - leanback applies it (together with a focus-ring border, whose color we reuse for the mask so it
-    //blends into the tile's own white border rather than the page background) via a ::after pseudo-element on
-    //the tile's <ytlr-tile-header-renderer> child instead.
-    function getRingStyle(tileElement) {
-        let header = tileElement && tileElement.querySelector('ytlr-tile-header-renderer')
-        if (!header) return { ringRadius: '0px', maskColor: '#fff' };
-
-        let style = getComputedStyle(header, '::after')
-        let hasBorderColor = style.borderTopStyle !== 'none' && parseFloat(style.borderTopWidth) > 0;
-        let rawRadius = parseFloat(style.borderRadius) || 0;
-
-        return {
-            ringRadius: rawRadius > 0 ? `${rawRadius * RING_RADIUS_SCALE}px` : '0px',
-            maskColor: hasBorderColor ? style.borderTopColor : '#fff'
-        };
-    }
-
     //asks the main process to show its dedicated preview view (see the file header comment above) over the given target
-    function createPreview(videoId, target, tileElement) {
+    function createPreview(videoId, target) {
         previewActive = true;
         ipcRenderer.send('autoplay-preview-show', {
             videoId,
-            rect: toRect(target),
-            ...getRingStyle(tileElement)
+            rect: toRect(target)
         })
     }
 
@@ -158,7 +128,7 @@ module.exports = async () => {
             if (getFocusedElement() !== focused) return;
             if (!isEnabled()) return;
 
-            createPreview(tile.contentId, getThumbnailElement(tile.element), tile.element)
+            createPreview(tile.contentId, getThumbnailElement(tile.element))
         }, DWELL_MS)
     }
 

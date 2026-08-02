@@ -330,25 +330,8 @@ async function main() {
                 let videoId = url.searchParams.get('v') || ''
                 let muted = url.searchParams.get('mute') === '1'
 
-                let ringRadius = url.searchParams.get('ringRadius') || '0px'
-                if (!/^[\d.\s%pxem/]+$/i.test(ringRadius)) ringRadius = '0px'; //defensive: only allow plain css <length>/percentage tokens through into the stylesheet below
-
-                let maskColor = url.searchParams.get('maskColor') || '#fff'
-                if (!/^[\w.\s#(),%-]+$/.test(maskColor)) maskColor = '#fff'; //defensive allowlist before this gets interpolated into the stylesheet below
-
                 let embedUrl = `https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1&controls=0&modestbranding=1&rel=0&playsinline=1&mute=${muted ? 1 : 0}`
-                //plain overflow:hidden+border-radius on the wrapper doesn't reliably clip the iframe's video content -
-                //chromium can promote a playing <video> to a hardware overlay layer that bypasses normal compositor
-                //clipping, and no css clipping technique (border-radius/overflow/clip-path) can reach through that.
-                //instead of trying to clip the video (impossible) or drawing a border ring on top of it (visually
-                //eats into the video), .mask uses a box-shadow with a huge spread (100vmax): a non-inset box-shadow
-                //only ever paints OUTSIDE its element's own (rounded) border-box, so this fills everything outside
-                //the rounded rect - i.e. exactly the 4 square corner notches that would otherwise stick out beyond
-                //a rounded shape - with the tile's own real border color (maskColor, matching its white focus ring)
-                //while leaving the rounded rect's own interior (the video) completely untouched. `.wrap`'s
-                //overflow:hidden keeps that huge shadow from bleeding out over the rest of the window (a plain
-                //box-shadow paint is not video, so it clips normally, unlike the video itself).
-                let wrapperHtml = `<!doctype html><html><head><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}.wrap{position:relative;width:100%;height:100%;overflow:hidden}iframe{border:0;width:100%;height:100%;display:block}.mask{position:absolute;inset:0;border-radius:${ringRadius};box-shadow:0 0 0 100vmax ${maskColor};pointer-events:none}</style></head><body><div class="wrap"><iframe src="${embedUrl}" allow="autoplay"></iframe><div class="mask"></div></div></body></html>`
+                let wrapperHtml = `<!doctype html><html><head><style>html,body{margin:0;height:100%;background:transparent;overflow:hidden}.wrap{position:relative;width:100%;height:100%;overflow:hidden}iframe{border:0;width:100%;height:100%;display:block}</style></head><body><div class="wrap"><iframe src="${embedUrl}" allow="autoplay"></iframe></div></body></html>`
 
                 res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' })
                 res.end(wrapperHtml)
@@ -408,7 +391,7 @@ async function main() {
     let previewToken = 0; //bumped on every show/hide, so a late 'media-started-playing' from an abandoned show() can't reveal a stale preview
     let previewLastRect = null; //the target rect passed to the current show(), remembered so it's still available once 'media-started-playing' actually fires and reveals the view
 
-    electron.ipcMain.on('autoplay-preview-show', (event, { videoId, rect, ringRadius, maskColor } = {}) => {
+    electron.ipcMain.on('autoplay-preview-show', (event, { videoId, rect } = {}) => {
         if (!autoplayPreviewEnabled || previewServerFailed || !win || !videoId || !rect) return;
 
         let view = getPreviewView()
@@ -423,9 +406,7 @@ async function main() {
         let muted = config.autoplay_preview_muted === true;
         let params = new URLSearchParams({
             v: videoId,
-            mute: muted ? '1' : '0',
-            ringRadius: ringRadius || '0px',
-            maskColor: maskColor || '#fff'
+            mute: muted ? '1' : '0'
         })
         let wrapperUrl = `http://127.0.0.1:${previewServerPort}/preview?${params.toString()}`
 
