@@ -5,7 +5,7 @@
 //via a dedicated Electron WebContentsView, owned and positioned by the main process (see src/index.js). that view
 //uses its own separate session, because this page's session identifies itself as a tv/console client (see the
 //user agent comment in src/index.js), and youtube's embed player refuses to serve those. a fresh, ordinary-looking
-//session doesn't hit that block. this module only handles focus/dwell detection in the dom and tells the main
+//session doesn't hit that block. this module handles focus/pointer dwell detection in the dom and tells the main
 //process where to show/hide/position that view via the 'autoplay-preview-show'/'-position'/'-hide' ipc messages.
 //
 //NOTE: tile data lookup (getTileData() below) relies on leanback's tile custom elements keeping a reference to
@@ -28,6 +28,10 @@ module.exports = async () => {
 
     let dwellTimer = null;
     let focusedTile = null;
+    let hoveredTile = null;
+    let touchInputActive = false;
+    let requestedPreviewTileElement = null;
+    let previewTileElement = null;
     let previewActive = false; //whether the main process's preview view is currently shown (the view itself lives there, not here)
 
     function isEnabled() {
@@ -82,9 +86,20 @@ module.exports = async () => {
         return { x: rect.left, y: rect.top, width: rect.width, height: rect.height }
     }
 
+    function setPreviewTile(tileElement) {
+        if (previewTileElement) previewTileElement.classList.remove('vt-autoplay-preview-active')
+        previewTileElement = tileElement;
+        if (previewTileElement) previewTileElement.classList.add('vt-autoplay-preview-active')
+    }
+
+    function resolveTileElement(element) {
+        return getTileData(element)?.element || null;
+    }
+
     //asks the main process to show its dedicated preview view (see the file header comment above) over the given target
-    function createPreview(videoId, target) {
+    function createPreview(videoId, target, tileElement) {
         previewActive = true;
+        requestedPreviewTileElement = tileElement || null;
         ipcRenderer.send('autoplay-preview-show', {
             videoId,
             rect: toRect(target)
@@ -96,6 +111,8 @@ module.exports = async () => {
             clearTimeout(dwellTimer)
             dwellTimer = null;
         }
+
+        requestedPreviewTileElement = null;
 
         if (!previewActive) return;
 
@@ -109,6 +126,36 @@ module.exports = async () => {
         return !!document.querySelector('#vt-settings-overlay-root:not(.vt-settings-hidden)')
     }
 
+    function setTouchInputActive(active) {
+        if (touchInputActive === active) return;
+        touchInputActive = active;
+
+        if (!touchInputActive) return;
+
+        hoveredTile = null;
+        destroyPreview()
+    }
+
+    function schedulePreviewForTile(tileElement, shouldStillBeActive, { dwellMs = DWELL_MS, onStart = null } = {}) {
+        if (!tileElement || !isEnabled()) return;
+
+        let tile = getTileData(tileElement)
+        if (!tile) return;
+
+        destroyPreview()
+
+        dwellTimer = setTimeout(() => {
+            dwellTimer = null;
+
+            if (!isEnabled()) return;
+            if (isSettingsOverlayOpen()) return;
+            if (!shouldStillBeActive()) return;
+
+            createPreview(tile.contentId, getThumbnailElement(tile.element), tile.element)
+            onStart?.()
+        }, dwellMs)
+    }
+
     function handleFocusChange() {
         let focused = isSettingsOverlayOpen() ? null : getFocusedElement()
         if (focused === focusedTile) return;
@@ -116,20 +163,54 @@ module.exports = async () => {
         focusedTile = focused;
         destroyPreview()
 
+        if (touchInputActive) return;
         if (!focused || !isEnabled()) return;
 
-        let tile = getTileData(focused)
-        if (!tile) return;
+        schedulePreviewForTile(focused, () => getFocusedElement() === focused)
+    }
 
-        dwellTimer = setTimeout(() => {
-            dwellTimer = null;
+    function handlePointerOver(event) {
+        if (event.pointerType !== 'mouse') return;
+        if (isSettingsOverlayOpen()) return;
+        setTouchInputActive(false)
 
-            //bail if focus moved on (or the feature got disabled) while we were waiting
-            if (getFocusedElement() !== focused) return;
-            if (!isEnabled()) return;
+        let tileElement = resolveTileElement(event.target)
+        if (!tileElement || tileElement === hoveredTile) return;
 
-            createPreview(tile.contentId, getThumbnailElement(tile.element))
-        }, DWELL_MS)
+        hoveredTile = tileElement;
+        schedulePreviewForTile(tileElement, () => hoveredTile === tileElement)
+    }
+
+    function handlePointerOut(event) {
+        if (event.pointerType !== 'mouse') return;
+        if (!hoveredTile) return;
+
+        let nextTarget = event.relatedTarget
+
+        //when the preview WebContentsView appears on top of the tile, relatedTarget can be null even though
+        //the cursor didn't actually leave the hovered tile area inside the page's own DOM
+        if (previewActive && !nextTarget) return;
+
+        if (nextTarget && hoveredTile.contains(nextTarget)) return;
+
+        hoveredTile = null;
+        destroyPreview()
+    }
+
+    function handleInputModePointerDown(event) {
+        if (event.pointerType === 'touch') {
+            setTouchInputActive(true)
+            return;
+        }
+
+        if (event.pointerType === 'mouse') {
+            setTouchInputActive(false)
+        }
+    }
+
+    function handleInputModePointerMove(event) {
+        if (event.pointerType !== 'mouse') return;
+        setTouchInputActive(false)
     }
 
     //isEnabled() only ever changes across a restart (see the settings UI's restart note), so it's safe to check
@@ -137,12 +218,30 @@ module.exports = async () => {
     //unless the feature is actually on, keeping it truly zero-cost while disabled.
     if (!isEnabled()) return;
 
+    let focusRingHideStyle = document.createElement('style')
+    focusRingHideStyle.textContent = '.vt-autoplay-preview-active ytlr-tile-header-renderer::after{opacity:0 !important}'
+    document.head.appendChild(focusRingHideStyle)
+
+    ipcRenderer.on('autoplay-preview-visible', () => {
+        if (!previewActive) return;
+        setPreviewTile(requestedPreviewTileElement)
+    })
+
+    ipcRenderer.on('autoplay-preview-hidden', () => {
+        setPreviewTile(null)
+    })
+
     let observer = new MutationObserver(handleFocusChange)
     observer.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['class'],
         subtree: true
     })
+
+    document.addEventListener('pointerover', handlePointerOver, true)
+    document.addEventListener('pointerout', handlePointerOut, true)
+    document.addEventListener('pointerdown', handleInputModePointerDown, true)
+    document.addEventListener('pointermove', handleInputModePointerMove, true)
 
     //resizing/maximizing mid-preview is a rare edge case (VacuumTube is normally launched and used fullscreen, and
     //stays that way) - rather than trying to precisely track the tile's rect through every intermediate layout

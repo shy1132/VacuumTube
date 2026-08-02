@@ -415,6 +415,7 @@ async function main() {
         view.webContents.once('media-started-playing', () => {
             if (token !== previewToken) return; //superseded by a newer show()/hide() while this one was still loading
             if (previewLastRect) view.setBounds(previewBounds(previewLastRect))
+            win.webContents.send('autoplay-preview-visible')
         })
     })
 
@@ -423,6 +424,7 @@ async function main() {
 
         previewToken++; //invalidates any still-pending media-started-playing listener from the last show()
         previewLastRect = null;
+        win?.webContents.send('autoplay-preview-hidden')
 
         if (!previewView) return;
 
