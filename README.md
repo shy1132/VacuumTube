@@ -109,6 +109,36 @@ VacuumTube has some settings that you can change, which are located directly in 
 - Device Discoverability
   - Allows VacuumTube to be discovered by the YouTube mobile app on devices within the same local network (DIAL)
 
+## Background Receiver Mode
+
+VacuumTube can also act as an on-demand software TV receiver on a regular desktop computer, HTPC, Raspberry Pi OS system, Steam Deck in desktop mode, or another device with a full operating system.
+
+This is useful when the device is not a dedicated TV box: you can keep using the desktop normally, then select VacuumTube from the **Cast** menu in the YouTube mobile app whenever you want to watch something on the larger screen.
+
+Start VacuumTube with:
+
+```sh
+vacuumtube --background-receiver --fullscreen
+```
+
+For Flatpak installations:
+
+```sh
+flatpak run rocks.shy.VacuumTube --background-receiver --fullscreen
+```
+
+In this mode:
+
+1. VacuumTube starts hidden instead of occupying the screen.
+2. It remains discoverable through DIAL while running in the background.
+3. A successful Cast launch restores the window automatically. `--fullscreen` makes it open as a TV-style fullscreen player.
+4. You can minimize the window after watching and continue using the computer; VacuumTube stays available for another Cast request.
+5. Closing the window exits VacuumTube normally.
+
+You can add the same command to your desktop environment's startup applications to make the receiver available after login. If YouTube TV cannot load during startup, the error page stays hidden instead of covering the desktop.
+
+**Device Discoverability** must be enabled for casting from the YouTube mobile app.
+
 ## Extra Input Mappings
 
 VacuumTube exposes a few extra input mappings for actions that may be desired on a desktop:
@@ -144,6 +174,8 @@ The userstyles folder is located in the config folder mentioned below.
   - Operates VacuumTube in portable mode, setting data directory to the one you specify, or defaulting to `data` in the executable directory (you can also create `portable.txt` in the executable directory, which works in the same way)
 - `--fullscreen`
   - Forces VacuumTube to open in fullscreen
+- `--background-receiver`
+  - Starts VacuumTube hidden and restores the window automatically when a successful DIAL Cast launch is received. Intended for desktop and HTPC systems that should remain usable while VacuumTube waits in the background
 - `--no-window-decorations`
   - Opens VacuumTube with hidden window decorations
 - `enable-devtools`

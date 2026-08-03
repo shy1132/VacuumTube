@@ -1,3 +1,4 @@
+const { ipcRenderer } = require('electron')
 const http = require('./http')
 const constants = require('./constants')
 const package = require('../../../../../package.json')
@@ -69,6 +70,15 @@ async function handle(basePath, callback, req, res) {
         res.statusCode = 400;
         res.end()
         return;
+    }
+
+    const isSuccessfulLaunch = req.method === 'POST' &&
+        req.url === basePath &&
+        data.responseCode >= 200 &&
+        data.responseCode < 300;
+
+    if (isSuccessfulLaunch) {
+        ipcRenderer.send('dial-launch-request')
     }
 
     if (data.mimeType) headers.append('Content-Type', data.mimeType)

@@ -54,6 +54,22 @@ const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI
 let win;
 let config;
 
+const backgroundReceiver = !!argv['background-receiver'];
+
+function getRequestedFullscreen() {
+    return argv['fullscreen'] || runningOnSteam || config.fullscreen || false;
+}
+
+function showReceiverWindow() {
+    if (!win || win.isDestroyed()) return;
+
+    win.setSkipTaskbar(false)
+    if (win.isMinimized()) win.restore()
+    win.show()
+    win.setFullScreen(getRequestedFullscreen())
+    win.focus()
+}
+
 async function main() {
     if (argv['version'] || argv['v']) {
         process.stdout.write(`VacuumTube ${package.version}\n`, () => { //console.log then process.exit isn't safe since console.log is async, so that's why it's done with process.stdout instead
@@ -117,7 +133,7 @@ async function main() {
     }
 
     electron.app.on('window-all-closed', () => {
-        if (process.platform !== 'darwin') electron.app.quit()
+        if (process.platform !== 'darwin' || backgroundReceiver) electron.app.quit()
     })
 
     electron.app.on('before-quit', () => {
@@ -237,6 +253,10 @@ async function main() {
         event.returnValue = config;
     })
 
+    electron.ipcMain.on('dial-launch-request', () => {
+        if (backgroundReceiver) showReceiverWindow()
+    })
+
     //etc helpers
     electron.ipcMain.handle('is-focused', () => {
         if (win) {
@@ -288,25 +308,33 @@ async function main() {
 
     userstyles.startWatcher()
 
-    electron.app.on('activate', () => {
-        if (electron.BrowserWindow.getAllWindows().length === 0) createWindow()
+    electron.app.on('activate', async () => {
+        if (electron.BrowserWindow.getAllWindows().length === 0) {
+            await createWindow()
+        }
+
+        if (backgroundReceiver) showReceiverWindow()
     })
 }
 
 async function createWindow() {
-    let fullscreen = argv['fullscreen'] || runningOnSteam || config.fullscreen || false;
+    const fullscreen = getRequestedFullscreen()
+    const initialFullscreen = backgroundReceiver ? false : fullscreen;
     let noWindowDecs = argv['no-window-decorations'] || config.no_window_decorations || false;
 
     win = new electron.BrowserWindow({
         width: 1200,
         height: 675,
+        show: false,
+        skipTaskbar: backgroundReceiver,
         backgroundColor: '#282828',
-        fullscreen, //this sometimes doesn't work for people, so it's repeated below
+        fullscreen: initialFullscreen, //this sometimes doesn't work for people, so it's repeated below
         fullscreenable: true, //explicitly enable fullscreen functionality on macOS
         titleBarStyle: noWindowDecs ? 'hidden' : 'default',
         frame: noWindowDecs ? false : true,
         icon: './assets/icon.png',
         webPreferences: {
+            backgroundThrottling: !backgroundReceiver,
             nodeIntegration: false,
             contextIsolation: false,
             sandbox: false, //allows me to use node apis in preload, but doesn't allow youtube to do so (solely need node apis for requiring the modules)
@@ -314,6 +342,10 @@ async function createWindow() {
             preload: path.join(__dirname, 'preload/index.js')
         },
         title: 'VacuumTube'
+    })
+
+    win.on('closed', () => {
+        win = null;
     })
 
     // Ensure the *content* area (excluding OS window borders) stays 16:9 on all platforms.
@@ -354,9 +386,12 @@ async function createWindow() {
     win.setAutoHideMenuBar(false)
 
     win.once('ready-to-show', () => {
-        win.setFullScreen(fullscreen)
         win.setAlwaysOnTop(config.keep_on_top)
-        win.show()
+
+        if (!backgroundReceiver) {
+            win.setFullScreen(fullscreen)
+            win.show()
+        }
     })
 
     if (argv['debug-gpu']) {
