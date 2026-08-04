@@ -28,12 +28,15 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.8.1" date="2026-07-08" type="stable">
+    <release version="1.8.2" date="2026-07-30" type="stable">
       <description>
-        <p>v1.8.1</p>
+        <p>v1.8.2</p>
         <ul>
-          <li>Added "Unlock Resolution" setting</li>
-          <li>Fixed maximum video resolution rounding down instead of up</li>
+          <li>Added option to let you hide specific guide tabs</li>
+          <li>Added music mode feature</li>
+          <li>Added "Features" tab to settings</li>
+          <li>Fixed video playback issues sometimes happening ("Something went wrong")</li>
+          <li>Removed settings keybind on controllers due to being too easy to accidentally press</li>
         </ul>
       </description>
     </release>

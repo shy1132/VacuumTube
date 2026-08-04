@@ -36,8 +36,8 @@ module.exports = {
         )
         const musicModeItem = createSettingItem(
             'music_mode_feature',
-            locale.settings.features.music_mode_title,
-            locale.settings.features.music_mode_description,
+            locale.settings.features.music_mode_feature_title,
+            locale.settings.features.music_mode_feature_description,
             config.music_mode_feature
         )
 

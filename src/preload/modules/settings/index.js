@@ -47,6 +47,7 @@ let tabs = [
     { id: 'dislikes' },
     { id: 'remove_super_resolution' },
     { id: 'hide_shorts' },
+    { id: 'guide_tabs' },
     { id: 'unlock_resolution' },
     { id: 'h264ify' },
     { id: 'hardware_decoding' },
@@ -78,6 +79,7 @@ for (let item of tabs) {
 const panelModules = [
     require('./panels/features'),
     require('./panels/about'),
+    require('./panels/guide-tabs'),
     require('./panels/h264ify'),
     require('./panels/mac-permissions'),
     require('./panels/userstyles')
@@ -203,6 +205,7 @@ function updateFocus(area) {
             const focusedElement =
                 panel.querySelector(`.vt-setting-item[data-index="${currentItemIndex}"]`)
                 || panel.querySelector(`.vt-userstyle-item[data-index="${currentItemIndex}"]`)
+                || panel.querySelector(`.vt-guide-tab-item[data-index="${currentItemIndex}"]`)
                 || panel.querySelector(`.vt-button[data-index="${currentItemIndex}"]`)
 
             if (focusedElement) {
@@ -298,9 +301,10 @@ function getItemCount() {
     //count setting items, userstyle items, and buttons
     const settingItems = panel.querySelectorAll('.vt-setting-item').length;
     const userstyleItems = panel.querySelectorAll('.vt-userstyle-item').length;
+    const guideTabItems = panel.querySelectorAll('.vt-guide-tab-item').length;
     const buttons = panel.querySelectorAll('.vt-button').length;
 
-    return settingItems + userstyleItems + buttons;
+    return settingItems + userstyleItems + guideTabItems + buttons;
 }
 
 function handleKeyDown(e) {
@@ -477,6 +481,12 @@ function setupEventListeners() {
             return;
         }
 
+        const guideTabItem = e.target.closest('.vt-guide-tab-item')
+        if (guideTabItem) {
+            getActivePanel()?.onActivate?.(guideTabItem)
+            return;
+        }
+
         const button = e.target.closest('.vt-button')
         if (button) {
             handleButtonAction(button.dataset.action)
@@ -519,7 +529,7 @@ module.exports = async () => {
     locale = localeProvider.getLocale()
 
     //let custom panels grab what they need
-    for (const panel of panelModules) {
+    for (let panel of panelModules) {
         panel.init?.({ locale })
     }
 
@@ -535,7 +545,7 @@ module.exports = async () => {
 
     //setup touch scrolling for the tab strip, then let panels set up their own viewports
     setupTouchScroll('.vt-tabs-viewport', '#vt-settings-tabs', '#vt-tabs-scrollbar-thumb')
-    for (const panel of panelModules) {
+    for (let panel of panelModules) {
         panel.setup?.()
     }
 
@@ -553,7 +563,7 @@ module.exports = async () => {
                 }
             })
 
-            for (const panel of panelModules) {
+            for (let panel of panelModules) {
                 panel.onConfigUpdate?.(config)
             }
         }
