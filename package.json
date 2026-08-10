@@ -4,6 +4,7 @@
     "description": "YouTube for TV, on your PC",
     "main": "src/index.js",
     "scripts": {
+        "test": "node --test",
         "start": "electron .",
         "windows:build": "electron-builder --win",
         "mac:build": "electron-builder --mac",
