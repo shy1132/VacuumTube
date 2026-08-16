@@ -96,6 +96,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Disables window decorations, including the title bar and window border
 - Keep on Top
   - Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window
+- Steam Overlay Compatibility
+  - Helps Steam Big Picture attach its overlay when VacuumTube is launched as a non-Steam game on Windows. Relaunch after toggling. Leave this off unless you use VacuumTube through Steam
 - Pause on Blur
   - Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)
 - Features
@@ -166,6 +168,22 @@ The userstyles folder is located in the config folder mentioned below.
 You can provide extra command line flags to Chromium via the `flags.txt` file located in the config folder.
 
 For example, putting `--disable-gpu` into the `flags.txt` file will cause VacuumTube to run with the GPU disabled. You can find more flags by searching for Chromium command line flags, but you likely won't need to mess with this.
+
+If you are trying to use Steam Big Picture's overlay with VacuumTube, use the **Steam Overlay Compatibility** setting instead of adding GPU or DirectComposition flags manually. The setting applies the required startup switches together on the next launch and keeps the normal default behavior unchanged while it is off.
+
+## Steam Big Picture Acceptance Test
+
+This Windows-only check needs Steam and cannot be automated by the regular Node test suite:
+
+1. Launch VacuumTube normally.
+2. Open VacuumTube Settings with `Ctrl+O`.
+3. Enable **Steam Overlay Compatibility**.
+4. Quit and relaunch VacuumTube once so the Chromium startup switches take effect.
+5. Add the same `VacuumTube.exe` to Steam as a non-Steam game.
+6. Launch VacuumTube from Steam Big Picture.
+7. Open the Steam overlay and verify that it appears over VacuumTube.
+8. While the overlay is open, verify controller input moves through the Steam overlay rather than the YouTube TV interface.
+9. Close the overlay and verify controller input returns to VacuumTube.
 
 ## Config Folder
 

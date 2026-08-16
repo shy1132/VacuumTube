@@ -99,6 +99,10 @@
             "title": "Keep on Top",
             "description": "Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window"
         },
+        "steam_overlay_compatibility": {
+            "title": "Steam Overlay Compatibility",
+            "description": "Helps Steam Big Picture attach its overlay when VacuumTube is launched as a non-Steam game. Windows only. Relaunch after toggling."
+        },
         "pause_on_blur": {
             "title": "Pause on Blur",
             "description": "Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)"
