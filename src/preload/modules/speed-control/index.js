@@ -16,7 +16,7 @@ module.exports = async () => {
 
     css.inject('speed-control', text)
 
-    let lastCustomPlaybackRate = config.lastCustomPlaybackRate || 2;
+    let lastCustomPlaybackRate = 2;
     let currentPlacbackRate = 1;
     let speedTimeout;
 
@@ -49,9 +49,10 @@ module.exports = async () => {
         for (let player of players) {
             if (!player?.setPlaybackRate) continue;
 
+            currentPlacbackRate = player.getPlaybackRate()
+
             if (step == 0) // toggle between normal and last non normal speed
             {
-                currentPlacbackRate = player.getPlaybackRate()
                 if (currentPlacbackRate != 1) {
                     lastCustomPlaybackRate = currentPlacbackRate
                     currentPlacbackRate = 1
@@ -68,10 +69,26 @@ module.exports = async () => {
         }
     }
 
+    function isWatching() {
+        let isShort = !!document.querySelector('ytlr-shorts-page')?.classList?.contains('zylon-focus')
+        if (isShort) { //very dumb, don't like it, but there doesn't seem to be a better way
+            return true;
+        } else {
+            let baseUri = window.yt?.player?.utils?.videoElement_?.baseURI;
+            if (!baseUri || !baseUri.includes('/watch?v=')) return false;
+
+            let id = baseUri.split('/watch?v=')[1]?.slice(0, 11)
+            if (!id) return false;
+
+            return true;
+        }
+    }
+
     //speed controls
     document.addEventListener('keydown', (e) => {
         const key = e.key || e.keyCode; 
-        if (!key) return;
+        if (!key || !isWatching())
+            return;
 
         const speedStep = 0.25;
 
