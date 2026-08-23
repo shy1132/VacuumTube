@@ -1,5 +1,5 @@
 const electron = require('electron')
-const childProcess = require('child_process')
+const microphonePermissionReset = require('./microphone-permission-reset.js')
 
 const youtubeOrigin = 'https://www.youtube.com'
 const microphonePrivacySettingsUrl = 'x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone'
@@ -72,16 +72,21 @@ async function requestMicrophonePermissionStatus() {
 async function resetMicrophonePermissionStatus() {
     if (process.platform !== 'darwin') return 'unsupported';
 
-    return await new Promise((resolve) => {
-        childProcess.execFile('/usr/bin/tccutil', [ 'reset', 'Microphone', appId ], (err) => {
-            if (err) {
-                console.error('[Permissions] Failed to reset microphone access:', err)
-                resolve('unknown')
-                return;
-            }
+    try {
+        await microphonePermissionReset.resetMicrophonePermission(appId)
+        return getMicrophonePermissionStatus();
+    } catch (err) {
+        console.error('[Permissions] Failed to reset microphone access:', err)
+        return 'unknown';
+    }
+}
 
-            resolve(getMicrophonePermissionStatus())
-        })
+function resetAfterUpdate(options = {}) {
+    return microphonePermissionReset.resetAfterAppUpdate({
+        ...options,
+        appVersion: electron.app.getVersion(),
+        isPackaged: electron.app.isPackaged,
+        platform: process.platform
     });
 }
 
@@ -159,5 +164,6 @@ function setup(options = {}) {
 }
 
 module.exports = {
+    resetAfterUpdate,
     setup
 }
