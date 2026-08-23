@@ -24,10 +24,11 @@
     height: 24px;
     margin-right: 16px;
     font-size: 24px;
+    font-family: 'YouTube Icons Outlined';
 }
 
 .vt-speed-icon::before {
-    content: '\23e9';
+    content: '\edf6';
 }
 
 .vt-speed-text {

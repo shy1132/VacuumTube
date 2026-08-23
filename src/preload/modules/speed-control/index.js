@@ -95,9 +95,9 @@ module.exports = async () => {
         if (key === 's' || key === 'S') {
             setPlaybackRate(0) // toggle
         } else if (key === 'a' || key === 'A') {
-            setPlaybackRate(speedStep)
-        } else if (key === 'd' || key === 'D') {
             setPlaybackRate(-speedStep)
+        } else if (key === 'd' || key === 'D') {
+            setPlaybackRate(speedStep)
         } else {
             return;
         }
