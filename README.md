@@ -133,9 +133,11 @@ In this mode:
 2. It remains discoverable through DIAL while running in the background.
 3. A successful Cast launch restores the window automatically. `--fullscreen` makes it open as a TV-style fullscreen player.
 4. You can minimize the window after watching and continue using the computer; VacuumTube stays available for another Cast request.
-5. Closing the window exits VacuumTube normally.
+5. Launching VacuumTube again focuses the already running receiver instead of starting a second copy.
+6. After sleep/resume or reconnecting to the network, the receiver refreshes its DIAL address and discovery socket.
+7. Closing the window exits VacuumTube normally.
 
-You can add the same command to your desktop environment's startup applications to make the receiver available after login. If YouTube TV cannot load during startup, the error page stays hidden instead of covering the desktop.
+You can add the same command to your desktop environment's startup applications to make the receiver available after login. VacuumTube only stays hidden after DIAL reports that it is ready; if Device Discoverability is disabled, DIAL fails, or the receiver is not ready within 15 seconds, the normal window is shown instead of leaving the application stuck invisibly in the background.
 
 **Device Discoverability** must be enabled for casting from the YouTube mobile app.
 

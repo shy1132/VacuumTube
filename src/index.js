@@ -24,6 +24,16 @@ if (portablePath) {
 const sessionData = path.join(userData, 'sessionData')
 electron.app.setPath('sessionData', sessionData)
 
+const gotSingleInstanceLock = electron.app.requestSingleInstanceLock()
+if (!gotSingleInstanceLock) {
+    electron.app.quit()
+} else {
+    electron.app.on('second-instance', () => {
+        console.log('[app] Second instance requested; showing the existing window')
+        showReceiverWindow()
+    })
+}
+
 const configManager = require('./config.js')
 const permissions = require('./permissions.js')
 const userstyles = require('./userstyles.js')
@@ -53,21 +63,48 @@ const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI
 
 let win;
 let config;
+let dialReady = false;
+let dialStartupTimeout = null;
 
-const backgroundReceiver = !!argv['background-receiver'];
+const backgroundReceiver = argv['background-receiver'] === true || argv['background-receiver'] === 'true';
+const dialStartupTimeoutMs = 15000;
 
 function getRequestedFullscreen() {
-    return argv['fullscreen'] || runningOnSteam || config.fullscreen || false;
+    return argv['fullscreen'] || runningOnSteam || config?.fullscreen || false;
+}
+
+function clearDialStartupTimeout() {
+    if (!dialStartupTimeout) return;
+
+    clearTimeout(dialStartupTimeout)
+    dialStartupTimeout = null;
 }
 
 function showReceiverWindow() {
     if (!win || win.isDestroyed()) return;
 
+    clearDialStartupTimeout()
     win.setSkipTaskbar(false)
     if (win.isMinimized()) win.restore()
     win.show()
     win.setFullScreen(getRequestedFullscreen())
     win.focus()
+}
+
+function waitForDialOrShowWindow() {
+    if (!backgroundReceiver || dialReady) return;
+
+    if (!config.device_discoverability) {
+        console.warn('[background-receiver] Device Discoverability is disabled; showing VacuumTube normally')
+        showReceiverWindow()
+        return;
+    }
+
+    clearDialStartupTimeout()
+    dialStartupTimeout = setTimeout(() => {
+        console.warn('[background-receiver] DIAL did not become ready in time; showing VacuumTube normally')
+        showReceiverWindow()
+    }, dialStartupTimeoutMs)
 }
 
 async function main() {
@@ -253,8 +290,31 @@ async function main() {
         event.returnValue = config;
     })
 
-    electron.ipcMain.on('dial-launch-request', () => {
-        if (backgroundReceiver) showReceiverWindow()
+    electron.ipcMain.on('dial-status', (event, status) => {
+        if (!backgroundReceiver || !win || event.sender !== win.webContents) return;
+
+        if (status === 'ready') {
+            dialReady = true;
+            clearDialStartupTimeout()
+            console.log('[background-receiver] DIAL receiver is ready')
+        } else if (status === 'disabled' || status === 'failed') {
+            dialReady = false;
+            console.warn(`[background-receiver] DIAL receiver is ${status}; showing VacuumTube normally`)
+            showReceiverWindow()
+        }
+    })
+
+    electron.ipcMain.on('dial-launch-succeeded', (event) => {
+        if (!backgroundReceiver || !dialReady || !win || event.sender !== win.webContents) return;
+        showReceiverWindow()
+    })
+
+    electron.powerMonitor.on('resume', () => {
+        if (!backgroundReceiver || !win || win.isDestroyed()) return;
+
+        dialReady = false;
+        win.webContents.send('dial-refresh')
+        waitForDialOrShowWindow()
     })
 
     //etc helpers
@@ -322,11 +382,9 @@ async function createWindow() {
     const initialFullscreen = backgroundReceiver ? false : fullscreen;
     let noWindowDecs = argv['no-window-decorations'] || config.no_window_decorations || false;
 
-    win = new electron.BrowserWindow({
+    let windowOptions = {
         width: 1200,
         height: 675,
-        show: false,
-        skipTaskbar: backgroundReceiver,
         backgroundColor: '#282828',
         fullscreen: initialFullscreen, //this sometimes doesn't work for people, so it's repeated below
         fullscreenable: true, //explicitly enable fullscreen functionality on macOS
@@ -334,7 +392,6 @@ async function createWindow() {
         frame: noWindowDecs ? false : true,
         icon: './assets/icon.png',
         webPreferences: {
-            backgroundThrottling: !backgroundReceiver,
             nodeIntegration: false,
             contextIsolation: false,
             sandbox: false, //allows me to use node apis in preload, but doesn't allow youtube to do so (solely need node apis for requiring the modules)
@@ -342,9 +399,24 @@ async function createWindow() {
             preload: path.join(__dirname, 'preload/index.js')
         },
         title: 'VacuumTube'
-    })
+    }
+
+    if (backgroundReceiver) {
+        windowOptions.show = false;
+        windowOptions.skipTaskbar = true;
+
+        // The hidden renderer hosts DIAL. Wayland is aggressive about throttling
+        // hidden surfaces, so keep it active there without changing other platforms.
+        if (process.platform === 'linux' && process.env.WAYLAND_DISPLAY) {
+            windowOptions.webPreferences.backgroundThrottling = false;
+        }
+    }
+
+    win = new electron.BrowserWindow(windowOptions)
 
     win.on('closed', () => {
+        clearDialStartupTimeout()
+        dialReady = false;
         win = null;
     })
 
@@ -407,6 +479,7 @@ async function createWindow() {
 
     console.log(`Loading ${youtubeUrl}`)
     win.loadURL(youtubeUrl, { userAgent: youtubeClientUserAgent })
+    if (backgroundReceiver) waitForDialOrShowWindow()
 
     //remember fullscreen preference
     win.on('enter-full-screen', () => {
@@ -468,4 +541,4 @@ function portable() {
     }
 }
 
-main()
+if (gotSingleInstanceLock) main()

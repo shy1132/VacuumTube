@@ -1,6 +1,6 @@
-const { ipcRenderer } = require('electron')
 const http = require('./http')
 const constants = require('./constants')
+const events = require('./events')
 const package = require('../../../../../package.json')
 
 const doc = new DOMParser().parseFromString('<root/>', 'text/xml')
@@ -78,7 +78,7 @@ async function handle(basePath, callback, req, res) {
         data.responseCode < 300;
 
     if (isSuccessfulLaunch) {
-        ipcRenderer.send('dial-launch-request')
+        events.emit('launch-succeeded', { path: basePath })
     }
 
     if (data.mimeType) headers.append('Content-Type', data.mimeType)
