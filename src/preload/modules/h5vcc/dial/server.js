@@ -1,5 +1,6 @@
 const http = require('./http')
 const constants = require('./constants')
+const events = require('./events')
 const package = require('../../../../../package.json')
 
 const doc = new DOMParser().parseFromString('<root/>', 'text/xml')
@@ -69,6 +70,15 @@ async function handle(basePath, callback, req, res) {
         res.statusCode = 400;
         res.end()
         return;
+    }
+
+    const isSuccessfulLaunch = req.method === 'POST' &&
+        req.url === basePath &&
+        data.responseCode >= 200 &&
+        data.responseCode < 300;
+
+    if (isSuccessfulLaunch) {
+        events.emit('launch-succeeded', { path: basePath })
     }
 
     if (data.mimeType) headers.append('Content-Type', data.mimeType)
