@@ -67,6 +67,10 @@
             "title": "Unlock Resolution",
             "description": "Removes monitor resolution cap and allows you to watch videos at any resolution. Relaunch after toggling"
         },
+        "support_ultrawide": {
+            "title": "Support Ultrawide",
+            "description": "Expands the YouTube TV interface to fill ultrawide displays"
+        },
         "h264ify": {
             "title": "Filter Video Codecs",
             "description": "Codec filtering options. Relaunch after toggling any of the options.",

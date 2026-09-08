@@ -34,6 +34,7 @@ const defaults = {
     no_window_decorations: false, //whether or not to disable window decorations
     keep_on_top: false, //whether or not to keep window on top
     pause_on_blur: false, //whether or not to pause video when out of focus (such as tabbing out)
+    support_ultrawide: false, //expand the YouTube TV interface to fill ultrawide displays
     userstyles: false, //whether or not to enable custom CSS injection
     disabled_userstyles: [], //array of filenames that are disabled
     touch_overlay: true, //whether or not to enable the touch overlay interface when touch is detected
