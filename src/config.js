@@ -31,6 +31,8 @@ const defaults = {
     features_enabled: false,
     music_mode_feature: false,
     music_mode: false,
+    autoplay_preview_feature: false, //experimental: autoplay a preview of the focused tile's video over its thumbnail after a short dwell delay (like the PS4 YouTube app)
+    autoplay_preview_muted: false, //whether the autoplay preview plays muted instead of with sound
     no_window_decorations: false, //whether or not to disable window decorations
     keep_on_top: false, //whether or not to keep window on top
     pause_on_blur: false, //whether or not to pause video when out of focus (such as tabbing out)

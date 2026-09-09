@@ -13,8 +13,10 @@ function createToggle(configKey, on) {
     ]);
 }
 
-//a standard "title + description + toggle" settings row
-function createSettingItem(configKey, title, description, on, focused = false) {
+//a standard "title + description + toggle" settings row. `note` is optional and renders as a second, distinctly
+//highlighted line below the description - use it for something that needs to stand out more than a regular
+//description would (e.g. "this setting requires a restart"), rather than burying it in the description text.
+function createSettingItem(configKey, title, description, on, focused = false, note = null) {
     return el('div', {
         className: `vt-setting-item ${focused ? 'vt-item-focused' : ''}`,
         dataSetting: configKey,
@@ -22,7 +24,8 @@ function createSettingItem(configKey, title, description, on, focused = false) {
     }, [
         el('div', { className: 'vt-setting-info' }, [
             el('span', { className: 'vt-setting-title', textContent: title }),
-            el('span', { className: 'vt-setting-description', textContent: description })
+            el('span', { className: 'vt-setting-description', textContent: description }),
+            ...(note ? [el('span', { className: 'vt-setting-note', textContent: note })] : [])
         ]),
         el('div', { className: 'vt-setting-control' }, [
             createToggle(configKey, on)

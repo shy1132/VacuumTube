@@ -19,6 +19,10 @@
         "appId": "rocks.shy.VacuumTube",
         "productName": "VacuumTube",
         "artifactName": "VacuumTube-${arch}.${ext}",
+        "files": [
+            "**/*",
+            "!docs/**"
+        ],
         "linux": {
             "icon": "./assets/icon.svg",
             "synopsis": "Watch and explore videos on YouTube",

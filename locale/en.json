@@ -111,7 +111,12 @@
             "enable_description": "I understand that these features are outside VacuumTube's default experience and may change or break.",
             "music_mode_feature_title": "Music Mode",
             "music_mode_feature_description": "Adds a Music Mode toggle to the video settings menu for audio-only playback using YouTube's native music view.",
-            "music_mode_title": "Music Mode"
+            "music_mode_title": "Music Mode",
+            "autoplay_preview_title": "Autoplay Preview",
+            "autoplay_preview_description": "Plays a preview of a video (with sound) over its thumbnail after focusing on it for a moment.",
+            "autoplay_preview_restart_note": "Restart VacuumTube for changes to this setting to take effect.",
+            "autoplay_preview_muted_title": "Mute Autoplay Preview",
+            "autoplay_preview_muted_description": "Plays the autoplay preview muted instead of with sound."
         },
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
