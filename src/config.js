@@ -33,6 +33,7 @@ const defaults = {
     music_mode: false,
     no_window_decorations: false, //whether or not to disable window decorations
     keep_on_top: false, //whether or not to keep window on top
+    steam_overlay_compatibility: false, //windows-only compatibility mode for Steam's non-Steam game overlay
     pause_on_blur: false, //whether or not to pause video when out of focus (such as tabbing out)
     userstyles: false, //whether or not to enable custom CSS injection
     disabled_userstyles: [], //array of filenames that are disabled
