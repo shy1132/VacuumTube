@@ -406,9 +406,13 @@ const gamepadKeyMap = {
 }
 
 function setupEventListeners() {
-    //global hotkey to toggle settings (Ctrl+O)
+    //global hotkey to toggle settings (Ctrl+O, or Cmd+, on macOS)
     document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key.toLowerCase() === 'o') {
+        let ctrlShortcut = e.ctrlKey && e.key.toLowerCase() === 'o';
+        let macShortcut = process.platform === 'darwin'
+            && e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey && e.key === ',';
+
+        if (ctrlShortcut || macShortcut) {
             e.preventDefault()
             e.stopPropagation()
             toggleSettingsOverlay()
