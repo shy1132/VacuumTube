@@ -6,6 +6,7 @@
     "scripts": {
         "test": "node --test",
         "start": "electron .",
+        "test": "node --test",
         "windows:build": "electron-builder --win",
         "mac:build": "electron-builder --mac",
         "linux:build": "electron-builder --linux",
