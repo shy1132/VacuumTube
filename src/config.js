@@ -38,7 +38,8 @@ const defaults = {
     disabled_userstyles: [], //array of filenames that are disabled
     touch_overlay: true, //whether or not to enable the touch overlay interface when touch is detected
     controller_support: true, //whether or not to enable game controller support
-    device_discoverability: true //whether or not to enable DIAL support
+    device_discoverability: true, //whether or not to enable DIAL support
+    remaining_time: false //whether or not to show videos remaining playback time
 }
 
 function init(overrides = {}) {
