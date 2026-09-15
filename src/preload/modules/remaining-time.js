@@ -8,26 +8,6 @@ module.exports = async () => {
     let isWatching = false;
     let isObserving = false;
 
-    function sanitizeTime(timeStr) {
-        return timeStr.replace(/[\•].*$/g, '');
-    }
-
-    function timeToSeconds(timeStr) {
-        let cleaned = sanitizeTime(timeStr);
-        let parts = cleaned.split(':').map(Number);
-        let hours = 0, minutes = 0, seconds = 0;
-
-        if (parts.length === 3) {
-            [hours, minutes, seconds] = parts;
-        } else if (parts.length === 2) {
-            [minutes, seconds] = parts;
-        } else if (parts.length === 1) {
-            [seconds] = parts;
-        }
-
-        return hours * 3600 + minutes * 60 + seconds;
-    }
-
     function secondsToTime(totalSeconds) {
         let hours = Math.floor(totalSeconds / 3600);
         let minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -40,30 +20,32 @@ module.exports = async () => {
         }
     }
 
-    function getRemainingTime(duration, elapsed, currentPlacbackRate) {
-        let durationSeconds = timeToSeconds(duration);
-        let elapsedSeconds = timeToSeconds(elapsed);
+    function getRemainingTime(durationSeconds, elapsedSeconds, currentPlacbackRate) {
+        durationSeconds = Math.floor(durationSeconds);
+        elapsedSeconds = Math.floor(elapsedSeconds);
         let remainingSeconds = Math.round(Math.max(0, (durationSeconds - elapsedSeconds) / currentPlacbackRate));
         return secondsToTime(remainingSeconds);
     }
 
     window.addEventListener('hashchange', async () => {
-        const pageUrl = new URL(location.hash.substring(1), location.href)
+        if (observer)
+            observer.disconnect();
+
+        const pageUrl = new URL(location.hash.substring(1), location.href);
 
         if (pageUrl.pathname === '/watch') {
             isWatching = true;
-            await functions.waitForCondition(() => !!document.querySelector('span[idomkey="duration"]'))
-            let video_duration = "";
+            await functions.waitForCondition(() => !!document.querySelector('span[idomkey="duration"]'));
             let duration = document.querySelector('span[idomkey="duration"]');
-            let elapsedTime = document.querySelector('span[idomkey="elapsedTime"]');
             parentNode = duration.parentNode;
-            video_duration = duration.innerText;
 
             observer = new MutationObserver(() => {
                 const durationText = duration.textContent.trim();
                 const player = document.querySelector('.html5-video-player');
+                const video_duration = player.getDuration();
+                const elapsedTime = player.getCurrentTime();
                 const currentPlacbackRate = player.getPlaybackRate();
-                const remaining = getRemainingTime(video_duration, elapsedTime.innerText, currentPlacbackRate);
+                const remaining = getRemainingTime(video_duration, elapsedTime, currentPlacbackRate);
 
                 if (duration.textContent !== remaining) {
                     duration.textContent = remaining;
@@ -74,29 +56,29 @@ module.exports = async () => {
 
             if (isObserving)
                 observer.observe(parentNode, { characterData: true, childList: true, subtree: true });
+
+            document.addEventListener('keydown', (e) => {
+                const key = e.key || e.keyCode;
+                if (!key || !isWatching)
+                    return;
+
+                if (key === 'r' || key === 'R') {
+                    if (isObserving) {
+                        observer.disconnect();
+                    }
+                    else {
+                        observer.observe(parentNode, { characterData: true, childList: true, subtree: true });
+                    }
+                    isObserving = !isObserving;
+
+                    e.preventDefault()
+                    e.stopPropagation()
+                    e.stopImmediatePropagation()
+                }
+            }, true);
         }
         else {
             isWatching = false;
         }
     });
-
-    document.addEventListener('keydown', (e) => {
-        const key = e.key || e.keyCode;
-        if (!key || !isWatching)
-            return;
-
-        if (key === 'r' || key === 'R') {
-            if (isObserving) {
-                observer.disconnect();
-            }
-            else {
-                observer.observe(parentNode, { characterData: true, childList: true, subtree: true });
-            }
-            isObserving = !isObserving;
-
-            e.preventDefault()
-            e.stopPropagation()
-            e.stopImmediatePropagation()
-        }
-    }, true)
 }
