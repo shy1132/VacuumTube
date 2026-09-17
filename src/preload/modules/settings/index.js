@@ -393,17 +393,17 @@ function handleKeyDown(e) {
 }
 
 const gamepadKeyMap = {
-    0: 'Enter',        //a
-    1: 'Escape',       //b
-    12: 'ArrowUp',     //dpad up
-    13: 'ArrowDown',   //dpad down
-    14: 'ArrowLeft',   //dpad left
-    15: 'ArrowRight',  //dpad right
+    32768: 'Enter',      //a
+    32769: 'Escape',     //b
+    32780: 'ArrowUp',    //dpad up
+    32781: 'ArrowDown',  //dpad down
+    32782: 'ArrowLeft',  //dpad left
+    32783: 'ArrowRight', //dpad right
 
-    1012: 'ArrowUp',   //left stick up
-    1014: 'ArrowDown', //left stick down
-    1011: 'ArrowLeft', //left stick left
-    1013: 'ArrowRight' //left stick right
+    32785: 'ArrowUp',    //left stick up
+    32786: 'ArrowDown',  //left stick down
+    32787: 'ArrowLeft',  //left stick left
+    32788: 'ArrowRight'  //left stick right
 }
 
 function setupEventListeners() {
