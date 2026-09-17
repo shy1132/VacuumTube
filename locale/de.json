@@ -39,6 +39,10 @@
         "userstyles": {
             "title": "Benutzerdefinierte CSS (Benutzerstile)",
             "description": "Ermöglicht das Einfügen von benutzerdefinierten CSS-Stilen. Legen Sie Ihre .css-Dateien im Ordner „Benutzerstile“ ab."
+        },
+        "remaining_time": {
+            "title": "Verbleibende Zeit anzeigen",
+            "description": "Zeigt die verbleibende Abspielzeit eines Videos anstatt der Gesamtlänge. Berücksichtigt die aktuelle Wiedergabegeschwindigkeit."
         }
     }
 }
