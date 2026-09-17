@@ -342,6 +342,7 @@
     text-align: center;
 }
 
+.vt-sponsorblock-section,
 .vt-permissions-section,
 .vt-h264ify-section,
 .vt-guide-tabs-section {
@@ -352,6 +353,7 @@
     overflow: hidden;
 }
 
+.vt-sponsorblock-viewport,
 .vt-permissions-viewport,
 .vt-h264ify-viewport,
 .vt-guide-tabs-viewport {
@@ -361,6 +363,7 @@
     position: relative;
 }
 
+.vt-sponsorblock-list,
 .vt-permissions-list,
 .vt-h264ify-list,
 .vt-guide-tabs-list {
@@ -475,6 +478,7 @@
     transition: opacity 0.2s ease;
 }
 
+.vt-sponsorblock-viewport:hover .vt-scrollbar,
 .vt-userstyles-viewport:hover .vt-scrollbar,
 .vt-permissions-viewport:hover .vt-scrollbar,
 .vt-h264ify-viewport:hover .vt-scrollbar,

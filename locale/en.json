@@ -27,7 +27,41 @@
         },
         "sponsorblock": {
             "title": "SponsorBlock",
-            "description": "Skips sponsor segments in YouTube videos using a crowdsourced database. Currently only supports skipping sponsors"
+            "description": "Skips sponsor segments in YouTube videos using a crowdsourced database.",
+            "categories": {
+                "sponsor": {
+                    "name": "Sponsor",
+                    "description": "Paid promotion, paid referrals and direct advertisements. Not for self-promotion or free shoutouts to causes/creators/websites/products they like."
+                },
+                "selfpromo": {
+                    "name": "Unpaid/Self Promotion",
+                    "description": "Similar to 'sponsor' except for unpaid or self promotion. This includes sections about merchandise, donations, or information about who they collaborated with."
+                },
+                "interaction": {
+                    "name": "Interaction Reminder (Subscribe)",
+                    "description": "When there is a short reminder to like, subscribe or follow them in the middle of content. If it is long or about something specific, it should be under self promotion instead."
+                },
+                "intro": {
+                    "name": "Intermission/Intro Animation",
+                    "description": "An interval without actual content. Could be a pause, static frame, repeating animation. This should not be used for transitions containing information."
+                },
+                "outro": {
+                    "name": "Endcards/Credits",
+                    "description": "Credits or when the YouTube endcards appear. Not for conclusions with information."
+                },
+                "preview": {
+                    "name": "Preview/Recap",
+                    "description": "Collection of clips that show what is coming up in in this video or other videos in a series where all information is repeated later in the video."
+                },
+                "hook": {
+                    "name": "Hook/Greetings",
+                    "description": "Narrated trailers for the upcoming video, greetings and goodbyes. This should not skip conclusions with information."
+                },
+                "filler": {
+                    "name": "Tangents/Jokes",
+                    "description": "Tangential scenes or jokes that are not required to understand the main content of the video. This should not include segments providing context or background details. This is a very aggressive category meant for when you aren't in the mood for 'fun'."
+                }
+            }
         },
         "dearrow": {
             "title": "DeArrow",
@@ -161,7 +195,14 @@
         }
     },
     "sponsorblock": {
-        "sponsor_skipped": "Sponsor skipped"
+        "sponsor_skipped": "Sponsor skipped",
+        "selfpromo_skipped": "Self Promo skipped",
+        "interaction_skipped": "Interaction skipped",
+        "intro_skipped": "Intro skipped",
+        "outro_skipped": "Outro skipped",
+        "preview_skipped": "Preview skipped",
+        "hook_skipped": "Hook/Greetings skipped",
+        "filler_skipped": "Tangents/Jokes skipped"
     },
     "donate": {
         "setting": {

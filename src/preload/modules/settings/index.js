@@ -80,7 +80,8 @@ const panelModules = [
     require('./panels/guide-tabs'),
     require('./panels/h264ify'),
     require('./panels/mac-permissions'),
-    require('./panels/userstyles')
+    require('./panels/userstyles'),
+    require('./panels/sponsorblock')
 ]
 
 const panels = {}
