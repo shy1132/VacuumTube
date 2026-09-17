@@ -5,6 +5,7 @@ module.exports = async () => {
     const config = configManager.get()
     let observer;
     let parentNode;
+    let player;
     let isWatching = false;
     let isObserving = false;
 
@@ -36,12 +37,17 @@ module.exports = async () => {
         if (pageUrl.pathname === '/watch') {
             isWatching = true;
             await functions.waitForCondition(() => !!document.querySelector('span[idomkey="duration"]'));
+            await functions.waitForCondition(() => !!document.querySelector('.html5-video-player'));
+            player = document.querySelector('.html5-video-player');
+
+            if (player.getVideoData().isLive) // Don't do anything during livestreams
+                return;
+
             let duration = document.querySelector('span[idomkey="duration"]');
             parentNode = duration.parentNode;
 
             observer = new MutationObserver(() => {
                 const durationText = duration.textContent.trim();
-                const player = document.querySelector('.html5-video-player');
                 const video_duration = player.getDuration();
                 const elapsedTime = player.getCurrentTime();
                 const currentPlacbackRate = player.getPlaybackRate();
