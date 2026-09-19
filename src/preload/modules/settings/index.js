@@ -54,6 +54,7 @@ let tabs = [
     { id: 'wayland_hdr', hide: process.platform !== 'linux' },
     { id: 'low_memory_mode', },
     { id: 'fullscreen', func: (value) => ipcRenderer.invoke('set-fullscreen', value) },
+    { id: 'support_ultrawide' },
     { id: 'no_window_decorations' },
     { id: 'keep_on_top', func: (value) => ipcRenderer.invoke('set-on-top', value) },
     { id: 'pause_on_blur' },

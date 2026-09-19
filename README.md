@@ -82,6 +82,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Allows you to choose which guide tabs are shown on the sidebar
 - Unlock Resolution
   - Removes monitor resolution cap and allows you to watch videos at any resolution
+- Support Ultrawide
+  - Expands the YouTube TV interface to fill ultrawide displays
 - Filter Video Codecs
   - Allows you to block specific video codecs, forcing YouTube to pick an alternative. Similiar to [h264ify](https://github.com/erkserkserks/h264ify), but more powerful
 - Hardware Decoding
