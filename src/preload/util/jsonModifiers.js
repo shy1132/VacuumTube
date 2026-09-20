@@ -3,21 +3,20 @@
 const modifiers = []
 const jsonParse = JSON.parse;
 
-JSON.parse = (...args) => {
-    let json = jsonParse.apply(this, args)
+JSON.parse = function (...args) {
+    let json = jsonParse(...args)
+
+    if (typeof json !== 'object' || json === null) return json;
 
     try {
-        if (typeof json === 'object') {
-            for (let modifier of modifiers) {
-                json = modifier(json)
-            }
+        for (let modifier of modifiers) {
+            json = modifier(json)
         }
-
-        return json;
     } catch (err) {
         console.error('a json modifier failed', err)
-        return json; //just to be safe, return what we have
     }
+
+    return json; //just to be safe, return what we have
 }
 
 function addModifier(func) {

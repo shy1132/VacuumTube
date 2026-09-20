@@ -64,7 +64,7 @@
         },
         "sponsorblock": {
             "title": "SponsorBlock",
-            "description": "Skips sponsor segments in YouTube videos using a crowdsourced database.",
+            "description": "Skips sponsor segments in YouTube videos using a crowdsourced database",
             "categories_link": "Segments to skip",
             "categories": {
                 "sponsor": {
@@ -147,6 +147,10 @@
             "disable_codec_title": "Disable {codec}",
             "disable_codec_description": "Block {codec} streams.",
             "codecs_link": "Blocked codecs"
+        },
+        "block_continue_watching": {
+            "title": "Block Continue Watching",
+            "description": "Blocks the \"Video paused. Continue watching?\" prompt that appears after being idle for a while"
         },
         "hardware_decoding": {
             "title": "Hardware Decoding",

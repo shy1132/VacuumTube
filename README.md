@@ -64,7 +64,7 @@ Otherwise, you can use a distribution package or a portable one. If you don't kn
  
 ## Settings
 
-VacuumTube has some settings that you can change, which are located directly in the YouTube settings. They can also be opened by pressing `Ctrl+O` on your keyboard.
+VacuumTube has some settings that you can change, which are located in the YouTube settings. They can also be opened by pressing `Ctrl+O` on your keyboard.
 
 - Ad Block
   - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
@@ -74,6 +74,8 @@ VacuumTube has some settings that you can change, which are located directly in 
   - Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database
 - Return Dislikes
   - Uses community data from the [Return YouTube Dislike API](https://returnyoutubedislike.com) to show rough dislike counts
+- Block Continue Watching
+  - Blocks the "Video paused. Continue watching?" prompt that appears after being idle for a while
 - Remove Super Resolution
   - Removes \"Super resolution\" (AI upscaled) qualities from low quality videos
 - Hide Shorts

@@ -27,6 +27,7 @@ const defaults = {
     dislikes: false, //readds youtube dislikes via https://www.returnyoutubedislike.com/
     remove_super_resolution: false, //block "super resolution" (ai upscaled qualities)
     hide_shorts: false, //hide youtube shorts from homepage
+    block_continue_watching: false, //blocks the "Video paused. Continue watching?" prompt that appears after being idle for a while
     h264ify: false, // enable codec blocking feature 
     h264ify_disable_webm: true, //when h264ify is enabled, block webm container streams
     h264ify_disable_vp8: true, //when h264ify is enabled, block vp8 streams

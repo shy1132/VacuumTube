@@ -58,6 +58,7 @@ module.exports = (locale) => [
                         type: 'toggle', key: 'sponsorblock', page: 'sponsorblock',
                         summary: (config) => ratio(locale, countOn(config, SPONSORBLOCK_KEYS), SPONSORBLOCK_KEYS.length)
                     },
+                    { type: 'toggle', key: 'block_continue_watching' },
                     { type: 'toggle', key: 'dearrow' },
                     { type: 'toggle', key: 'dislikes' }
                 ]
