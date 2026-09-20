@@ -1,7 +1,7 @@
 //various mouse controls to improve desktop usability
 
 module.exports = () => {
-    const ESCAPE_KEYCODE = 27;
+    const BACK = 32769;
 
     let visible = true;
     let lastUse = 0;
@@ -14,8 +14,8 @@ module.exports = () => {
     //right click to go back
     window.addEventListener('mousedown', (e) => {
         if (e.button === 2) {
-            simulateKeyDown(ESCAPE_KEYCODE)
-            setTimeout(() => simulateKeyUp(ESCAPE_KEYCODE), 50)
+            simulateKeyDown(BACK)
+            setTimeout(() => simulateKeyUp(BACK), 50)
         }
     })
 
