@@ -64,7 +64,7 @@ Otherwise, you can use a distribution package or a portable one. If you don't kn
  
 ## Settings
 
-VacuumTube has some settings that you can change, which are located directly in the YouTube settings. They can also be opened by pressing `Ctrl+O` on your keyboard or `R3` on your controller.
+VacuumTube has some settings that you can change, which are located directly in the YouTube settings. They can also be opened by pressing `Ctrl+O`, `Cmd+,` on macOS, or `R3` on your controller.
 
 - Ad Block
   - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
@@ -113,10 +113,12 @@ VacuumTube has some settings that you can change, which are located directly in 
 
 VacuumTube exposes a few extra input mappings for actions that may be desired on a desktop:
 
-- `Ctrl+O` or `R3`
+- `Ctrl+O`, `Cmd+,` (macOS), or `R3`
   - Open VacuumTube Settings
-- `Ctrl+Shift+C`
+- `Ctrl+Shift+C` or `Cmd+C` (macOS)
   - Copy current video URL to clipboard
+- `Cmd+Shift+C` (macOS)
+  - Copy current video URL at the current playback time
 - `Shift+Enter`
   - Simulate long-press of the Enter key
 - `Right Click`

@@ -40,7 +40,7 @@ module.exports = async () => {
         }, delay);
     })
 
-    //ctrl+shift+c to copy video url
+    //copy the current video url, optionally including the current time on macOS
     let lastShortId = null;
     rcMod.addInputModifier((c) => {
         if (c.reelWatchEndpoint) {
@@ -51,20 +51,30 @@ module.exports = async () => {
     })
 
     document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.shiftKey && e.key?.toLowerCase() === 'c') {
+        let macCopy = process.platform === 'darwin'
+            && e.metaKey && !e.ctrlKey && !e.altKey;
+        let legacyCopy = e.ctrlKey && e.shiftKey && !e.metaKey && !e.altKey;
+
+        if ((macCopy || legacyCopy) && e.key?.toLowerCase() === 'c') {
             let url;
+            let videoElement = window.yt?.player?.utils?.videoElement_;
 
             let isShort = !!document.querySelector('ytlr-shorts-page')?.classList?.contains('zylon-focus')
             if (isShort && lastShortId) {
                 url = `https://youtube.com/shorts/${lastShortId}`
             } else {
-                let baseUri = window.yt?.player?.utils?.videoElement_?.baseURI;
+                let baseUri = videoElement?.baseURI;
                 if (!baseUri || !baseUri.includes('/watch?v=')) return;
 
                 let id = baseUri.split('/watch?v=')[1]?.slice(0, 11)
                 if (!id) return;
 
                 url = `https://youtu.be/${id}`
+            }
+
+            if (macCopy && e.shiftKey) {
+                let currentTime = Math.max(0, Math.floor(Number(videoElement?.currentTime) || 0))
+                url += `?t=${currentTime}s`
             }
 
             e.preventDefault()
