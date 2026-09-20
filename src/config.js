@@ -36,9 +36,10 @@ const defaults = {
     wayland_hdr: false, //whether or not to enable wayland color management, which allows hdr but sometimes has issues on non-hdr systems
     low_memory_mode: false, //enables env_isLimitedMemory
     fullscreen: false, //whether or not to launch in fullscreen, changes automatically if user enters/exits fullscreen
-    features_enabled: false,
-    music_mode_feature: false,
-    music_mode: false,
+    features_enabled: false, //whether or not VacuumTube extended features are enabled
+    music_mode_feature: false, //whether or not the music mode *feature* is enabled
+    music_mode: false, //whether or not music mode *itself* is enabled
+    remaining_time_feature: false, //whether or not to show videos remaining playback time
     no_window_decorations: false, //whether or not to disable window decorations
     keep_on_top: false, //whether or not to keep window on top
     pause_on_blur: false, //whether or not to pause video when out of focus (such as tabbing out)
@@ -47,7 +48,6 @@ const defaults = {
     touch_overlay: true, //whether or not to enable the touch overlay interface when touch is detected
     controller_support: true, //whether or not to enable game controller support
     device_discoverability: true, //whether or not to enable DIAL support
-    remaining_time: false, //whether or not to show videos remaining playback time
     auto_update: true //whether or not to download and install updates automatically (only on installs that support it)
 }
 

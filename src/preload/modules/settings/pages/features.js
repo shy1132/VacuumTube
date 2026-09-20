@@ -7,13 +7,15 @@ module.exports = {
         {
             type: 'toggle',
             key: 'music_mode_feature',
-            title: locale.features.music_mode_feature_title,
-            description: locale.features.music_mode_feature_description,
+            title: locale.features.settings.music_mode.title,
+            description: locale.features.settings.music_mode.description,
             dependsOn: 'features_enabled'
         },
         {
             type: 'toggle',
             key: 'remaining_time',
+            title: locale.features.settings.remaining_time.title,
+            description: locale.features.settings.remaining_time.description,
             dependsOn: 'features_enabled'
         }
     ]
