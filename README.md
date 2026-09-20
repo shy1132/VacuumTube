@@ -131,6 +131,10 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
   - Decrease volume
 - `M` or `L3`
   - Toggle mute
+- `D`
+  - Increase playback speed
+- `A`
+  - Decrease playback speed
 - `C`
   - Toggle captions
 
@@ -183,7 +187,9 @@ Your config folder is located at:
 
 ## Building from Source
 
-Builds will be created in the dist/ folder
+You should always clone from the latest release tag, since latest commit may contain incomplete features and bugs.
+
+Builds will be created in the dist/ folder.
 
 ```sh
 git clone https://github.com/shy1132/VacuumTube

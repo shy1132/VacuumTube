@@ -68,6 +68,8 @@ async function main() {
         electron.app.commandLine.appendSwitch('--no-sandbox') //won't run without this in game mode for me
     }
 
+    await permissions.resetAfterUpdate({ appId, userData })
+
     config = configManager.init({
         fullscreen: !!runningOnSteam //if running on steam in game mode, override fullscreen to be on by default (note that this was broken from 1.3.0 until 1.3.6 due to config bug)
     })
@@ -298,9 +300,26 @@ async function createWindow() {
     let fullscreen = argv['fullscreen'] || runningOnSteam || config.fullscreen || false;
     let noWindowDecs = argv['no-window-decorations'] || config.no_window_decorations || false;
 
+    let width = 1200;
+    let height = 675;
+
+    if (argv['width'] !== undefined) {
+        const parsed = Number(argv['width'])
+        if (typeof argv['width'] === 'boolean' || !Number.isFinite(parsed) || parsed < 1) throw new Error(`invalid width: ${argv['width']}`);
+
+        width = Math.floor(parsed)
+    }
+
+    if (argv['height'] !== undefined) {
+        const parsed = Number(argv['height'])
+        if (typeof argv['height'] === 'boolean' || !Number.isFinite(parsed) || parsed < 1) throw new Error(`invalid height: ${argv['height']}`);
+
+        height = Math.floor(parsed)
+    }
+
     win = new electron.BrowserWindow({
-        width: 1200,
-        height: 675,
+        width,
+        height,
         backgroundColor: '#282828',
         fullscreen, //this sometimes doesn't work for people, so it's repeated below
         fullscreenable: true, //explicitly enable fullscreen functionality on macOS

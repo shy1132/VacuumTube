@@ -15,6 +15,14 @@ const defaults = {
     adblock: true, //block ads
     sponsorblock: false, //enable sponsorblock
     sponsorblock_uuid: crypto.randomUUID(), //sponsorblock wants to track this per user so you can ask it for stats later
+    sponsorblock_skip_sponsor: true,
+    sponsorblock_skip_selfpromo: false,
+    sponsorblock_skip_interaction: false,
+    sponsorblock_skip_intro: false,
+    sponsorblock_skip_outro: false,
+    sponsorblock_skip_preview: false,
+    sponsorblock_skip_hook: false,
+    sponsorblock_skip_filler: false,
     dearrow: false, //replaces titles and thumbnails with more accurate and less sensationalized versions from a crowdsourced database (https://dearrow.ajay.app/)
     dislikes: false, //readds youtube dislikes via https://www.returnyoutubedislike.com/
     remove_super_resolution: false, //block "super resolution" (ai upscaled qualities)

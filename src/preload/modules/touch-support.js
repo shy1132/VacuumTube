@@ -19,13 +19,13 @@ module.exports = () => {
     })
 
     window.addEventListener('load', () => {
-        const touchKeyCodeMap = {
-            'back':   27, //escape
-            'select': 13, //enter
-            'up':     38,
-            'down':   40,
-            'left':   37,
-            'right':  39
+        const touchKeyCodeMap = { //maps to gamepad keycodes
+            'back':   32769, //escape
+            'select': 32768, //enter
+            'up':     32785,
+            'down':   32786,
+            'left':   32787,
+            'right':  32788
         }
 
         function simulateKeyDown(keyCode) {

@@ -4,6 +4,7 @@ const ui = require('../util/ui')
 const rcMod = require('../util/resolveCommandModifiers')
 const patchFunction = require('../util/patchFunction')
 const localeProvider = require('../util/localeProvider')
+const { clipboard } = require('electron')
 
 module.exports = async () => {
     await localeProvider.waitUntilAvailable()
@@ -66,10 +67,12 @@ module.exports = async () => {
                 url = `https://youtu.be/${id}`
             }
 
-            navigator.clipboard.writeText(url)
+            e.preventDefault()
+            e.stopImmediatePropagation()
+            clipboard.writeText(url)
             ui.toast('VacuumTube', locale.general.video_copied)
         }
-    })
+    }, true)
 
     //c to toggle captions (like desktop)
     let captions = false;
