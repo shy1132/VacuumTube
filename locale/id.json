@@ -7,7 +7,7 @@
     "settings": {
         "generic": {
             "title": "Pengaturan",
-            "description": "Buka menu pengaturan VacuumTube. Akses menu ini dengan menekan Ctrl+O pada papan ketik atau tombol R3 pada pengontrol konsol.",
+            "description": "Buka menu pengaturan VacuumTube. Akses menu ini dengan menekan Ctrl+O pada papan ketik.",
             "button_label": "Buka Pengaturan VacuumTube",
             "hint": "Gunakan tombol panah untuk menjelajah"
         },

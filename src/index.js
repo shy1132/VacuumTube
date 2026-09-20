@@ -129,7 +129,13 @@ async function main() {
 
     await electron.app.whenReady()
 
-    updater.setup({ electron, autoUpdater, getWindow: () => win })
+    updater.setup({
+        electron,
+        autoUpdater,
+        getWindow: () => win,
+        isAutoUpdateEnabled: () => configManager.get().auto_update !== false
+    })
+
     permissions.setup({ appId })
 
     //general request modification
@@ -235,6 +241,10 @@ async function main() {
 
         if (win) {
             win.webContents.send('config-update', config)
+        }
+
+        if ('auto_update' in newConfig) {
+            updater.onPreferenceChanged()
         }
 
         event.returnValue = config;

@@ -32,8 +32,9 @@
       <description>
         <p>v2.0.0</p>
         <ul>
-          <li>Heavily improved settings menu (TBD)</li>
+          <li>Heavily improved settings menu</li>
           <li>Added configurable SponsorBlock categories</li>
+          <li>Added "Show Remaining Time" feature</li>
           <li>Added playback speed control keybinds (A + D)</li>
           <li>Added --width/--height CLI flags</li>
           <li>Improved controller support</li>

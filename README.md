@@ -64,12 +64,8 @@ Otherwise, you can use a distribution package or a portable one. If you don't kn
  
 ## Settings
 
-VacuumTube has some settings that you can change, which are located directly in the YouTube settings. They can also be opened by pressing `Ctrl+O` on your keyboard or `R3` on your controller.
+VacuumTube has some settings that you can change, which are located directly in the YouTube settings. They can also be opened by pressing `Ctrl+O` on your keyboard.
 
-- About
-  - Shows the installed version, platform, installation type, and update method
-  - Checks for new releases and links to the appropriate update source when an in-app update is unavailable
-  - Includes direct links to the project and its latest releases
 - Ad Block
   - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
 - SponsorBlock
@@ -103,7 +99,7 @@ VacuumTube has some settings that you can change, which are located directly in 
 - Pause on Blur
   - Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)
 - Features
-  - Contains extra experimental features that add functionality: **Music Mode**
+  - Contains extra experimental features that add functionality: **Music Mode**, **Show Remaining Time**
 - Custom CSS (Userstyles)
   - Enables injection of custom CSS styles. See the section below for more information
 - Touch Overlay
@@ -117,7 +113,7 @@ VacuumTube has some settings that you can change, which are located directly in 
 
 VacuumTube exposes a few extra input mappings for actions that may be desired on a desktop:
 
-- `Ctrl+O` or `R3`
+- `Ctrl+O`
   - Open VacuumTube Settings
 - `Ctrl+Shift+C`
   - Copy current video URL to clipboard

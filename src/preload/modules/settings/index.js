@@ -1,24 +1,11 @@
-/*
-notes for adding a new setting:
+//the VacuumTube settings overlay (ctrl+o)
+//to add or change a setting, see schema.js
 
-a plain on/off setting: add it to the `tabs` array as { id: (config key), hide?: (hide condition) }
-the config and locale key should all match up with the id
-hide can be used to make a setting conditional / platform specific
-
-a setting with its own interface (a custom panel rather than a single toggle):
-write a panel module under ./panels/ and add it to the `panelModules` array below
-a panel module exports:
-    id            - matches the tabs array entry
-    init(ctx)     - optional, receives { locale }
-    render()      - returns the panel's dom
-    onShow()      - optional, called when the overlay opens or the tab is selected
-    onFocusItem(el) - optional, called with the focused content element
-    onActivate(el)  - optional, called when a non-setting/non-button item is activated
-    setup()       - optional, one-time setup after the overlay dom is injected
-    actions       - optional, map of data-action -> async handler for vt-button clicks
-
-this is still a bit annoying to add to outside of boolean options, sorry
-*/
+//scripts
+//overlay.js builds the frame
+//render.js builds the current view from the schema
+//focus.js and nav.js handle arrow key movement
+//input.js maps events to the actions below
 
 const fs = require('fs')
 const path = require('path')
@@ -27,499 +14,137 @@ const configManager = require('../../config')
 const css = require('../../util/css')
 const localeProvider = require('../../util/localeProvider')
 const functions = require('../../util/functions')
-const controller = require('../../util/controller')
-const { el, createSettingItem, createTab } = require('./dom')
-const { updateViewportScroll, setupTouchScroll } = require('./scroll')
+const { renderCategory, renderPage } = require('./render')
+const overlay = require('./overlay')
+const focus = require('./focus')
+const input = require('./input')
+const scroll = require('./scroll')
+const pages = require('./pages')
 
-let locale = null; //gets set in exported function
-let config = configManager.get()
+let locale = null; //locale.settings
+let categories = []
+let markOpened = () => {}
 
-let overlayVisible = false;
-let currentTabIndex = 0;
-let currentItemIndex = 0;
-let focusArea = 'content' //'tabs', 'content', or 'close'
+const state = {
+    open: false,
+    category: 0,
+    page: null //{ id, fromHeader, returnFocus } while a page is open
+}
 
-//settings
-let tabs = [
-    { id: 'adblock' },
-    { id: 'sponsorblock' },
-    { id: 'dearrow' },
-    { id: 'dislikes' },
-    { id: 'remove_super_resolution' },
-    { id: 'hide_shorts' },
-    { id: 'guide_tabs' },
-    { id: 'unlock_resolution' },
-    { id: 'h264ify' },
-    { id: 'hardware_decoding' },
-    { id: 'wayland_hdr', hide: process.platform !== 'linux' },
-    { id: 'low_memory_mode', },
-    { id: 'fullscreen', func: (value) => ipcRenderer.invoke('set-fullscreen', value) },
-    { id: 'no_window_decorations' },
-    { id: 'keep_on_top', func: (value) => ipcRenderer.invoke('set-on-top', value) },
-    { id: 'pause_on_blur' },
-    { id: 'features' },
-    { id: 'userstyles' },
-    { id: 'touch_overlay' },
-    { id: 'controller_support' },
-    { id: 'device_discoverability' },
-    { id: 'mac_permissions', hide: process.platform !== 'darwin' },
-    { id: 'about' }
-]
+let renderCount = 0;
+let renderedView = null;
 
-tabs = tabs.filter(t => !t.hide)
+function currentCategory() {
+    return categories[state.category];
+}
 
-const dynamicFunction = {}
-for (let item of tabs) {
-    if (item.func) {
-        dynamicFunction[item.id] = item.func;
+function categoryTabIndex() {
+    return state.page?.fromHeader ? -1 : state.category;
+}
+
+async function render() {
+    if (!state.open) return;
+
+    const renderId = ++renderCount;
+    const config = configManager.get()
+    const context = { config, locale, pages, openPage, goBack }
+
+    let view;
+    if (state.page) {
+        const page = pages[state.page.id]
+        const sections = page.sections ? await page.sections(config, locale) : [ { rows: await page.rows(config, locale) } ]
+
+        if (renderId !== renderCount) return; //a newer render replaced this one
+
+        const parent = state.page.fromHeader ? locale.generic.title : locale.categories[currentCategory().id]?.title;
+        view = renderPage(page, sections, parent, context)
+    } else {
+        view = renderCategory(currentCategory(), context)
+    }
+
+    overlay.list().replaceChildren(view)
+    overlay.markSelectedTab(categoryTabIndex())
+
+    const viewId = `${currentCategory().id}/${state.page?.id}`
+    if (viewId !== renderedView) {
+        renderedView = viewId;
+        scroll.reset()
+    }
+
+    focus.restore()
+}
+
+//actions
+
+function openCategory(index) {
+    state.category = index;
+    state.page = null;
+    return render();
+}
+
+async function openPage(id, { fromHeader = false } = {}) {
+    const page = pages[id]
+
+    state.page = { id, fromHeader, returnFocus: focus.id() }
+    focus.want()
+    await render()
+
+    if (page.onOpen) {
+        await page.onOpen({ refresh: render })
+        await render()
     }
 }
 
-//custom panels (settings with their own interface instead of a single toggle), keyed by tab id
-const panelModules = [
-    require('./panels/features'),
-    require('./panels/about'),
-    require('./panels/guide-tabs'),
-    require('./panels/h264ify'),
-    require('./panels/mac-permissions'),
-    require('./panels/userstyles'),
-    require('./panels/sponsorblock')
-]
+//closes the open page, or the overlay if no page is open
+function goBack() {
+    if (!state.page) return close();
 
-const panels = {}
-for (const panel of panelModules) {
-    panels[panel.id] = panel;
+    const returnFocus = state.page.returnFocus;
+    state.page = null;
+    render().then(() => focus.restore(returnFocus))
 }
 
-function createOverlayDOM() {
-    const settingsTabs = tabs.map((tab, i) =>
-        createTab(tab.id, locale.settings[tab.id].title, i, i === 0)
-    )
+async function activate(node = focus.current()) {
+    if (!node?.vtActivate) return;
 
-    const settingsContent = tabs.map((tab, i) => {
-        const panel = panels[tab.id]
-        const content = panel
-            ? panel.render()
-            : createSettingItem(tab.id, locale.settings[tab.id].title, locale.settings[tab.id].description, config[tab.id], true)
-
-        return el('div', { className: `vt-content-panel${i === 0 ? ' vt-panel-active' : ''}`, dataPanel: tab.id }, [
-            content
-        ]);
-    })
-
-    //building the overlay structure
-    return el('div', {
-        id: 'vt-settings-overlay-root',
-        className: 'vt-settings-hidden',
-        tabindex: '-1'
-    }, [
-        el('div', {
-            className: 'vt-settings-backdrop'
-        }),
-        el('div', {
-            className: 'vt-settings-container'
-        }, [
-            el('div', { className: 'vt-settings-header' }, [
-                el('span', { className: 'vt-settings-title', textContent: locale.settings.generic.title }),
-                el('span', { className: 'vt-settings-hint', textContent: locale.settings.generic.hint }),
-                el('div', { className: 'vt-settings-close', dataAction: 'close' }, [
-                    el('span', { textContent: '✕' })
-                ])
-            ]),
-            el('div', { className: 'vt-settings-body' }, [
-                el('div', { className: 'vt-tabs-viewport' }, [
-                    el('div', { className: 'vt-settings-tabs', id: 'vt-settings-tabs' }, settingsTabs),
-                    el('div', { className: 'vt-scrollbar vt-tabs-scrollbar', id: 'vt-tabs-scrollbar' }, [
-                        el('div', { className: 'vt-scrollbar-thumb', id: 'vt-tabs-scrollbar-thumb' })
-                    ])
-                ]),
-                // Content for settings pages
-                el('div', { className: 'vt-settings-content' }, settingsContent)
-            ])
-        ])
-    ]);
-}
-
-function getOverlay() {
-    return document.getElementById('vt-settings-overlay-root');
-}
-
-//returns the active content panel's dom element
-function getActivePanelElement() {
-    return getOverlay()?.querySelector('.vt-content-panel.vt-panel-active') || null;
-}
-
-//returns the panel module for the active tab, or undefined for a plain toggle tab
-function getActivePanel() {
-    const panelElement = getActivePanelElement()
-    return panelElement ? panels[panelElement.dataset.panel] : undefined;
-}
-
-function showOverlay() {
-    const overlay = getOverlay()
-
-    overlayVisible = Date.now()
-    overlay.classList.remove('vt-settings-hidden')
-    overlay.style.opacity = '1'
-    overlay.style.pointerEvents = 'auto'
-    overlay.focus()
-
-    for (let panel of panelModules) {
-        panel.onShow?.()
-    }
-
-    currentTabIndex = 0;
-    currentItemIndex = 0;
-    updateFocus('content')
-}
-
-function hideOverlay() {
-    const overlay = getOverlay()
-    if (!overlay) return;
-
-    overlayVisible = false;
-    overlay.classList.add('vt-settings-hidden')
-    overlay.style.opacity = '0'
-    overlay.style.pointerEvents = 'none'
-    overlay.blur() //unfocus
-}
-
-function updateFocus(area) {
-    const overlay = getOverlay()
-    if (!overlay) return;
-
-    overlay.querySelectorAll('.vt-tab-focused, .vt-item-focused, .vt-close-focused').forEach((node) => {
-        node.classList.remove('vt-tab-focused', 'vt-item-focused', 'vt-close-focused')
-    })
-
-    focusArea = area;
-
-    if (area === 'tabs') {
-        const tab = overlay.querySelector(`.vt-tab[data-index="${currentTabIndex}"]`)
-        if (tab) {
-            tab.classList.add('vt-tab-focused')
-            updateViewportScroll('.vt-tabs-viewport', '#vt-settings-tabs', tab, '#vt-tabs-scrollbar-thumb')
-        }
-    } else if (area === 'content') {
-        const panel = getActivePanelElement()
-        if (panel) {
-            const focusedElement =
-                panel.querySelector(`.vt-setting-item[data-index="${currentItemIndex}"]`)
-                || panel.querySelector(`.vt-userstyle-item[data-index="${currentItemIndex}"]`)
-                || panel.querySelector(`.vt-guide-tab-item[data-index="${currentItemIndex}"]`)
-                || panel.querySelector(`.vt-button[data-index="${currentItemIndex}"]`)
-
-            if (focusedElement) {
-                focusedElement.classList.add('vt-item-focused')
-                panels[panel.dataset.panel]?.onFocusItem?.(focusedElement)
-            }
-        }
-    } else if (area === 'close') {
-        const closeBtn = overlay.querySelector('.vt-settings-close')
-        if (closeBtn) closeBtn.classList.add('vt-close-focused')
-    }
-}
-
-function selectTab(index) {
-    const overlay = getOverlay()
-    if (!overlay) return;
-
-    currentTabIndex = index;
-    currentItemIndex = 0;
-
-    overlay.querySelectorAll('.vt-tab').forEach(tab => {
-        tab.classList.remove('vt-tab-selected')
-    })
-
-    const selectedTab = overlay.querySelector(`.vt-tab[data-index="${index}"]`)
-    if (!selectedTab) return;
-
-    selectedTab.classList.add('vt-tab-selected')
-    const tabId = selectedTab.dataset.tab
-
-    overlay.querySelectorAll('.vt-content-panel').forEach(panel => {
-        panel.classList.remove('vt-panel-active')
-    })
-
-    const activePanel = overlay.querySelector(`.vt-content-panel[data-panel="${tabId}"]`)
-    if (activePanel) activePanel.classList.add('vt-panel-active')
-
-    panels[tabId]?.onShow?.()
-}
-
-function toggleSetting(configKey) {
-    const newValue = !config[configKey]
-    configManager.set({ [configKey]: newValue })
-    config = configManager.get()
-
-    const overlay = getOverlay()
-    if (overlay) {
-        const toggle = overlay.querySelector(`.vt-toggle[data-config="${configKey}"]`)
-        if (toggle) {
-            toggle.classList.toggle('vt-toggle-on', newValue)
-        }
-    }
-
-    if (dynamicFunction[configKey]) {
-        dynamicFunction[configKey](newValue)
-    }
-}
-
-//runs a vt-button's data-action against the active panel's action handlers
-async function handleButtonAction(action) {
-    const handler = getActivePanel()?.actions?.[action]
-    if (!handler) return;
+    focus.set(node)
 
     try {
-        await handler()
+        const running = node.vtActivate()
+        if (running instanceof Promise) {
+            await render()
+            await running;
+        }
     } catch (err) {
-        console.error(`[Settings Overlay] Failed to run button action ${action}:`, err)
+        console.error('[Settings Overlay] Action failed:', err)
     }
+
+    render()
 }
 
-//activates whatever content item is currently focused
-function activateFocusedItem() {
-    const panel = getActivePanelElement()
-    if (!panel) return;
+function open() {
+    if (window.ytcfg.data_.INNERTUBE_CLIENT_NAME === 'TVHTML5_FOR_KIDS') return;
 
-    const focused = panel.querySelector('.vt-item-focused')
-    if (!focused) return;
+    state.open = true;
+    state.page = null;
+    state.category = 0;
+    focus.want(`tab:${currentCategory().id}`) //opens on the category tab, not the first setting
+    markOpened()
 
-    if (focused.classList.contains('vt-setting-item')) {
-        if (focused.classList.contains('vt-setting-item-inactive')) return;
-        if (focused.dataset.setting) toggleSetting(focused.dataset.setting)
-    } else if (focused.classList.contains('vt-button')) {
-        handleButtonAction(focused.dataset.action)
+    overlay.show()
+    render()
+}
+
+function close() {
+    state.open = false;
+    overlay.hide()
+}
+
+function toggle() {
+    if (state.open) {
+        close()
     } else {
-        panels[panel.dataset.panel]?.onActivate?.(focused)
-    }
-}
-
-function getItemCount() {
-    const panel = getActivePanelElement()
-    if (!panel) return 0;
-
-    //count setting items, userstyle items, and buttons
-    const settingItems = panel.querySelectorAll('.vt-setting-item').length;
-    const userstyleItems = panel.querySelectorAll('.vt-userstyle-item').length;
-    const guideTabItems = panel.querySelectorAll('.vt-guide-tab-item').length;
-    const buttons = panel.querySelectorAll('.vt-button').length;
-
-    return settingItems + userstyleItems + guideTabItems + buttons;
-}
-
-function handleKeyDown(e) {
-    if (!overlayVisible) return;
-
-    const key = e.key;
-
-    //handle escape/back
-    if (key === 'Escape' || key === 'Backspace') {
-        e.preventDefault()
-        e.stopPropagation()
-        hideOverlay()
-        return;
-    }
-
-    //handle navigation
-    if (key === 'ArrowUp') {
-        e.preventDefault()
-        e.stopPropagation()
-        if (focusArea === 'tabs') {
-            if (currentTabIndex > 0) {
-                currentTabIndex--;
-                selectTab(currentTabIndex) //immediately switch tab
-                updateFocus('tabs')
-            }
-        } else if (focusArea === 'content') {
-            if (currentItemIndex > 0) {
-                currentItemIndex--;
-                updateFocus('content')
-            } else {
-                //move to close button when at top of content
-                focusArea = 'close'
-                updateFocus('close')
-            }
-        }
-    } else if (key === 'ArrowDown') {
-        e.preventDefault()
-        e.stopPropagation()
-        if (focusArea === 'close') {
-            //move from close button to content
-            focusArea = 'content'
-            currentItemIndex = 0;
-            updateFocus('content')
-        } else if (focusArea === 'tabs') {
-            if (currentTabIndex < tabs.length - 1) {
-                currentTabIndex++;
-                selectTab(currentTabIndex)
-                updateFocus('tabs')
-            }
-        } else if (focusArea === 'content') {
-            const maxIndex = getItemCount() - 1;
-            if (currentItemIndex < maxIndex) {
-                currentItemIndex++;
-                updateFocus('content')
-            }
-        }
-    } else if (key === 'ArrowLeft') {
-        e.preventDefault()
-        e.stopPropagation()
-        if (focusArea !== 'close') {
-            focusArea = 'tabs'
-            updateFocus('tabs')
-        }
-    } else if (key === 'ArrowRight') {
-        e.preventDefault()
-        e.stopPropagation()
-        if (focusArea === 'tabs') {
-            focusArea = 'content'
-            updateFocus('content')
-        } else if (focusArea === 'content') {
-            //move to close button from content
-            focusArea = 'close'
-            updateFocus('close')
-        }
-    } else if (key === 'Enter' || key === ' ') {
-        e.preventDefault()
-        e.stopPropagation()
-        if (focusArea === 'close') {
-            hideOverlay()
-        } else if (focusArea === 'tabs') {
-            focusArea = 'content'
-            updateFocus('content')
-        } else if (focusArea === 'content') {
-            activateFocusedItem()
-        }
-    }
-}
-
-const gamepadKeyMap = {
-    32768: 'Enter',      //a
-    32769: 'Escape',     //b
-    32780: 'ArrowUp',    //dpad up
-    32781: 'ArrowDown',  //dpad down
-    32782: 'ArrowLeft',  //dpad left
-    32783: 'ArrowRight', //dpad right
-
-    32785: 'ArrowUp',    //left stick up
-    32786: 'ArrowDown',  //left stick down
-    32787: 'ArrowLeft',  //left stick left
-    32788: 'ArrowRight'  //left stick right
-}
-
-function setupEventListeners() {
-    //global hotkey to toggle settings (Ctrl+O)
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key.toLowerCase() === 'o') {
-            e.preventDefault()
-            e.stopPropagation()
-            toggleSettingsOverlay()
-            return;
-        }
-    }, true)
-
-    //keyboard events
-    //block ALL keyboard input when overlay is visible to prevent leanback from receiving it
-    document.addEventListener('keydown', (e) => {
-        if (overlayVisible) {
-            e.preventDefault()
-            e.stopPropagation()
-            e.stopImmediatePropagation()
-            handleKeyDown(e)
-        }
-    }, true)
-
-    //block keyup events to prevent leanback from seeing them
-    document.addEventListener('keyup', (e) => {
-        if (overlayVisible) {
-            e.preventDefault()
-            e.stopPropagation()
-            e.stopImmediatePropagation()
-        }
-    }, true)
-
-    //mouse/touch events for the overlay
-    document.addEventListener('click', (e) => {
-        if ((Date.now() - overlayVisible) < 100) return;
-
-        const overlay = getOverlay()
-        if (!overlay) return;
-
-        //click on backdrop to close
-        if (e.target.classList.contains('vt-settings-backdrop')) {
-            hideOverlay()
-            return;
-        }
-
-        const closeBtn = e.target.closest('.vt-settings-close')
-        if (closeBtn) {
-            hideOverlay()
-            return;
-        }
-
-        const tab = e.target.closest('.vt-tab')
-        if (tab) {
-            const index = parseInt(tab.dataset.index)
-            selectTab(index)
-            focusArea = 'content'
-            updateFocus('content')
-
-            return;
-        }
-
-        const item = e.target.closest('.vt-setting-item')
-        if (item) {
-            if (item.classList.contains('vt-setting-item-inactive')) return;
-            const configKey = item.dataset.setting;
-            if (configKey) toggleSetting(configKey)
-            return;
-        }
-
-        const userstyleItem = e.target.closest('.vt-userstyle-item')
-        if (userstyleItem) {
-            getActivePanel()?.onActivate?.(userstyleItem)
-            return;
-        }
-
-        const guideTabItem = e.target.closest('.vt-guide-tab-item')
-        if (guideTabItem) {
-            getActivePanel()?.onActivate?.(guideTabItem)
-            return;
-        }
-
-        const button = e.target.closest('.vt-button')
-        if (button) {
-            handleButtonAction(button.dataset.action)
-            return;
-        }
-    }, true)
-
-    controller.on('down', (e) => {
-        if ((Date.now() - overlayVisible) < 100) return;
-
-        let key = gamepadKeyMap[e.code]
-        if (key) {
-            handleKeyDown({ key, preventDefault: () => {}, stopPropagation: () => {} })
-        }
-    })
-}
-
-function openSettingsOverlay() {
-    let isKids = window.ytcfg.data_.INNERTUBE_CLIENT_NAME === 'TVHTML5_FOR_KIDS'
-    if (isKids) return;
-
-    showOverlay()
-}
-
-function toggleSettingsOverlay() {
-    if (overlayVisible) {
-        hideOverlay()
-    } else {
-        let isKids = window.ytcfg.data_.INNERTUBE_CLIENT_NAME === 'TVHTML5_FOR_KIDS'
-        if (isKids) return;
-
-        showOverlay()
+        open()
     }
 }
 
@@ -527,51 +152,40 @@ module.exports = async () => {
     await localeProvider.waitUntilAvailable()
     await functions.waitForCondition(() => !!document.body)
 
-    locale = localeProvider.getLocale()
+    locale = localeProvider.getLocale().settings;
+    categories = require('./schema')(locale).filter((category) => !category.hide)
 
-    //let custom panels grab what they need
-    for (let panel of panelModules) {
-        panel.init?.({ locale })
-    }
+    css.inject('settings', fs.readFileSync(path.join(__dirname, 'style.css'), 'utf-8'))
 
-    //inject settings css
-    const cssPath = path.join(__dirname, 'style.css')
-    const text = fs.readFileSync(cssPath, 'utf-8')
+    document.body.appendChild(overlay.create(categories, locale, {
+        //activating a tab moves focus into the settings, arrow keys across the tabs do not
+        openCategory: async (index) => {
+            await openCategory(index)
+            focus.first()
+        },
+        openAbout: () => openPage('about', { fromHeader: true }),
+        close
+    }))
 
-    css.inject('settings', text)
+    scroll.attach(
+        document.querySelector('.vt-content-viewport'),
+        overlay.list(),
+        document.getElementById('vt-content-scrollbar-thumb')
+    )
 
-    //create overlay
-    const overlayElement = createOverlayDOM()
-    document.body.appendChild(overlayElement)
+    markOpened = input.listen({
+        isOpen: () => state.open,
+        toggle,
+        close,
+        back: goBack,
+        move: (direction) => focus.move(direction, openCategory),
+        activate
+    }).markOpened;
 
-    //setup touch scrolling for the tab strip, then let panels set up their own viewports
-    setupTouchScroll('.vt-tabs-viewport', '#vt-settings-tabs', '#vt-tabs-scrollbar-thumb')
-    for (let panel of panelModules) {
-        panel.setup?.()
-    }
+    ipcRenderer.on('config-update', render)
 
-    //setup event listeners
-    setupEventListeners()
-
-    ipcRenderer.on('config-update', (event, newConfig) => {
-        config = newConfig;
-        const overlay = getOverlay()
-        if (overlay) {
-            overlay.querySelectorAll('.vt-toggle').forEach(toggle => {
-                const configKey = toggle.dataset.config;
-                if (configKey && config[configKey] !== undefined) {
-                    toggle.classList.toggle('vt-toggle-on', config[configKey])
-                }
-            })
-
-            for (let panel of panelModules) {
-                panel.onConfigUpdate?.(config)
-            }
-        }
-    })
-
-    window.vtOpenSettingsOverlay = openSettingsOverlay;
-    window.vtToggleSettingsOverlay = toggleSettingsOverlay;
+    window.vtOpenSettingsOverlay = open;
+    window.vtToggleSettingsOverlay = toggle;
 }
 
-module.exports.openSettingsOverlay = openSettingsOverlay;
+module.exports.openSettingsOverlay = open;

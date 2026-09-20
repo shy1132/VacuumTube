@@ -4,15 +4,28 @@ const test = require('node:test')
 const package = require('../package.json')
 const { detectInstallation, getManualDownloadUrl } = require('../src/updater')
 
-function createUpdaterHarness(checkForUpdates) {
+//extra: setup() options to override, e.g. { platform, env, isAutoUpdateEnabled }
+function createUpdaterHarness(checkForUpdates, extra = {}) {
     const modulePath = require.resolve('../src/updater')
     delete require.cache[modulePath]
+
     const updater = require(modulePath)
     const handlers = new Map()
+    const listeners = new Map()
     const openedUrls = []
+    const checks = []
     const autoUpdater = new EventEmitter()
 
-    autoUpdater.checkForUpdates = checkForUpdates.bind(null, autoUpdater)
+    autoUpdater.checkForUpdates = (...args) => {
+        checks.push('check')
+        return checkForUpdates(autoUpdater, ...args);
+    }
+
+    autoUpdater.checkForUpdatesAndNotify = (...args) => {
+        checks.push('check-and-notify')
+        return checkForUpdates(autoUpdater, ...args);
+    }
+
     autoUpdater.downloadUpdate = async () => {}
     autoUpdater.quitAndInstall = () => {}
 
@@ -26,16 +39,20 @@ function createUpdaterHarness(checkForUpdates) {
                 getVersion: () => package.version
             },
             ipcMain: {
-                handle: (name, handler) => handlers.set(name, handler)
+                handle: (name, handler) => handlers.set(name, handler),
+                on: (name, listener) => listeners.set(name, listener)
             },
             shell: {
                 openExternal: async (url) => openedUrls.push(url)
             }
-        }
+        },
+        ...extra
     })
 
-    return { autoUpdater, handlers, openedUrls }
+    return { updater, autoUpdater, handlers, listeners, openedUrls, checks };
 }
+
+const appImage = { platform: 'linux', env: { APPIMAGE: '/tmp/VacuumTube.AppImage' } }
 
 test('development builds do not offer automatic updates', () => {
     assert.deepEqual(detectInstallation({ isPackaged: false }), {
@@ -93,8 +110,67 @@ test('Linux recognizes Flatpak and AppImage packaging without guessing package m
         existsSync: () => false
     }), {
         type: 'appimage',
-        canAutoUpdate: false
+        canAutoUpdate: true
     })
+})
+
+test('auto updating installs check, download, and install on quit by default', async () => {
+    const harness = createUpdaterHarness(async () => ({}), appImage)
+    await new Promise(setImmediate)
+
+    assert.deepEqual(harness.checks, [ 'check-and-notify' ])
+    assert.equal(harness.autoUpdater.autoDownload, true)
+    assert.equal(harness.autoUpdater.autoInstallOnAppQuit, true)
+
+    //an update that is already downloading on its own shouldn't offer a download button
+    harness.autoUpdater.emit('update-available', { version: '99.0.0' })
+    const info = await harness.handlers.get('get-about-info')()
+    assert.equal(info.status, 'downloading')
+    assert.equal(info.latestVersion, '99.0.0')
+})
+
+test('turning auto updates off stops the startup check, downloads, and install on quit', async () => {
+    let enabled = false;
+    const harness = createUpdaterHarness(async () => ({}), { ...appImage, isAutoUpdateEnabled: () => enabled })
+    await new Promise(setImmediate)
+
+    assert.deepEqual(harness.checks, [])
+    assert.equal(harness.autoUpdater.autoDownload, false)
+    assert.equal(harness.autoUpdater.autoInstallOnAppQuit, false)
+
+    //manual checks from the about page still work, and offer the download instead of starting it
+    await harness.handlers.get('check-for-updates')()
+    assert.deepEqual(harness.checks, [ 'check' ])
+    harness.autoUpdater.emit('update-available', { version: '99.0.0' })
+    assert.equal((await harness.handlers.get('get-about-info')()).status, 'available')
+
+    //turning it back on applies straight away
+    enabled = true;
+    harness.updater.onPreferenceChanged()
+    assert.equal(harness.autoUpdater.autoDownload, true)
+    assert.equal(harness.autoUpdater.autoInstallOnAppQuit, true)
+})
+
+test('turning auto updates back on checks right away if nothing has been checked yet', async () => {
+    let enabled = false;
+    const harness = createUpdaterHarness(async () => ({}), { ...appImage, isAutoUpdateEnabled: () => enabled })
+    await new Promise(setImmediate)
+
+    enabled = true;
+    harness.updater.onPreferenceChanged()
+    await new Promise(setImmediate)
+
+    assert.deepEqual(harness.checks, [ 'check-and-notify' ])
+})
+
+test('the settings overlay can ask whether auto updates apply to this install', () => {
+    const event = {}
+
+    createUpdaterHarness(async () => ({}), appImage).listeners.get('can-auto-update')(event)
+    assert.equal(event.returnValue, true)
+
+    createUpdaterHarness(async () => ({}), { platform: 'darwin' }).listeners.get('can-auto-update')(event)
+    assert.equal(event.returnValue, false)
 })
 
 test('manual download links select stable platform artifacts', () => {

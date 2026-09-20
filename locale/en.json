@@ -17,9 +17,46 @@
     "settings": {
         "generic": {
             "title": "Settings",
-            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere by pressing Ctrl+O on your keyboard, or R3 on your controller",
+            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere by pressing Ctrl+O on your keyboard",
             "button_label": "Open VacuumTube Settings",
-            "hint": "Use arrow keys to navigate"
+            "hint": "Use arrow keys to navigate",
+            "option_count": "{count} options",
+            "ratio": "{on} of {total}"
+        },
+        "categories": {
+            "general": {
+                "title": "General",
+                "description": "How the VacuumTube window behaves."
+            },
+            "playback": {
+                "title": "Playback",
+                "description": "Control what plays and how videos are presented."
+            },
+            "appearance": {
+                "title": "Appearance",
+                "description": "Change what the interface shows and how it looks."
+            },
+            "controls": {
+                "title": "Controls & Devices",
+                "description": "Input methods and connected devices."
+            },
+            "advanced": {
+                "title": "Advanced",
+                "description": "Performance tweaks and optional features."
+            }
+        },
+        "sections": {
+            "window": "Window",
+            "behavior": "Behavior",
+            "updates": "Updates",
+            "content": "Content",
+            "quality": "Quality & Compatibility",
+            "interface": "Interface",
+            "userstyles": "Custom CSS",
+            "input": "Input",
+            "devices": "Devices",
+            "performance": "Performance",
+            "experimental": "Experimental"
         },
         "adblock": {
             "title": "Ad Block",
@@ -28,6 +65,7 @@
         "sponsorblock": {
             "title": "SponsorBlock",
             "description": "Skips sponsor segments in YouTube videos using a crowdsourced database.",
+            "categories_link": "Segments to skip",
             "categories": {
                 "sponsor": {
                     "name": "Sponsor",
@@ -107,7 +145,8 @@
             "enable_title": "Enable codec filter (h264ify)",
             "enable_description": "Enables the codec filter. This can help with performance and battery life on slower devices, but may reduce the available resolutions.",
             "disable_codec_title": "Disable {codec}",
-            "disable_codec_description": "Block {codec} streams."
+            "disable_codec_description": "Block {codec} streams.",
+            "codecs_link": "Blocked codecs"
         },
         "hardware_decoding": {
             "title": "Hardware Decoding",
@@ -133,6 +172,10 @@
             "title": "Keep on Top",
             "description": "Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window"
         },
+        "auto_update": {
+            "title": "Automatic Updates",
+            "description": "Download new versions in the background and install them when VacuumTube closes. When off, you can still check for updates from the About page"
+        },
         "pause_on_blur": {
             "title": "Pause on Blur",
             "description": "Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)"
@@ -147,13 +190,18 @@
             "music_mode_feature_description": "Adds a Music Mode toggle to the video settings menu for audio-only playback using YouTube's native music view.",
             "music_mode_title": "Music Mode"
         },
+        "remaining_time": {
+            "title": "Show Remaining Time",
+            "description": "Displays the remaining video runtime in the player overlay, instead of total video duration. Takes current playback speed into account."
+        },
         "userstyles": {
             "title": "Custom CSS (Userstyles)",
             "description": "Place .css files in the userstyles folder to customize the interface. Changes are applied automatically",
             "warn_empty": "No userstyles found",
             "open_folder": "Open Userstyles folder",
             "enable": "Enable Userstyles",
-            "failed_to_load": "Failed to load userstyles"
+            "failed_to_load": "Failed to load userstyles",
+            "manage_link": "Manage userstyles"
         },
         "touch_overlay": {
             "title": "Touch Overlay",
@@ -166,10 +214,6 @@
         "device_discoverability": {
             "title": "Device Discoverability",
             "description": "Allows VacuumTube to be discovered by the YouTube mobile app on devices within the same local network. Relaunch after toggling"
-        },
-        "remaining_time": {
-            "title": "Show Remaining Time",
-            "description": "Displays the remaining video runtime in the player overlay, instead of total video duration. Takes current playback speed into account."
         },
         "mac_permissions": {
             "title": "Permissions",
@@ -199,7 +243,7 @@
         },
         "about": {
             "title": "About",
-            "description": "YouTube for TV on your desktop, with controller support and thoughtful enhancements.",
+            "description": "YouTube for TV on your desktop",
             "version": "Version {version}",
             "platform_label": "Platform",
             "installation_label": "Installation",
@@ -212,8 +256,7 @@
                 "linux": "Linux"
             },
             "architectures": {
-                "apple_silicon": "Apple silicon",
-                "arm64": "ARM64",
+                "arm64": "arm64",
                 "x64": "x64",
                 "ia32": "x86"
             },
@@ -241,12 +284,10 @@
                 "checking_button": "Checking…",
                 "current_title": "You’re up to date",
                 "current_detail": "VacuumTube {version} is the newest version available.",
-                "checked_badge": "Checked just now",
                 "check_again": "Check again",
                 "available_title": "VacuumTube {version} is available",
                 "available_automatic_detail": "Download the update now, then restart VacuumTube when it is ready.",
                 "available_manual_detail": "Download the latest build and replace your current copy.",
-                "current_badge": "Current version: {version}",
                 "download_update": "Download update",
                 "download_latest": "Download latest version",
                 "downloading_title": "Downloading update…",
@@ -254,7 +295,6 @@
                 "downloading_button": "Downloading… {percent}%",
                 "ready_title": "Update ready to install",
                 "ready_detail": "Restart VacuumTube to install version {version}.",
-                "ready_badge": "Download complete",
                 "install_update": "Restart and install",
                 "error_title": "Couldn’t check for updates",
                 "error_detail": "Check your connection and try again, or open the releases page.",
@@ -278,7 +318,7 @@
         "hook_skipped": "Hook/Greetings skipped",
         "filler_skipped": "Tangents/Jokes skipped"
     },
-    "donate": {
+    "donate_unused": {
         "setting": {
             "title": "Donate",
             "description": "Support VacuumTube's development by making a donation! You can donate by visiting shy.rocks/donate, or by pressing the button below to open the donation page in your browser",
