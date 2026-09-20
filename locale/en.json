@@ -167,6 +167,10 @@
             "title": "Device Discoverability",
             "description": "Allows VacuumTube to be discovered by the YouTube mobile app on devices within the same local network. Relaunch after toggling"
         },
+        "remaining_time": {
+            "title": "Show Remaining Time",
+            "description": "Displays the remaining video runtime in the player overlay, instead of total video duration. Takes current playback speed into account."
+        },
         "mac_permissions": {
             "title": "Permissions",
             "description": "Manage macOS permissions used by VacuumTube.",
