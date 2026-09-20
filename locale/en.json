@@ -250,7 +250,7 @@
         },
         "about": {
             "title": "About",
-            "description": "YouTube for TV on your desktop",
+            "description": "YouTube for TV, on your PC",
             "version": "Version {version}",
             "platform_label": "Platform",
             "installation_label": "Installation",
