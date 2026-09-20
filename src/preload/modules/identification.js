@@ -46,7 +46,7 @@ module.exports = () => {
         os: osName,
         os_version: osVersion,
         feature_switches: {
-            mdx_device_label: `VacuumTube on ${hostname}` //label that displays on cast
+            mdx_device_label: `${hostname} (VacuumTube)` //label that displays on cast. only mentions VacuumTube incase the user doesn't know their hostname
         }
     })
 

@@ -39,6 +39,7 @@
           <li>Added playback speed control keybinds (A + D)</li>
           <li>Added --width/--height CLI flags</li>
           <li>Improved controller support</li>
+          <li>Changed cast label to read better</li>
           <li>Fixed Ctrl+Shift+C</li>
         </ul>
       </description>
