@@ -1,4 +1,5 @@
-//controller support with console parity (normal leanback doesn't have this for some reason, not sure how the console apps do it...)
+//controller support with console parity
+//leanback maps gamepad codes (32768 + button index) itself, we just have to emit the key events for it
 
 const { ipcRenderer } = require('electron')
 const controller = require('../util/controller')
@@ -8,33 +9,16 @@ const configManager = require('../config')
 const config = configManager.get()
 
 module.exports = async () => {
-    const gamepadKeyCodeMap = { //aiming to maintain parity with the console versions of leanback
-        0:  13,   //a -> enter
-        1:  27,   //b -> escape
-        2:  170,  //x -> asterisk (search)
-        4:  115,  //left bumper -> f4 (back)
-        5:  116,  //right bumper -> f5 (forward)
-        6:  113,  //left trigger -> f2 (seek backwards)
-        7:  114,  //right trigger -> f3 (seek forwards)
-        8:  189,  //select -> minus (vacuumtube volume down)
-        9:  187,  //start -> equals (vacuumtube volume up)
-        10: 77,   //l3 (vacuumtube mute)
-        //11: 'vt-settings', //r3 -> (vacuumtube settings)
-        12: 38,   //dpad up -> arrow key up
-        13: 40,   //dpad down -> arrow key down
-        14: 37,   //dpad left -> arrow key left
-        15: 39,   //dpad right -> arrow key right
-
-        1012: 38,  //left stick up -> arrow key up
-        1014: 40,  //left stick down -> arrow key down
-        1011: 37,  //left stick left -> arrow key left
-        1013: 39   //left stick right -> arrow key right
+    const customKeyCodes = { //custom VacuumTube mappings
+        32776: 16001,  //select -> vt volume down
+        32777: 16002,  //start  -> vt volume up
+        32778: 16000   //l3     -> vt mute
     }
 
-    const fallbackKeyCode = 135; //f24, key isn't used by youtube but is picked up and brings up the menu thing (which all buttons do if they dont do anything else)
     let hasPressedAnyButton = false;
 
-    let runningOnSteam = await ipcRenderer.invoke('is-steam')
+    const runningOnSteam = await ipcRenderer.invoke('is-steam')
+
     if (runningOnSteam) {
         setTimeout(async () => {
             if (!hasPressedAnyButton) {
@@ -48,30 +32,15 @@ module.exports = async () => {
 
     controller.on('down', (e) => {
         hasPressedAnyButton = true;
-
-        let keyCode = gamepadKeyCodeMap[e.code]
-        if (!keyCode) keyCode = fallbackKeyCode;
-
-        simulateKeyDown(keyCode)
+        simulateKeyDown(customKeyCodes[e.code] ?? e.code)
     })
 
     controller.on('up', (e) => {
-        let keyCode = gamepadKeyCodeMap[e.code]
-        if (!keyCode) keyCode = fallbackKeyCode;
-
-        simulateKeyUp(keyCode)
+        simulateKeyUp(customKeyCodes[e.code] ?? e.code)
     })
 
     function simulateKeyDown(keyCode) {
         if (!config.controller_support) return;
-
-        if (keyCode === 'vt-settings') {
-            if (window.vtToggleSettingsOverlay) {
-                window.vtToggleSettingsOverlay()
-            }
-
-            return;
-        }
 
         let event = new Event('keydown')
         event.keyCode = keyCode;
@@ -80,10 +49,6 @@ module.exports = async () => {
 
     function simulateKeyUp(keyCode) {
         if (!config.controller_support) return;
-
-        if (keyCode === 'vt-settings') {
-            return;
-        }
 
         let event = new Event('keyup')
         event.keyCode = keyCode;

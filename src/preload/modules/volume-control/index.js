@@ -102,11 +102,12 @@ module.exports = async () => {
 
         const volumeStep = 5;
 
-        if (key === '+' || key === '=' || key === 187) {
+        //the 16xxx ones are custom VacuumTube keycodes used by controller-support.js
+        if (key === '+' || key === '=' || key === 187 || key === 16002) {
             volume = Math.min(100, volume + volumeStep)
-        } else if (key === '-' || key === 189) {
+        } else if (key === '-' || key === 189 || key === 16001) {
             volume = Math.max(0, volume - volumeStep)
-        } else if (key === 'm' || key === 'M' || key === 77) {
+        } else if (key === 'm' || key === 'M' || key === 77 || key === 16000) {
             muted = !muted;
         } else {
             return;

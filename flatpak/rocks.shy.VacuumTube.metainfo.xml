@@ -28,11 +28,15 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="1.x.x" date="2026-08-xx" type="stable">
+    <release version="2.0.0" date="2026-09-xx" type="stable">
       <description>
-        <p>v1.x.x</p>
+        <p>v2.0.0</p>
         <ul>
+          <li>Heavily improved settings menu (TBD)</li>
+          <li>Added configurable SponsorBlock categories</li>
           <li>Added playback speed control keybinds (A + D)</li>
+          <li>Added --width/--height CLI flags</li>
+          <li>Improved controller support</li>
           <li>Fixed Ctrl+Shift+C</li>
         </ul>
       </description>

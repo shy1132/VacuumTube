@@ -4,6 +4,8 @@ const localeProvider = require('../util/localeProvider')
 const configManager = require('../config')
 const config = configManager.get()
 
+const SPONSORBLOCK_CATEGORIES = [ 'sponsor', 'selfpromo', 'interaction', 'intro', 'outro', 'preview', 'hook', 'filler' ]
+
 module.exports = async () => {
     await localeProvider.waitUntilAvailable()
     let locale = localeProvider.getLocale()
@@ -47,8 +49,7 @@ module.exports = async () => {
         console.log('[SponsorBlock] Skipping sponsor segment')
 
         activeVideo.currentTime = matchingSegment[0].endTime;
-
-        ui.toast('VacuumTube', locale.sponsorblock.sponsor_skipped)
+        ui.toast('VacuumTube', locale.sponsorblock[`${matchingSegment[0].category}_skipped`])
     }
 
     window.addEventListener('hashchange', () => {
@@ -60,7 +61,10 @@ module.exports = async () => {
             const videoId = pageUrl.searchParams.get('v')
 
             // TODO: Full SponsorBlock config so you can choose what categories to skip/show
-            const categories = ['sponsor']
+            const categories = SPONSORBLOCK_CATEGORIES.filter(
+                category => config[`sponsorblock_skip_${category}`]
+            )
+
             sponsorBlock.getSegments(videoId, categories).then((segments) => {
                 sponsorBlockSegments = segments;
                 activeVideoId = videoId;
