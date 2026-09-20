@@ -56,6 +56,7 @@ let tabs = [
     { id: 'fullscreen', func: (value) => ipcRenderer.invoke('set-fullscreen', value) },
     { id: 'no_window_decorations' },
     { id: 'keep_on_top', func: (value) => ipcRenderer.invoke('set-on-top', value) },
+    { id: 'steam_overlay_compatibility', hide: process.platform !== 'win32' },
     { id: 'pause_on_blur' },
     { id: 'features' },
     { id: 'userstyles' },

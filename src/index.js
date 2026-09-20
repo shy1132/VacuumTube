@@ -27,6 +27,7 @@ electron.app.setPath('sessionData', sessionData)
 const configManager = require('./config.js')
 const permissions = require('./permissions.js')
 const userstyles = require('./userstyles.js')
+const { applySteamOverlayCompatibilitySwitches } = require('./steam-overlay-compatibility.js')
 
 //code
 /*
@@ -87,6 +88,11 @@ async function main() {
             electron.app.commandLine.appendSwitch(key, value)
         }
     }
+
+    applySteamOverlayCompatibilitySwitches({
+        commandLine: electron.app.commandLine,
+        config
+    })
 
     let enabledFeatures = electron.app.commandLine.getSwitchValue('enable-features').split(',')
     let disabledFeatures = electron.app.commandLine.getSwitchValue('disable-features').split(',')
