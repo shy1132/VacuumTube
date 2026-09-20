@@ -144,6 +144,16 @@ function countFocusable(rows) {
     return visibleRows(rows).filter((row) => [ 'toggle', 'link', 'button' ].includes(row.type)).length;
 }
 
+//shown under every category if the language file is missing strings
+function translateLink(context) {
+    const label = context.locale.generic.translate.replace('{language}', context.translation.name)
+
+    return focusable('translate', 'vt-translate', [
+        el('span', { textContent: label }),
+        el('span', { className: 'vt-chevron', textContent: '›' })
+    ], context.openTranslation);
+}
+
 function renderCategory(category, context) {
     const sections = category.sections.filter((section) => !section.hide && visibleRows(section.rows).length)
     const count = sections.reduce((n, section) => n + countFocusable(section.rows), 0)
@@ -160,7 +170,8 @@ function renderCategory(category, context) {
                 el('h3', { className: 'vt-section-title', textContent: context.locale.sections[section.id] || '' }),
                 card(section.rows, context)
             ])
-        ))
+        )),
+        context.translation.complete ? null : translateLink(context)
     ]);
 }
 

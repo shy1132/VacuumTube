@@ -21,6 +21,7 @@
             "button_label": "Open VacuumTube Settings",
             "hint": "Use arrow keys to navigate",
             "option_count": "{count} options",
+            "translate": "Help translate VacuumTube to {language}",
             "ratio": "{on} of {total}"
         },
         "categories": {

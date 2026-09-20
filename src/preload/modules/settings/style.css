@@ -160,7 +160,7 @@ styles the frame and the generic row types from render.js only
 }
 
 .vt-content-list {
-    padding: 24px 28px 32px;
+    padding: 24px 28px 16px;
     transition: transform 0.15s ease-out;
 }
 
@@ -168,7 +168,7 @@ styles the frame and the generic row types from render.js only
     display: flex;
     align-items: flex-end;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .vt-view-title {
@@ -427,6 +427,26 @@ styles the frame and the generic row types from render.js only
     padding: 10px 16px;
     font-size: 14px;
     color: var(--vt-muted);
+}
+
+/*translation prompt under a category*/
+
+.vt-translate {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    margin-top: 16px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: var(--vt-muted);
+    cursor: pointer;
+}
+
+.vt-translate:hover,
+.vt-translate.vt-focused {
+    color: var(--vt-text);
 }
 
 /*back button on pages*/

@@ -1,6 +1,6 @@
 # Localizing VacuumTube
 
-VacuumTube has very few strings of it's own, but since it integrates with YouTube directly, it makes sense to localize them.
+VacuumTube has a good amount of strings of its own, and since it integrates with YouTube directly, it makes sense to localize them.
 
 To get started on your own translation, you may need to have some JSON experience. If you're inexperienced, you can likely still do it.
 
@@ -22,6 +22,6 @@ Otherwise, copy the `en.json` file and paste it in the same directory. Rename it
 
 After that, just go through every string and translate it to the desired language. Make sure it's properly formatted and gramatically correct, as every other string in the regular YouTube app is.
 
-I'd recommend doing this in a more sophisticated editor that does syntax highlighting, especially if you're inexperienced with JSON since you may not know what parts to translate. Only translate the text between quotes, and make sure not to translate things like "YouTube", "VacuumTube", and "h264ify", since those are names, and don't translate variables like `{path}`.
+I'd recommend doing this in a more sophisticated editor that does syntax highlighting, especially if you're inexperienced with JSON since you may not know what parts to translate. Only translate the text between quotes, and make sure not to translate things like "YouTube", "VacuumTube", and "SponsorBlock", since those are names, and don't translate variables like `{path}`.
 
 Once you're done translating, either create a PR with your fork, or if you didn't know how to fork, open an issue with the translated JSON file.

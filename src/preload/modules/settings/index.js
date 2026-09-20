@@ -9,7 +9,7 @@
 
 const fs = require('fs')
 const path = require('path')
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, shell } = require('electron')
 const configManager = require('../../config')
 const css = require('../../util/css')
 const localeProvider = require('../../util/localeProvider')
@@ -47,7 +47,15 @@ async function render() {
 
     const renderId = ++renderCount;
     const config = configManager.get()
-    const context = { config, locale, pages, openPage, goBack }
+    const context = {
+        config,
+        locale,
+        pages,
+        openPage,
+        goBack,
+        translation: localeProvider.getTranslation(),
+        openTranslation: () => shell.openExternal('https://github.com/shy1132/VacuumTube/blob/main/locale/README.md')
+    }
 
     let view;
     if (state.page) {
