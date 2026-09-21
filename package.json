@@ -15,6 +15,7 @@
     "keywords": [],
     "author": "shy (shy@shy.rocks)",
     "license": "MIT",
+    "desktopName": "rocks.shy.VacuumTube",
     "build": {
         "appId": "rocks.shy.VacuumTube",
         "productName": "VacuumTube",
@@ -31,6 +32,7 @@
                     "Keywords": "YouTube;YT;"
                 }
             },
+            "syncDesktopName": true,
             "maintainer": "shy@shy.rocks",
             "target": [
                 {
