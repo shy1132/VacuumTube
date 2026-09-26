@@ -7,7 +7,7 @@ const minimist = require('minimist')
 const stringArgv = require('string-argv')
 const package = require('../package.json')
 
-const appId = package.build?.appId || 'rocks.shy.VacuumTube'
+const appId = package.build.appId;
 
 const argv = minimist(process.argv)
 
@@ -28,27 +28,9 @@ const configManager = require('./config.js')
 const permissions = require('./permissions.js')
 const updater = require('./updater.js')
 const userstyles = require('./userstyles.js')
+const ua = require('./ua.js')
 
 //code
-/*
-about the user agent:
-leanback is extremely weird about user agents, a lot of ones do really different things for no reason. i can't imagine what the backend code looks like for this
-but, this is using the most optimal one i've been able to create
-
-Mozilla/5.0 makes youtube think it's a "DESKTOP" device
-(PS4; Leanback Shell) is part of the user agent of the ps4 youtube app, i chose ps4 because it's the most versatile in this situation since it gives the most up-to-date ui
-Cobalt/25.lts.40.1035033 is a fairly new cobalt version, cobalt is the browser the tv youtube app tends to run in internally, using the latest seems to trigger playback issues
-ON CLIENT SIDE: Cobalt/19.lts.0-qa is an older cobalt version so that youtube doesn't automatically assume widevine is supported
-the actual ps4 ua has more to it, but this is all that's needed for it to work here
-the "compatible" and "VacuumTube" part are just for transparency's sake, and to make sure they can detect it so i'm not screwing up any internal logging/analytics
-
-this is only used because you have to have a good user agent to be "allowed" onto leanback, and many innertube endpoints check the user agent specifically to know what to send (e.g. high quality thumbnails)
-VacuumTube overrides some things to identify properly, but this user agent has to be sent with every request to youtube sadly
-*/
-const youtubeClientUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/19.lts.0-qa; compatible; VacuumTube/${package.version}`
-const youtubeUserAgent = `Mozilla/5.0 (PS4; Leanback Shell) Cobalt/25.lts.40.1035033; compatible; VacuumTube/${package.version}`
-const userAgent = `VacuumTube/${package.version}` //for anything else
-
 const youtubeUrl = 'https://www.youtube.com/tv'
 const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI === '1'
 
@@ -126,6 +108,8 @@ async function main() {
     electron.app.on('before-quit', () => {
         configManager.save()
     })
+
+    electron.app.userAgentFallback = ua.userAgent; //default for anything not covered below (e.g. workers)
 
     await electron.app.whenReady()
 
@@ -218,12 +202,7 @@ async function main() {
     })
 
     electron.session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-        let url = new URL(details.url)
-        if (url.host === 'www.youtube.com') {
-            details.requestHeaders['User-Agent'] = youtubeUserAgent;
-        } else {
-            details.requestHeaders['User-Agent'] = userAgent;
-        }
+        ua.applyToRequestHeaders(new URL(details.url), details.requestHeaders)
 
         callback({
             requestHeaders: details.requestHeaders
@@ -391,7 +370,7 @@ async function createWindow() {
 
     if (argv['debug-gpu']) {
         console.log('Loading chrome://gpu')
-        win.loadURL('chrome://gpu', { userAgent })
+        win.loadURL('chrome://gpu')
         return;
     }
 
@@ -400,8 +379,11 @@ async function createWindow() {
         win.webContents.toggleDevTools()
     }
 
+    await win.loadURL('about:blank') //the metadata override can only be applied once there's a page
+    await ua.applyToWebContents(win.webContents)
+
     console.log(`Loading ${youtubeUrl}`)
-    win.loadURL(youtubeUrl, { userAgent: youtubeClientUserAgent })
+    win.loadURL(youtubeUrl, { userAgent: ua.userAgent })
 
     //remember fullscreen preference
     win.on('enter-full-screen', () => {

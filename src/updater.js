@@ -1,9 +1,10 @@
 const fs = require('fs')
 const path = require('path')
+const package = require('../package.json')
 
 const PROJECT_URL = 'https://github.com/shy1132/VacuumTube'
 const RELEASES_URL = `${PROJECT_URL}/releases/latest`
-const FLATPAK_URL = 'https://flathub.org/apps/rocks.shy.VacuumTube'
+const FLATPAK_URL = `https://flathub.org/apps/${package.build.appId}`
 
 let app;
 let autoUpdater;

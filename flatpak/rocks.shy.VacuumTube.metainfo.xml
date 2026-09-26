@@ -32,6 +32,7 @@
       <description>
         <p>v2.0.0</p>
         <ul>
+          <li>VacuumTube now gets the latest YouTube UI</li>
           <li>Overhauled settings menu with categories and About page</li>
           <li>Added "Block Continue Watching" setting</li>
           <li>Added "Show Remaining Time" feature</li>
@@ -41,6 +42,7 @@
           <li>Improved controller support</li>
           <li>Changed cast label to read better</li>
           <li>Fixed Ctrl+Shift+C</li>
+          <li>Massive internal improvements</li>
         </ul>
       </description>
     </release>
