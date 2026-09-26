@@ -8,10 +8,6 @@
             "title": "Reklam Engelleyici",
             "description": "Video ve yayıncı reklamlarını engeller, YouTube engelleyicileri engelleme yöntemlerine tabi değildir"
         },
-		"sponsorblock_full_unused": {
-            "title": "Sponsor Engelleyici",
-            "description": "Kitlesel veritabanı kullanarak YouTube videolarındaki sponsor bölümlerini atlar. Ayrıca girişleri, çıkışları ve abonelik hatırlatıcılarını atlamayı da destekler"
-        },
 		"dearrow": {
             "title": "DeArrow",
             "description": "Başlıkları ve küçük resimleri, herkese açık veritabanından alınan daha doğru ve daha az sansasyonel sürümlerle değiştirir. Sunucudan bilgi alması gerektiğinden yüklemeyi yavaşlatır"
@@ -38,7 +34,7 @@
         },
         "userstyles": {
             "title": "Özel CSS (Kullanıcı Stilleri)",
-            "description": "Özel CSS stillerinin eklenmesini sağlar. .css dosyalarınızı {path} klasörüne yerleştirin."
+            "description": "Özel CSS stillerinin eklenmesini sağlar. .css dosyalarınızı userstyles klasörüne yerleştirin."
         }
     }
 }

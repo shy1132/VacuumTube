@@ -147,7 +147,7 @@ module.exports = () => {
     localeProvider.waitUntilAvailable().then(() => {
         const locale = localeProvider.getLocale()
         labels = {
-            title: locale.settings?.features?.music_mode_title || labels.title
+            title: locale.settings?.features?.settings?.music_mode?.title || labels.title
         }
     })
 

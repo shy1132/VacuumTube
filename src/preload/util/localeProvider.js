@@ -12,6 +12,8 @@ function countMissing(base, partial) {
     let missing = 0;
 
     for (const [ key, value ] of Object.entries(base)) {
+        if (key.endsWith('_unused')) continue; //not shown anywhere, doesn't count
+
         const translated = partial?.[key]
 
         if (value && typeof value === 'object') {

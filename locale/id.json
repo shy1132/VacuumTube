@@ -67,7 +67,7 @@
     "sponsorblock": {
         "sponsor_skipped": "Sponsor dilewati"
     },
-    "donate": {
+    "donate_unused": {
         "setting": {
             "title": "Mari Berdonasi",
             "description": "Dukung pengembangan VacuumTube dengan berdonasi ke shy.rocks/donate. Tekan tombol berikut untuk membuka situs donasi di peramban Anda.",

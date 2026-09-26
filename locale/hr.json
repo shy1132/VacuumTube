@@ -8,10 +8,6 @@
             "title": "Bloker Reklama",
             "description": "Besprijekorno blokira video i feed oglase, ne podliježe YouTubeovim metodama protiv blokiranja"
         },
-        "sponsorblock_full_unused": {
-            "title": "Sponzorski blokator",
-            "description": "Preskače segmente sponzora u YouTube videozapisima koristeći bazu podataka prikupljenu od mnoštva korisnika. Također podržava preskakanje uvoda, završetaka i podsjetnika za pretplatu"
-        },
         "dearrow": {
             "title": "DeArrow",
             "description": "Zamjenjuje naslove i sličice točnijim, manje senzacionalističkim verzijama iz javne baze podataka koju prikupljaju korisnici. Usporava učitavanje jer mora dohvaćati informacije s poslužitelja"
