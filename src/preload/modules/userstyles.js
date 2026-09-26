@@ -36,16 +36,10 @@ async function loadUserstyles() {
 	try {
 		const styles = await ipcRenderer.invoke('get-userstyles')
 
-		let anyRemoved = false;
-		for (let style of config.disabled_userstyles) {
-			if (!styles.includes(style)) {
-				anyRemoved = true;
-				config.disabled_userstyles.splice(config.disabled_userstyles.indexOf(style), 1)
-			}
-		}
-
-		if (anyRemoved) {
-			configManager.set(config)
+		const disabled = config.disabled_userstyles.filter((filename) => styles.some((style) => style.filename === filename))
+		if (disabled.length !== config.disabled_userstyles.length) {
+			configManager.set({ disabled_userstyles: disabled })
+			config = configManager.get()
 		}
 
 		styles.forEach(({ filename, css }) => {
@@ -89,7 +83,7 @@ module.exports = async () => {
 	})
 
 	ipcRenderer.on('userstyle-updated', (event, { filename, css }) => {
-		if (config.userstyles) {
+		if (config.userstyles && !config.disabled_userstyles.includes(filename)) {
 			injectCSS(filename, css)
 		}
 	})

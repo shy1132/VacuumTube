@@ -50,7 +50,10 @@ function pollGamepads() {
     const gamepads = navigator.getGamepads()
 
     for (let index in pressedButtons) {
-        if (!gamepads[index]) pressedButtons[index] = null;
+        if (!gamepads[index] && pressedButtons[index]) { //disconnected
+            releaseAll(pressedButtons[index])
+            pressedButtons[index] = null;
+        }
     }
 
     const steamInput = gamepads.find(g => g && g.id.endsWith('(STANDARD GAMEPAD Vendor: 28de Product: 11ff)'))
@@ -124,13 +127,26 @@ function release(code) {
     stopButtonRepeat()
 }
 
+function releaseAll(state) {
+    for (let code in state.buttons) {
+        if (state.buttons[code]) {
+            release(Number(code))
+        }
+    }
+
+    for (let code of Object.values(state.axes)) {
+        if (code) {
+            release(code)
+        }
+    }
+}
+
 function buttonDown(code) {
     if (!focused) return;
     emitter.emit('down', { code })
 }
 
 function buttonUp(code) {
-    if (!focused) return;
     emitter.emit('up', { code })
 }
 

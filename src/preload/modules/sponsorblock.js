@@ -52,23 +52,31 @@ module.exports = async () => {
         ui.toast('VacuumTube', locale.sponsorblock[`${matchingSegment[0].category}_skipped`])
     }
 
-    window.addEventListener('hashchange', () => {
+    const onNavigate = () => {
         if (!config.sponsorblock) return;
 
         const pageUrl = new URL(location.hash.substring(1), location.href)
 
         if (pageUrl.pathname === '/watch') {
             const videoId = pageUrl.searchParams.get('v')
+            if (videoId === activeVideoId) return;
 
-            // TODO: Full SponsorBlock config so you can choose what categories to skip/show
+            sponsorBlockSegments = []
+            activeVideoId = videoId;
+
             const categories = SPONSORBLOCK_CATEGORIES.filter(
                 category => config[`sponsorblock_skip_${category}`]
             )
 
             sponsorBlock.getSegments(videoId, categories).then((segments) => {
+                if (activeVideoId !== videoId) return; //navigated to another video before this one finished
+
                 sponsorBlockSegments = segments;
-                activeVideoId = videoId;
                 attachToVideo()
+            }).catch((err) => {
+                if (err?.status !== 404) { //404 just means the video has no segments
+                    console.error('[SponsorBlock] Failed to get segments for', videoId, err)
+                }
             })
         } else {
             activeVideo = null;
@@ -79,5 +87,8 @@ module.exports = async () => {
                 attachVideoTimeout = null;
             }
         }
-    })
+    }
+
+    window.addEventListener('hashchange', onNavigate)
+    onNavigate()
 }

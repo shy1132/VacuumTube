@@ -1,6 +1,7 @@
 //shows the remaining time in place of the elapsed time in the player (e.g. -4:17 4:27), like the official apps do
 
 const configManager = require('../config')
+const shortcuts = require('../util/shortcuts')
 
 function isEnabled(config) {
     return config.features_enabled === true && config.remaining_time_feature === true;
@@ -37,7 +38,6 @@ module.exports = () => {
     let player = null;
     let videoId = null;
     let showRemaining = true; //toggled with R, reset for each video
-    let elapsedText = null; //the real elapsed time, from the last time youtube rendered it
     let showing = false;
 
     function getElapsedTextNode() {
@@ -54,17 +54,16 @@ module.exports = () => {
         if (!node) return;
 
         if (!isActive()) {
-            if (showing && elapsedText !== null) node.data = elapsedText; //put the elapsed time back right away instead of waiting for youtube to update it
+            if (showing && player) { //put the elapsed time back, youtube doesn't render it when controls are hidden
+                node.data = secondsToTime(Math.floor(player.getCurrentTime()))
+            }
+
             showing = false;
             return;
         }
 
         let remaining = getRemainingTime(player)
         if (node.data === remaining) return;
-
-        if (!showing || !node.data.startsWith('-')) {
-            elapsedText = node.data;
-        }
 
         node.data = remaining;
         showing = true;
@@ -99,6 +98,7 @@ module.exports = () => {
 
     document.addEventListener('keydown', (e) => {
         if (e.key !== 'r' && e.key !== 'R') return;
+        if (!shortcuts.isShortcutKey(e)) return;
         if (!isEnabled(config) || !isWatchPage()) return;
 
         showRemaining = !showRemaining;

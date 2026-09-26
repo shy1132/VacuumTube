@@ -3,15 +3,13 @@ const electron = require('electron')
 const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const fs = require('fs')
-const minimist = require('minimist')
+const { parseArgs } = require('util')
 const stringArgv = require('string-argv')
 const package = require('../package.json')
 
 const appId = package.build.appId;
 
-const argv = minimist(process.argv.slice(process.defaultApp ? 2 : 1), {
-    boolean: [ 'version', 'v', 'fullscreen', 'no-window-decorations', 'enable-devtools', 'debug-gpu' ] //otherwise a deeplink after one of these would be taken as its value
-})
+const argv = parseCommandLine(process.argv.slice(process.defaultApp ? 2 : 1))
 
 electron.app.setName('VacuumTube')
 
@@ -40,7 +38,7 @@ let win;
 let config;
 
 async function main() {
-    if (argv['version'] || argv['v']) {
+    if (argv['version']) {
         process.stdout.write(`VacuumTube ${package.version}\n`, () => { //console.log then process.exit isn't safe since console.log is async, so that's why it's done with process.stdout instead
             process.exit(0)
         })
@@ -77,15 +75,18 @@ async function main() {
     const flagsPath = path.join(userData, 'flags.txt')
     if (fs.existsSync(flagsPath)) {
         let extraFlags = fs.readFileSync(flagsPath, 'utf-8').trim()
-        let arg = stringArgv.parseArgsStringToArgv(extraFlags)
-        let parsed = minimist(arg)
 
-        for (let [ key, value ] of Object.entries(parsed)) {
-            if (key === '_') {
-                continue;
+        let { tokens } = parseArgs({ args: stringArgv.parseArgsStringToArgv(extraFlags), strict: false, allowPositionals: true, tokens: true })
+
+        for (let token of tokens) {
+            if (token.kind !== 'option') continue;
+
+            //added exactly as written, --name or --name=value
+            if (token.inlineValue) {
+                electron.app.commandLine.appendSwitch(token.name, token.value)
+            } else {
+                electron.app.commandLine.appendSwitch(token.name)
             }
-
-            electron.app.commandLine.appendSwitch(key, value)
         }
     }
 
@@ -426,6 +427,47 @@ async function createWindow() {
     })
 }
 
+const commandLineOptions = {
+    version: { type: 'boolean', short: 'v' },
+    fullscreen: { type: 'boolean' },
+    'no-window-decorations': { type: 'boolean' },
+    'enable-devtools': { type: 'boolean' },
+    'debug-gpu': { type: 'boolean' },
+    width: { type: 'string' },
+    height: { type: 'string' },
+    portable: { type: 'string', short: 'p', optionalValue: true } //the path is optional
+}
+
+function parseCommandLine(args) {
+    //util.parseArgs doesn't support options with an optional value, it always takes the next argument
+    //so when one of those isn't followed by a value, it's given an empty one explicitly (e.g. --portable --fullscreen -> --portable= --fullscreen)
+    let optionalValueFlags = new Map()
+    for (let [ name, option ] of Object.entries(commandLineOptions)) {
+        if (!option.optionalValue) continue;
+
+        optionalValueFlags.set(`--${name}`, name)
+        if (option.short) optionalValueFlags.set(`-${option.short}`, name)
+    }
+
+    args = args.map((arg, i) => {
+        let next = args[i + 1]
+        if (optionalValueFlags.has(arg) && (next === undefined || next.startsWith('-'))) {
+            return `--${optionalValueFlags.get(arg)}=`;
+        }
+
+        return arg;
+    })
+
+    let { values, positionals } = parseArgs({
+        args,
+        options: commandLineOptions,
+        strict: false, //chromium switches can be passed too
+        allowPositionals: true
+    })
+
+    return { ...values, _: positionals };
+}
+
 function getDeeplink() {
     let deeplink = argv._[argv._.length - 1]
     if (!deeplink) return null;
@@ -470,16 +512,14 @@ function portable() {
         if (fs.existsSync(path.join(exeDir, './portable.txt'))) {
             let str = fs.readFileSync(path.join(exeDir, './portable.txt'), 'utf-8')
             if (str && str.trim().length !== 0) {
-                portablePath = str.trim()
+                portablePath = path.resolve(exeDir, str.trim()) //relative to the executable
             } else {
                 portablePath = path.join(exeDir, 'data')
             }
-        } else if (argv['portable'] === true || argv['p'] === true) { //arg specified, but not set to any particular path 
-            portablePath = path.join(exeDir , 'data')
-        } else if (argv['portable']) { //--portable arg specified, set to particular path
-            portablePath = argv['portable']
-        } else if (argv['p']) { //-p arg specified, set to particular path
-            portablePath = argv['p']
+        } else if (argv['portable'] === '') { //arg specified, but not set to any particular path
+            portablePath = path.join(exeDir, 'data')
+        } else if (argv['portable']) { //portable arg set to particular path (relative to where it was launched from)
+            portablePath = path.resolve(argv['portable'])
         }
 
         return portablePath;
@@ -489,4 +529,10 @@ function portable() {
     }
 }
 
-main()
+main().catch((err) => {
+    //without this, the process would stay running with no window
+
+    console.error('Failed to start', err)
+    electron.dialog.showErrorBox('VacuumTube failed to start', err?.stack || String(err)) //i don't like doing this but it's a rare case and it's not worth risking another failure by launching a pretty window for it
+    electron.app.exit(1)
+})

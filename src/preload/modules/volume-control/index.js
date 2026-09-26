@@ -4,6 +4,7 @@ const rcMod = require('../../util/resolveCommandModifiers')
 const css = require('../../util/css')
 const functions = require('../../util/functions')
 const configManager = require('../../config')
+const shortcuts = require('../../util/shortcuts')
 
 const config = configManager.get()
 
@@ -17,7 +18,7 @@ module.exports = async () => {
 
     css.inject('volume-control', text)
 
-    let volume = config.volume || 100;
+    let volume = config.volume ?? 100;
     let muted = false;
     let volumeTimeout;
 
@@ -98,7 +99,7 @@ module.exports = async () => {
     //volume controls
     document.addEventListener('keydown', (e) => {
         const key = e.key || e.keyCode; 
-        if (!key || !isWatching()) return;
+        if (!key || !isWatching() || !shortcuts.isShortcutKey(e)) return;
 
         const volumeStep = 5;
 
