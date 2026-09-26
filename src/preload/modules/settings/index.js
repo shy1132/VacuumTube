@@ -20,6 +20,7 @@ const focus = require('./focus')
 const input = require('./input')
 const scroll = require('./scroll')
 const pages = require('./pages')
+const schema = require('./schema')
 
 let locale = null; //locale.settings
 let categories = []
@@ -163,7 +164,7 @@ module.exports = async () => {
     await functions.waitForCondition(() => !!document.body)
 
     locale = localeProvider.getLocale().settings;
-    categories = require('./schema')(locale).filter((category) => !category.hide)
+    categories = schema(locale).filter((category) => !category.hide)
 
     css.inject('settings', fs.readFileSync(path.join(__dirname, 'style.css'), 'utf-8'))
 
