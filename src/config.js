@@ -33,6 +33,7 @@ const defaults = {
     h264ify_disable_vp8: true, //when h264ify is enabled, block vp8 streams
     h264ify_disable_vp9: true, //when h264ify is enabled, block vp9 streams
     h264ify_disable_av1: true, //when h264ify is enabled, block av1 streams
+    unlock_resolution: false, //unlock resolution past window resolution
     hardware_decoding: true, //use hardware gpu video decoding
     wayland_hdr: false, //whether or not to enable wayland color management, which allows hdr but sometimes has issues on non-hdr systems
     low_memory_mode: false, //enables env_isLimitedMemory
