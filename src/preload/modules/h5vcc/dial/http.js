@@ -1,10 +1,16 @@
-const dgram = require('dgram')
 const http = require('http')
+const net = require('./net')
 const constants = require('./constants')
 
 const handlers = []
 
 const server = http.createServer((req, res) => {
+    if (!net.isLocalAddress(req.socket.remoteAddress) || req.headers.host !== `${req.socket.localAddress}:${req.socket.localPort}`) {
+        res.writeHead(403)
+        res.end()
+        return;
+    }
+
     res.setHeader('Server', constants.appAgent)
 
     for (let [ method, path, handler ] of handlers) {
@@ -18,38 +24,26 @@ const server = http.createServer((req, res) => {
     res.end()
 })
 
+server.on('error', (err) => {
+    console.error('[h5vcc] DIAL: HTTP server error', err)
+})
+
 function route(method, path, handler) {
     handlers.push([ method, path, handler ])
 }
 
-async function listen() {
-    return await new Promise(async (resolve, reject) => {
-        const localIP = await getLocalIP()
-
-        server.listen(0, (err) => {
-            if (err) {
-                reject(`Failed to start server: ${err}`)
-                return;
-            }
-
-            let addr = server.address()
-
-            module.exports.host = localIP;
-            module.exports.port = addr.port;
-            module.exports.base = `http://${localIP}:${addr.port}`
-
-            resolve()
-        })
-    });
+function baseFor(req) {
+    return `http://${req.socket.localAddress}:${req.socket.localPort}`;
 }
 
-async function getLocalIP() {
-    return new Promise((resolve) => {
-        let sock = dgram.createSocket('udp4')
-        sock.connect(80, '224.0.0.0')
-        sock.on('connect', () => {
-            resolve(sock.address().address)
-            sock.close()
+function listen() {
+    return new Promise((resolve, reject) => {
+        server.once('error', reject)
+
+        server.listen(0, '0.0.0.0', () => { //ipv4 only
+            server.off('error', reject)
+            module.exports.port = server.address().port;
+            resolve()
         })
     });
 }
@@ -57,5 +51,7 @@ async function getLocalIP() {
 module.exports = {
     server,
     route,
-    listen
+    listen,
+    baseFor,
+    port: null
 }

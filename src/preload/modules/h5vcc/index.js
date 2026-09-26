@@ -1,6 +1,7 @@
 const { ipcRenderer } = require('electron')
 const http = require('./dial/http')
 const DialServer = require('./dial/server')
+const discover = require('./dial/discover')
 const configManager = require('../../config')
 const config = configManager.get()
 
@@ -38,7 +39,7 @@ async function startDial() {
     try {
         await waitForDeviceId()
         await http.listen()
-        require('./dial/discover')
+        discover.start()
 
         console.log('[h5vcc] DIAL: Server started')
     } catch (err) {

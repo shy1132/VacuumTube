@@ -23,14 +23,13 @@ function el(tag, children, attrs) {
     return node;
 }
 
-let deviceDesc = null;
-function buildDeviceDesc() {
+function buildDeviceDesc(base) {
     doc.documentElement.replaceWith(el('root', [
         el('specVersion', [
             el('major', '1'),
             el('minor', '0')
         ]),
-        el('URLBase', http.base),
+        el('URLBase', base),
         el('device', [
             el('deviceType', 'urn:dial-multiscreen-org:device:dial:1'),
             el('friendlyName', `${constants.hostname} (VacuumTube)`),
@@ -44,13 +43,13 @@ function buildDeviceDesc() {
 }
 
 http.route('GET', '/', (req, res) => {
-    if (!deviceDesc) deviceDesc = buildDeviceDesc()
+    let base = http.baseFor(req)
 
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/xml; charset="utf-8"')
-    res.setHeader('Application-URL', `${http.base}/apps`)
+    res.setHeader('Application-URL', `${base}/apps`)
 
-    res.end(deviceDesc)
+    res.end(buildDeviceDesc(base))
 })
 
 async function handle(basePath, callback, req, res) {
@@ -64,7 +63,7 @@ async function handle(basePath, callback, req, res) {
         addHeader: (key, value) => headers.append(key, value)
     }
 
-    let cb = callback({ host: `${http.host}:${http.port}`, path: basePath, body }, data)
+    let cb = callback({ host: `${req.socket.localAddress}:${req.socket.localPort}`, path: basePath, body }, data)
     if (!cb) {
         res.statusCode = 400;
         res.end()
@@ -73,7 +72,7 @@ async function handle(basePath, callback, req, res) {
 
     if (data.mimeType) headers.append('Content-Type', data.mimeType)
 
-    res.statusCode = data.responseCode;
+    res.statusCode = data.responseCode ?? 200;
     res.setHeaders(headers)
 
     if (data.body) {
@@ -120,15 +119,26 @@ module.exports = class {
         return (this.basePath + path).replace(/\/+$/, '') || '/';
     }
 
+    #route(method, path, callback) {
+        http.route(method, this.#fullPath(path), (req, res) => {
+            handle(this.basePath, callback, req, res).catch((err) => {
+                console.error('[h5vcc] DIAL: Failed to handle request', req.method, req.url, err)
+
+                if (!res.headersSent) res.statusCode = 500;
+                res.end()
+            })
+        })
+    }
+
     onGet(path, callback) {
-        http.route('GET', this.#fullPath(path), (req, res) => handle(this.basePath, callback, req, res))
+        this.#route('GET', path, callback)
     }
 
     onPost(path, callback) {
-        http.route('POST', this.#fullPath(path), (req, res) => handle(this.basePath, callback, req, res))
+        this.#route('POST', path, callback)
     }
 
     onDelete(path, callback) {
-        http.route('DELETE', this.#fullPath(path), (req, res) => handle(this.basePath, callback, req, res))
+        this.#route('DELETE', path, callback)
     }
 }

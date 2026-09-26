@@ -1,44 +1,68 @@
 const dgram = require('dgram')
 const http = require('./http')
+const net = require('./net')
 const constants = require('./constants')
 
 const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true })
+const joinedInterfaces = new Set()
 
-socket.bind(constants.port, () => {
-    socket.addMembership(constants.address)
+socket.on('error', (err) => {
+    console.error('[h5vcc] DIAL: SSDP socket error', err)
 })
 
-socket.on('message', (msg, rinfo) => {
-    if (msg.length > 0) {
+function joinGroup() {
+    for (let iface of net.getInterfaces()) {
+        if (joinedInterfaces.has(iface.address)) continue;
+
         try {
-            let ssdp = parseSSDP(msg)
-            if (ssdp.method !== 'M-SEARCH' || ssdp.path !== '*') return;
-
-            let response = createSSDP({
-                status: 200,
-                statusText: 'OK',
-                headers: {
-                    'CACHE-CONTROL': 'max-age=1800',
-                    'DATE': `${new Date().toGMTString()}`,
-                    'EXT': '',
-                    'LOCATION': `${http.base}/`,
-                    'SERVER': `${constants.osAgent} UPnP/1.0 ${constants.appAgent}`,
-                    'ST': 'urn:dial-multiscreen-org:service:dial:1',
-                    'USN': `uuid:${constants.uuid()}::urn:dial-multiscreen-org:service:dial:1`
-                }
-            })
-
-            let sock = dgram.createSocket({ type: 'udp4', reuseAddr: true })
-            sock.connect(rinfo.port, rinfo.address, () => {
-                sock.send(response, (err) => {
-                    sock.close()
-                })
-            })
+            socket.addMembership(constants.address, iface.address)
+            joinedInterfaces.add(iface.address)
         } catch (err) {
-            console.error('[h5vcc] DIAL: Failed to handle SSDP discovery', err)
+            console.warn(`[h5vcc] DIAL: Failed to listen for SSDP on ${iface.address}`, err)
         }
     }
+}
+
+socket.on('message', async (msg, rinfo) => {
+    if (msg.length === 0) return;
+
+    try {
+        let ssdp = parseSSDP(msg)
+        if (ssdp.method !== 'M-SEARCH' || ssdp.path !== '*') return;
+
+        let address = net.getInterfaceAddressFor(rinfo.address) ?? await net.getDefaultAddress()
+        if (!address) return;
+
+        let response = createSSDP({
+            status: 200,
+            statusText: 'OK',
+            headers: {
+                'CACHE-CONTROL': 'max-age=1800',
+                'DATE': `${new Date().toGMTString()}`,
+                'EXT': '',
+                'LOCATION': `http://${address}:${http.port}/`,
+                'SERVER': `${constants.osAgent} UPnP/1.0 ${constants.appAgent}`,
+                'ST': 'urn:dial-multiscreen-org:service:dial:1',
+                'USN': `uuid:${constants.uuid()}::urn:dial-multiscreen-org:service:dial:1`
+            }
+        })
+
+        socket.send(response, rinfo.port, rinfo.address, (err) => {
+            if (err) {
+                console.error(`[h5vcc] DIAL: Failed to respond to SSDP discovery from ${rinfo.address}`, err)
+            }
+        })
+    } catch (err) {
+        console.error('[h5vcc] DIAL: Failed to handle SSDP discovery', err)
+    }
 })
+
+function start() {
+    socket.bind(constants.port, () => {
+        joinGroup()
+        setInterval(joinGroup, 30000)
+    })
+}
 
 function parseSSDP(buf) {
     let str = buf.toString('utf-8')
@@ -81,4 +105,8 @@ function createSSDP(options) {
     }
 
     return `${head}\r\n${headersText}\r\n`;
+}
+
+module.exports = {
+    start
 }
