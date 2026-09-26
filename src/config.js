@@ -6,11 +6,14 @@ const path = require('path')
 const userData = electron.app.getPath('userData')
 const legacyStateFile = path.join(userData, 'state.json')
 const configFile = path.join(userData, 'config.json')
+const tempConfigFile = configFile + '.tmp'
+const oldConfigFile = configFile + '.old'
 
 let changed = false;
+let saveFailed = false;
 let config = {}
 
-const defaults = {
+const defaults = { //mess
     volume: 100, //video volume (0-100)
     adblock: true, //block ads
     sponsorblock: false, //enable sponsorblock
@@ -60,25 +63,37 @@ function init(overrides = {}) {
         fs.renameSync(legacyStateFile, configFile)
     }
 
-    if (fs.existsSync(configFile) && isValidJson(configFile)) {
+    let parsed = fs.existsSync(configFile) ? readConfig(configFile) : null;
+    if (fs.existsSync(configFile) && !parsed) {
+        console.error(`[config] ${configFile} is not valid, backing it up to ${oldConfigFile} and starting with default config`)
+
+        try {
+            fs.renameSync(configFile, oldConfigFile)
+        } catch (err) {
+            console.error('[config] Failed to back up invalid config file', err)
+        }
+    }
+
+    if (parsed) {
         console.log(`[config] Reading config from ${configFile}`)
 
-        let parsed = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
         if (parsed['0']) { //i was accidentally still passing the path of the config file to the init function before the overrides (old behavior), causing it to apply the path string as an override and ignore the actual overrides... oops
-            console.log('[config] Fixing config bug')
-
             for (let key of Object.keys(parsed)) {
                 if (!isNaN(Number(key))) { //remove each character of the path string...
                     delete parsed[key];
                 }
             }
 
-            fs.writeFileSync(configFile, JSON.stringify(parsed, null, 4))
+            changed = true;
         }
 
         config = {
             ...defaults,
             ...parsed
+        }
+
+        if (Object.keys(config).length > Object.keys(parsed).length) { //some defaults were missing
+            changed = true;
         }
 
         console.log('[config] Loaded config', config)
@@ -90,13 +105,10 @@ function init(overrides = {}) {
             ...overrides
         }
 
-        try {
-            fs.mkdirSync(userData, { recursive: true })
-            fs.writeFileSync(configFile, JSON.stringify(config, null, 4))
-        } catch (err) {
-            console.error('[config] Failed to write config file', err)
-        }
+        changed = true;
     }
+
+    save()
 
     setInterval(save, 500)
 
@@ -104,19 +116,37 @@ function init(overrides = {}) {
 }
 
 function save() {
-    if (changed) {
-        console.log('[config] Saving updated config to file')
+    if (!changed) return;
 
-        try {
-            fs.writeFileSync(configFile, JSON.stringify(config, null, 4))
-            return true;
-        } catch (err) {
-            console.error('[config] Failed to write config file', err)
-            return false;
-        } finally {
-            changed = false;
+    try {
+        writeConfig(config)
+        changed = false;
+        saveFailed = false;
+        console.log('[config] Saved config to file')
+        return true;
+    } catch (err) {
+        if (!saveFailed) {
+            console.error('[config] Failed to write config file, will keep retrying', err)
         }
+
+        saveFailed = true;
+        return false; //stays changed, so it's retried on the next save
     }
+}
+
+function writeConfig(value) {
+    fs.mkdirSync(userData, { recursive: true })
+
+    //atomic write to avoid corruption
+    let fd = fs.openSync(tempConfigFile, 'w')
+    try {
+        fs.writeSync(fd, JSON.stringify(value, null, 4))
+        fs.fsyncSync(fd)
+    } finally {
+        fs.closeSync(fd)
+    }
+
+    fs.renameSync(tempConfigFile, configFile)
 }
 
 function update(newConfig = {}) {
@@ -133,15 +163,14 @@ function get() {
     return config;
 }
 
-function isValidJson(file) {
+function readConfig(file) {
     try {
-        let text = fs.readFileSync(file, 'utf-8')
-        let json = JSON.parse(text)
-        if (typeof json !== 'object') throw new Error('Not an object');
+        let json = JSON.parse(fs.readFileSync(file, 'utf-8'))
+        if (typeof json !== 'object' || json === null || Array.isArray(json)) return null;
 
-        return true;
+        return json;
     } catch {
-        return false;
+        return null;
     }
 }
 

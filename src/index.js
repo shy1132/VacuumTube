@@ -9,6 +9,17 @@ const package = require('../package.json')
 
 const appId = package.build.appId;
 
+const commandLineOptions = {
+    version: { type: 'boolean', short: 'v' },
+    fullscreen: { type: 'boolean' },
+    'no-window-decorations': { type: 'boolean' },
+    'enable-devtools': { type: 'boolean' },
+    'debug-gpu': { type: 'boolean' },
+    width: { type: 'string' },
+    height: { type: 'string' },
+    portable: { type: 'string', short: 'p', optionalValue: true } //the path is optional
+}
+
 const argv = parseCommandLine(process.argv.slice(process.defaultApp ? 2 : 1))
 
 electron.app.setName('VacuumTube')
@@ -425,17 +436,6 @@ async function createWindow() {
     win.webContents.on('page-title-updated', () => {
         win.setTitle('VacuumTube')
     })
-}
-
-const commandLineOptions = {
-    version: { type: 'boolean', short: 'v' },
-    fullscreen: { type: 'boolean' },
-    'no-window-decorations': { type: 'boolean' },
-    'enable-devtools': { type: 'boolean' },
-    'debug-gpu': { type: 'boolean' },
-    width: { type: 'string' },
-    height: { type: 'string' },
-    portable: { type: 'string', short: 'p', optionalValue: true } //the path is optional
 }
 
 function parseCommandLine(args) {
