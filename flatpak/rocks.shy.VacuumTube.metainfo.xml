@@ -36,6 +36,7 @@
           <li>Overhauled settings menu with categories and About page</li>
           <li>Added "Block Continue Watching" setting</li>
           <li>Added "Show Remaining Time" feature</li>
+          <li>Added "Automatic Updates" setting</li>
           <li>Added configurable SponsorBlock categories</li>
           <li>Added playback speed control keybinds (A + D)</li>
           <li>Added --width/--height CLI flags</li>
