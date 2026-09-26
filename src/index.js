@@ -77,8 +77,6 @@ async function main() {
         electron.app.commandLine.appendSwitch('--no-sandbox') //won't run without this in game mode for me
     }
 
-    await permissions.resetAfterUpdate({ appId, userData })
-
     config = configManager.init({
         fullscreen: !!runningOnSteam //if running on steam in game mode, override fullscreen to be on by default (note that this was broken from 1.3.0 until 1.3.6 due to config bug)
     })
@@ -140,6 +138,8 @@ async function main() {
     })
 
     electron.app.userAgentFallback = ua.userAgent; //default for anything not covered below (e.g. workers)
+
+    await permissions.resetAfterUpdate({ appId, userData })
 
     await electron.app.whenReady()
 
