@@ -17,7 +17,7 @@ cobalt 27 is chromium based (unlike previous versions), which is the closest mat
 const package = require('../package.json')
 
 //constants
-const appId = package.build.appId;
+const { appId } = require('./constants.js')
 const googleHosts = [ 'youtube.com', 'googlevideo.com', 'ytimg.com', 'ggpht.com', 'google.com', 'googleapis.com', 'gstatic.com', 'doubleclick.net', 'googleusercontent.com', 'youtube-nocookie.com' ]
 
 //pulled from latest android tv app

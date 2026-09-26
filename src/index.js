@@ -7,7 +7,7 @@ const { parseArgs } = require('util')
 const stringArgv = require('string-argv')
 const package = require('../package.json')
 
-const appId = package.build.appId;
+const { appId } = require('./constants.js')
 
 const commandLineOptions = {
     version: { type: 'boolean', short: 'v' },
