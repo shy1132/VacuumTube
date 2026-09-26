@@ -110,6 +110,8 @@ VacuumTube has some settings that you can change, which are located in the YouTu
   - Enables support for game controllers, including navigation and video playback controls. Requires an external controller, such as an Xbox controller. Can be turned off to avoid conflicting with apps like JoyToKey
 - Device Discoverability
   - Allows VacuumTube to be discovered by the YouTube mobile app on devices within the same local network (DIAL)
+- Automatic Updates
+  - Download new versions in the background and install them when VacuumTube closes. When off, you can still check for updates from the About page
 
 ## Extra Input Mappings
 
