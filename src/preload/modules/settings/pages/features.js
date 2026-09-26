@@ -13,7 +13,7 @@ module.exports = {
         },
         {
             type: 'toggle',
-            key: 'remaining_time',
+            key: 'remaining_time_feature',
             title: locale.features.settings.remaining_time.title,
             description: locale.features.settings.remaining_time.description,
             dependsOn: 'features_enabled'

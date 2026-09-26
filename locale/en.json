@@ -198,7 +198,7 @@
                 },
                 "remaining_time": {
                     "title": "Show Remaining Time",
-                    "description": "Displays the remaining video runtime in the player overlay, instead of total video duration. Takes current playback speed into account."
+                    "description": "Displays the remaining video runtime in the player overlay instead of the elapsed time. Takes current playback speed into account. Press R to toggle it for the current video."
                 },
                 "ultrawide": {
                     "title": "Ultrawide Support",

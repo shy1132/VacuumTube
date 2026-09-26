@@ -1,90 +1,111 @@
-const functions = require('../util/functions')
+//shows the remaining time in place of the elapsed time in the player (e.g. -4:17 4:27), like the official apps do
+
 const configManager = require('../config')
 
-module.exports = async () => {
+function isEnabled(config) {
+    return config.features_enabled === true && config.remaining_time_feature === true;
+}
+
+function secondsToTime(totalSeconds) {
+    let hours = Math.floor(totalSeconds / 3600)
+    let minutes = Math.floor((totalSeconds % 3600) / 60)
+    let seconds = totalSeconds % 60
+
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+        return `${minutes}:${String(seconds).padStart(2, '0')}`;
+    }
+}
+
+function getRemainingTime(player) {
+    let duration = Math.floor(player.getDuration())
+    let elapsed = Math.floor(player.getCurrentTime())
+    let remaining = Math.round(Math.max(0, (duration - elapsed) / player.getPlaybackRate())) //takes playback speed into account
+
+    return `-${secondsToTime(remaining)}`; //parity with mobile app
+}
+
+function isWatchPage() {
+    return new URL(location.hash.substring(1), location.href).pathname === '/watch';
+}
+
+module.exports = () => {
     const config = configManager.get()
-    let observer;
-    let parentNode;
-    let player;
-    let isWatching = false;
-    let isObserving = false;
 
-    function secondsToTime(totalSeconds) {
-        let hours = Math.floor(totalSeconds / 3600);
-        let minutes = Math.floor((totalSeconds % 3600) / 60);
-        let seconds = totalSeconds % 60;
+    let timeLabel = null;
+    let player = null;
+    let videoId = null;
+    let showRemaining = true; //toggled with R, reset for each video
+    let elapsedText = null; //the real elapsed time, from the last time youtube rendered it
+    let showing = false;
 
-        if (hours > 0) {
-            return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-        } else {
-            return `${minutes}:${String(seconds).padStart(2, '0')}`;
-        }
+    function getElapsedTextNode() {
+        let node = timeLabel?.querySelector('[idomkey="elapsedTime"]')?.firstChild
+        return node?.nodeType === Node.TEXT_NODE ? node : null;
     }
 
-    function getRemainingTime(durationSeconds, elapsedSeconds, currentPlacbackRate) {
-        durationSeconds = Math.floor(durationSeconds);
-        elapsedSeconds = Math.floor(elapsedSeconds);
-        let remainingSeconds = Math.round(Math.max(0, (durationSeconds - elapsedSeconds) / currentPlacbackRate));
-        return secondsToTime(remainingSeconds);
+    function isActive() {
+        return isEnabled(config) && showRemaining && isWatchPage() && !!player && !player.getVideoData?.()?.isLive;
     }
 
-    window.addEventListener('hashchange', async () => {
-        if (observer)
-            observer.disconnect();
+    function render() {
+        let node = getElapsedTextNode()
+        if (!node) return;
 
-        const pageUrl = new URL(location.hash.substring(1), location.href);
-
-        if (pageUrl.pathname === '/watch') {
-            isWatching = true;
-            await functions.waitForCondition(() => !!document.querySelector('span[idomkey="duration"]'));
-            await functions.waitForCondition(() => !!document.querySelector('.html5-video-player'));
-            player = document.querySelector('.html5-video-player');
-
-            if (player.getVideoData().isLive) // Don't do anything during livestreams
-                return;
-
-            let duration = document.querySelector('span[idomkey="duration"]');
-            parentNode = duration.parentNode;
-
-            observer = new MutationObserver(() => {
-                const durationText = duration.textContent.trim();
-                const video_duration = player.getDuration();
-                const elapsedTime = player.getCurrentTime();
-                const currentPlacbackRate = player.getPlaybackRate();
-                const remaining = getRemainingTime(video_duration, elapsedTime, currentPlacbackRate);
-
-                if (duration.textContent !== remaining) {
-                    duration.textContent = remaining;
-                }
-            });
-
-            isObserving = config.remaining_time;
-
-            if (isObserving)
-                observer.observe(parentNode, { characterData: true, childList: true, subtree: true });
-
-            document.addEventListener('keydown', (e) => {
-                const key = e.key || e.keyCode;
-                if (!key || !isWatching)
-                    return;
-
-                if (key === 'r' || key === 'R') {
-                    if (isObserving) {
-                        observer.disconnect();
-                    }
-                    else {
-                        observer.observe(parentNode, { characterData: true, childList: true, subtree: true });
-                    }
-                    isObserving = !isObserving;
-
-                    e.preventDefault()
-                    e.stopPropagation()
-                    e.stopImmediatePropagation()
-                }
-            }, true);
+        if (!isActive()) {
+            if (showing && elapsedText !== null) node.data = elapsedText; //put the elapsed time back right away instead of waiting for youtube to update it
+            showing = false;
+            return;
         }
-        else {
-            isWatching = false;
+
+        let remaining = getRemainingTime(player)
+        if (node.data === remaining) return;
+
+        if (!showing || !node.data.startsWith('-')) {
+            elapsedText = node.data;
         }
-    });
+
+        node.data = remaining;
+        showing = true;
+    }
+
+    const observer = new MutationObserver(render)
+
+    setInterval(() => {
+        if (!isEnabled(config) && !showing) return;
+
+        let label = document.querySelector('[idomkey="time-label"] > [idomkey="elapsedTime"]')?.parentElement ?? null;
+        if (label !== timeLabel) {
+            observer.disconnect()
+            timeLabel = label;
+            showing = false;
+
+            if (label) {
+                observer.observe(label, { characterData: true, childList: true, subtree: true })
+            }
+        }
+
+        player = document.querySelector('.html5-video-player')
+
+        let id = player?.getVideoData?.()?.video_id ?? null;
+        if (id !== videoId) {
+            videoId = id;
+            showRemaining = true;
+        }
+
+        render()
+    }, 250)
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'r' && e.key !== 'R') return;
+        if (!isEnabled(config) || !isWatchPage()) return;
+
+        showRemaining = !showRemaining;
+        render()
+
+        e.preventDefault()
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+    }, true)
 }
