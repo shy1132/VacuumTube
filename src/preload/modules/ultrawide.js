@@ -7,7 +7,7 @@ const css = require('../util/css')
 const ultrawideCSS = `
 div#container,
 yt-virtual-list,
-ytlr-section-list-renderer
+ytlr-section-list-renderer,
 ytlr-horizontal-list-renderer,
 ytlr-tv-surface-content-renderer,
 div[idomkey="shadow"],
@@ -22,6 +22,10 @@ ytlr-welcome-immersive-value-prop
 }
 `
 
+function isEnabled(config) {
+    return config.features_enabled === true && config.ultrawide_feature === true;
+}
+
 function update(enabled) {
     if (enabled) {
         css.inject('ultrawide', ultrawideCSS)
@@ -31,16 +35,16 @@ function update(enabled) {
 }
 
 module.exports = () => {
-    let enabled = configManager.get().support_ultrawide;
+    let enabled = isEnabled(configManager.get())
 
     if (enabled) {
         update(true)
     }
 
     ipcRenderer.on('config-update', (event, config) => {
-        if (config.support_ultrawide === enabled) return;
+        if (isEnabled(config) === enabled) return;
 
-        enabled = config.support_ultrawide;
+        enabled = isEnabled(config)
         update(enabled)
     })
 }

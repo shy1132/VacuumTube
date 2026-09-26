@@ -84,8 +84,6 @@ VacuumTube has some settings that you can change, which are located in the YouTu
   - Allows you to choose which guide tabs are shown on the sidebar
 - Unlock Resolution
   - Removes monitor resolution cap and allows you to watch videos at any resolution
-- Support Ultrawide
-  - Expands the YouTube TV interface to fill ultrawide displays
 - Filter Video Codecs
   - Allows you to block specific video codecs, forcing YouTube to pick an alternative. Similiar to [h264ify](https://github.com/erkserkserks/h264ify), but more powerful
 - Hardware Decoding
@@ -103,7 +101,7 @@ VacuumTube has some settings that you can change, which are located in the YouTu
 - Pause on Blur
   - Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)
 - Features
-  - Contains extra experimental features that add functionality: **Music Mode**, **Show Remaining Time**
+  - Contains extra experimental features that add extra functionality: **Music Mode**, **Show Remaining Time**, **Ultrawide Support**
 - Custom CSS (Userstyles)
   - Enables injection of custom CSS styles. See the section below for more information
 - Touch Overlay
