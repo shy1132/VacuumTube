@@ -36,21 +36,17 @@ async function loadUserstyles() {
 	try {
 		const styles = await ipcRenderer.invoke('get-userstyles')
 
-		const disabled = config.disabled_userstyles.filter((filename) => styles.some((style) => style.filename === filename))
-		if (disabled.length !== config.disabled_userstyles.length) {
-			configManager.set({ disabled_userstyles: disabled })
-			config = configManager.get()
-		}
-
+		let loaded = 0;
 		styles.forEach(({ filename, css }) => {
 			if (!config.disabled_userstyles.includes(filename)) {
 				injectCSS(filename, css)
+				loaded++;
 			} else {
 				console.log(`[Userstyles] Skipping disabled: ${filename}`)
 			}
 		})
 
-		console.log(`[Userstyles] Loaded ${styles.length - config.disabled_userstyles.length} of ${styles.length} stylesheets`)
+		console.log(`[Userstyles] Loaded ${loaded} of ${styles.length} stylesheets`)
 	} catch (err) {
 		console.error('[Userstyles] Failed to load styles:', err)
 	}

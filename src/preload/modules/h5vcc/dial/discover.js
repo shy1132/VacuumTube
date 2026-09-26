@@ -5,20 +5,38 @@ const constants = require('./constants')
 
 const socket = dgram.createSocket({ type: 'udp4', reuseAddr: true })
 const joinedInterfaces = new Set()
+const failedInterfaces = new Set()
 
 socket.on('error', (err) => {
     console.error('[h5vcc] DIAL: SSDP socket error', err)
 })
 
 function joinGroup() {
-    for (let iface of net.getInterfaces()) {
-        if (joinedInterfaces.has(iface.address)) continue;
+    let addresses = net.getInterfaces().map((iface) => iface.address)
+
+    //forget interfaces that went away so they're joined again if they come back
+    for (let address of joinedInterfaces) {
+        if (!addresses.includes(address)) {
+            joinedInterfaces.delete(address)
+        }
+    }
+
+    for (let address of addresses) {
+        if (joinedInterfaces.has(address)) continue;
 
         try {
-            socket.addMembership(constants.address, iface.address)
-            joinedInterfaces.add(iface.address)
+            socket.addMembership(constants.address, address)
+            joinedInterfaces.add(address)
         } catch (err) {
-            console.warn(`[h5vcc] DIAL: Failed to listen for SSDP on ${iface.address}`, err)
+            if (err.code === 'EADDRINUSE') { //already joined through this interface
+                joinedInterfaces.add(address)
+                continue;
+            }
+
+            if (!failedInterfaces.has(address)) {
+                console.warn(`[h5vcc] DIAL: Failed to listen for SSDP on ${address}`, err)
+                failedInterfaces.add(address)
+            }
         }
     }
 }

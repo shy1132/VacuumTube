@@ -23,9 +23,11 @@ function XMLHttpRequest() {
     let url = null;
     let modification = null; //promise of the response being modified
     let modifiedText = null;
+    let request = 0; //increases with every open() so a modification still running from the previous request can't affect the next one
 
     function modifyResponse() {
         if (!modification) {
+            let current = request;
             modification = (async () => {
                 if (xhr.responseType !== '' && xhr.responseType !== 'text') return;
                 if (xhr.status === 0) return; //aborted or failed, nothing to modify
@@ -43,7 +45,7 @@ function XMLHttpRequest() {
                     }
                 }
 
-                modifiedText = text;
+                if (current === request) modifiedText = text;
             })()
         }
 
@@ -52,7 +54,11 @@ function XMLHttpRequest() {
 
     function createWrapper(listener) {
         return async function (event) {
-            if (xhr.readyState === 4) await modifyResponse()
+            if (xhr.readyState === 4) {
+                let current = request;
+                await modifyResponse()
+                if (current !== request) return; //reopened while waiting, this event belonged to the previous request
+            }
 
             if (typeof listener === 'function') {
                 listener.call(xhr, event)
@@ -117,6 +123,7 @@ function XMLHttpRequest() {
         url = String(requestUrl)
         modification = null;
         modifiedText = null;
+        request++;
 
         return originalOpen.apply(this, arguments);
     }

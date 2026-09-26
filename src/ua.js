@@ -108,12 +108,35 @@ function applyToRequestHeaders(url, headers) {
     headers['User-Agent'] = google ? userAgent : genericUserAgent;
 }
 
+const autoAttach = { autoAttach: true, waitForDebuggerOnStart: true, flatten: true }
+
 async function applyToWebContents(webContents) {
     try {
         if (!webContents.debugger.isAttached()) webContents.debugger.attach('1.3')
+
+        webContents.debugger.on('message', (event, method, params) => {
+            if (method === 'Target.attachedToTarget') {
+                applyToChild(webContents.debugger, params)
+            }
+        })
+
         await webContents.debugger.sendCommand('Emulation.setUserAgentOverride', { userAgent, userAgentMetadata }) //makes navigator.userAgent and navigator.userAgentData match
+        await webContents.debugger.sendCommand('Target.setAutoAttach', autoAttach)
     } catch (err) {
         console.error('[useragent] Failed to set user agent metadata', err)
+    }
+}
+
+async function applyToChild(debuggerApi, { sessionId, targetInfo, waitingForDebugger }) {
+    try {
+        if (targetInfo.type === 'iframe') {
+            await debuggerApi.sendCommand('Emulation.setUserAgentOverride', { userAgent, userAgentMetadata }, sessionId)
+            await debuggerApi.sendCommand('Target.setAutoAttach', autoAttach, sessionId) //iframes inside it
+        }
+    } catch (err) {
+        console.error('[useragent] Failed to set user agent metadata for', targetInfo.type, targetInfo.url, err)
+    } finally {
+        if (waitingForDebugger) debuggerApi.sendCommand('Runtime.runIfWaitingForDebugger', {}, sessionId).catch(() => {}) //always resumed, even if applying failed
     }
 }
 

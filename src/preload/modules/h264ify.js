@@ -20,6 +20,8 @@ module.exports = () => {
     }
 
     function isBlocked(type) {
+        type = String(type)
+
         return config.h264ify_disable_webm && type.includes('webm') ||
             config.h264ify_disable_vp8 && type.includes('vp8') ||
             config.h264ify_disable_vp9 && (type.includes('vp9') || type.includes('vp09')) ||

@@ -51,6 +51,14 @@ function createOnDeepLink() {
     let listeners = []
     let pending = [] //deeplinks that arrived before leanback called addListener
 
+    function callListener(listener, deeplink) {
+        try {
+            listener(deeplink)
+        } catch (err) {
+            console.error('[h5vcc] Deeplink listener failed', err)
+        }
+    }
+
     ipcRenderer.on('deeplink', (event, deeplink) => {
         if (listeners.length === 0) {
             pending.push(deeplink)
@@ -58,7 +66,7 @@ function createOnDeepLink() {
         }
 
         for (let listener of listeners) {
-            listener(deeplink)
+            callListener(listener, deeplink)
         }
     })
 
@@ -66,7 +74,7 @@ function createOnDeepLink() {
         addListener: (listener) => {
             listeners.push(listener)
             while (pending.length > 0) {
-                listener(pending.shift())
+                callListener(listener, pending.shift())
             }
         }
     };

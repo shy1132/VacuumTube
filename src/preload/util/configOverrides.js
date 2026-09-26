@@ -32,7 +32,11 @@ function applyWhenAvailable(queue, getTarget, apply) {
         clearInterval(interval)
 
         for (let override of queue) {
-            apply(target, override)
+            try {
+                apply(target, override)
+            } catch (err) {
+                console.error('a config override failed', err)
+            }
         }
     })
 }
