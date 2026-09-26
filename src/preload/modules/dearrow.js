@@ -5,13 +5,14 @@ const configManager = require('../config')
 const config = configManager.get()
 
 const cache = {}
+const timeout = 2000;
 
 async function getBranding(id) {
     if (id in cache) {
         return cache[id];
     }
 
-    let res = await fetch(`https://sponsor.ajay.app/api/branding?videoID=${id}`)
+    let res = await fetch(`https://sponsor.ajay.app/api/branding?videoID=${id}`, { signal: AbortSignal.timeout(timeout) })
     if (res.status === 404) return null;
 
     if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);

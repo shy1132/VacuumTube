@@ -5,8 +5,10 @@ const localeProvider = require('../util/localeProvider')
 const configManager = require('../config')
 const config = configManager.get()
 
+const timeout = 2000;
+
 async function fetchDislikes(videoId) {
-    let res = await fetch(`https://returnyoutubedislikeapi.com/Votes?videoId=${videoId}`)
+    let res = await fetch(`https://returnyoutubedislikeapi.com/Votes?videoId=${videoId}`, { signal: AbortSignal.timeout(timeout) })
     if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
 
     let data = await res.json()
@@ -62,7 +64,7 @@ module.exports = async () => {
             }
         })
 
-        if (likesEngagement.button?.likeButtonRenderer) {
+        if (likesEngagement?.button?.likeButtonRenderer) {
             likesEngagement.button.likeButtonRenderer.dislikeCountText.simpleText = abbreviatedDislikes;
             likesEngagement.button.likeButtonRenderer.dislikeCountWithUndislikeText.simpleText = abbreviatedDislikes;
         }
