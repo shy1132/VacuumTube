@@ -48,6 +48,7 @@ const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI
 
 let win;
 let config;
+let windowDeeplink = null;
 
 async function main() {
     if (argv['version']) {
@@ -58,13 +59,19 @@ async function main() {
         return;
     }
 
-    if (!electron.app.requestSingleInstanceLock({ deeplink: getDeeplink() })) {
+    windowDeeplink = getDeeplink()
+
+    if (!electron.app.requestSingleInstanceLock({ deeplink: windowDeeplink })) {
         electron.app.quit()
         return;
     }
 
     electron.app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
-        if (!win) return;
+        if (!win) { //on macos the app keeps running with no window after it's closed, so open one (with the new deeplink)
+            windowDeeplink = additionalData?.deeplink ?? null;
+            createWindow().catch((err) => console.error('Failed to create window', err))
+            return;
+        }
 
         if (win.isMinimized()) win.restore()
         win.focus()
@@ -293,7 +300,7 @@ async function main() {
     })
 
     electron.ipcMain.handle('get-deeplink', () => {
-        return getDeeplink();
+        return windowDeeplink;
     })
 
     electron.ipcMain.handle('relaunch-app', () => {
@@ -308,7 +315,10 @@ async function main() {
     userstyles.startWatcher()
 
     electron.app.on('activate', () => {
-        if (electron.BrowserWindow.getAllWindows().length === 0) createWindow()
+        if (electron.BrowserWindow.getAllWindows().length === 0) {
+            windowDeeplink = null; //reopening from the dock shouldn't open the launch url again
+            createWindow()
+        }
     })
 }
 
