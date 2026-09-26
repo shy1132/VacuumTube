@@ -85,17 +85,18 @@ async function main() {
     if (fs.existsSync(flagsPath)) {
         let extraFlags = fs.readFileSync(flagsPath, 'utf-8').trim()
 
-        let { tokens } = parseArgs({ args: stringArgv.parseArgsStringToArgv(extraFlags), strict: false, allowPositionals: true, tokens: true })
+        let { switches, positionals } = parseSwitches(stringArgv.parseArgsStringToArgv(extraFlags))
 
-        for (let token of tokens) {
-            if (token.kind !== 'option') continue;
-
-            //added exactly as written, --name or --name=value
-            if (token.inlineValue) {
-                electron.app.commandLine.appendSwitch(token.name, token.value)
+        for (let { name, value } of switches) {
+            if (value === undefined) {
+                electron.app.commandLine.appendSwitch(name)
             } else {
-                electron.app.commandLine.appendSwitch(token.name)
+                electron.app.commandLine.appendSwitch(name, value)
             }
+        }
+
+        if (positionals.length > 0) {
+            console.warn('[flags.txt] Ignoring positional values:', positionals)
         }
     }
 
@@ -467,14 +468,37 @@ function parseCommandLine(args) {
         return arg;
     })
 
-    let { values, positionals } = parseArgs({
-        args,
-        options: commandLineOptions,
-        strict: false, //chromium switches can be passed too
-        allowPositionals: true
-    })
+    let { values, positionals } = parseSwitches(args, commandLineOptions)
 
     return { ...values, _: positionals };
+}
+
+function parseSwitches(args, options = {}) {
+    let { values, tokens } = parseArgs({ args, options, strict: false, allowPositionals: true, tokens: true })
+
+    let switches = []
+    let positionals = []
+
+    for (let i = 0; i < tokens.length; i++) {
+        let token = tokens[i]
+
+        if (token.kind === 'positional') {
+            positionals.push(token.value)
+        } else if (token.kind === 'option') {
+            let value = token.value
+            let next = tokens[i + 1]
+
+            if (!(token.name in options) && value === undefined && next?.kind === 'positional') {
+                value = next.value;
+                values[token.name] = value;
+                i++
+            }
+
+            switches.push({ name: token.name, value })
+        }
+    }
+
+    return { values, switches, positionals };
 }
 
 function getDeeplink() {
