@@ -98,7 +98,9 @@ async function openPage(id, { fromHeader = false } = {}) {
     await render()
 
     if (page.onOpen) {
-        await page.onOpen({ refresh: render })
+        const refresh = () => state.open && state.page?.id === id ? render() : Promise.resolve()
+
+        await page.onOpen({ refresh })
         await render()
     }
 }

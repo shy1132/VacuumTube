@@ -24,35 +24,30 @@ function overrideEnv(key, value) {
     history.replaceState(null, '', newUrl)
 }
 
-let ytcfgInterval = setInterval(() => {
-    if (!window.ytcfg) return;
-    if (ytcfgOverrides.length === 0) return;
+function applyWhenAvailable(queue, getTarget, apply) {
+    let interval = setInterval(() => {
+        let target = getTarget()
+        if (!target) return;
 
-    while (ytcfgOverrides.length > 0) {
-        let override = ytcfgOverrides.shift()
-        functions.deepMerge(window.ytcfg.data_, override)
-        window.ytcfg.set(window.ytcfg.data_)
-    }
+        clearInterval(interval)
+
+        for (let override of queue) {
+            apply(target, override)
+        }
+    })
+}
+
+applyWhenAvailable(ytcfgOverrides, () => window.ytcfg, (ytcfg, override) => {
+    functions.deepMerge(ytcfg.data_, override)
+    ytcfg.set(ytcfg.data_)
 })
 
-let environmentInterval = setInterval(() => {
-    if (!window.environment) return;
-    if (environmentOverrides.length === 0) return;
-
-    while (environmentOverrides.length > 0) {
-        let override = environmentOverrides.shift()
-        functions.deepMerge(window.environment, override)
-    }
+applyWhenAvailable(environmentOverrides, () => window.environment, (environment, override) => {
+    functions.deepMerge(environment, override)
 })
 
-let tectonicConfigInterval = setInterval(() => {
-    if (!window.tectonicConfig) return;
-    if (tectonicConfigOverrides.length === 0) return;
-
-    while (tectonicConfigOverrides.length > 0) {
-        let override = tectonicConfigOverrides.shift()
-        functions.deepMerge(window.tectonicConfig, override)
-    }
+applyWhenAvailable(tectonicConfigOverrides, () => window.tectonicConfig, (tectonicConfig, override) => {
+    functions.deepMerge(tectonicConfig, override)
 })
 
 module.exports = {

@@ -1,130 +1,157 @@
-//overrides xmlhttprequest to be able to modify responses, used for dearrow support (the benefit to this over jsonModifiers is that since you're doing it from the response itself, you can use async stuff)
+//overrides xmlhttprequest to be able to modify responses (the benefit to this over jsonModifiers is that since you're doing it from the response itself, you can use async stuff, and be more explicit)
 
 const functions = require('./functions')
 
 const responseModifiers = []
 const requestModifiers = []
 const OriginalXMLHttpRequest = window.XMLHttpRequest;
+const nativeResponseText = Object.getOwnPropertyDescriptor(OriginalXMLHttpRequest.prototype, 'responseText').get;
+const nativeResponse = Object.getOwnPropertyDescriptor(OriginalXMLHttpRequest.prototype, 'response').get;
+
+const responseEvents = [ 'readystatechange', 'load', 'loadend' ]
 
 let blocked = false;
 
-window.XMLHttpRequest = function () { //i've lost track of what's going on in here at this point, but it works
+function XMLHttpRequest() {
     const xhr = new OriginalXMLHttpRequest()
     const originalOpen = xhr.open;
     const originalSend = xhr.send;
+    const originalAddEventListener = xhr.addEventListener;
+    const originalRemoveEventListener = xhr.removeEventListener;
 
-    xhr.open = async function (method, url) {
-        this._method = method;
-        this._url = url;
+    //per request, reset when the object is reused with open()
+    let url = null;
+    let modification = null; //promise of the response being modified
+    let modifiedText = null;
 
-        if (blocked) {
-            await functions.waitForCondition(() => !blocked)
-        }
+    function modifyResponse() {
+        if (!modification) {
+            modification = (async () => {
+                if (xhr.responseType !== '' && xhr.responseType !== 'text') return;
+                if (xhr.status === 0) return; //aborted or failed, nothing to modify
 
-        return originalOpen.apply(this, arguments);
-    }
+                let text = nativeResponseText.call(xhr)
 
-    xhr.send = async function (body) {
-        if (blocked) {
-            await functions.waitForCondition(() => !blocked)
-        }
+                for (let modifier of responseModifiers) {
+                    try {
+                        let modified = await modifier(url, text)
+                        if (modified === undefined) continue;
 
-        for (let modifier of requestModifiers) {
-            try {
-                let modified = await modifier(xhr._url, body)
-                body = modified;
-            } catch (err) {
-                console.error('an xhr request modifier failed', err)
-                continue;
-            }
-        }
-
-        return originalSend.apply(this, [ body ]);
-    }
-
-    let readyStateHandler = null;
-    let loadHandler = null;
-
-    async function modifyResponse() {
-        if (xhr.responseType !== '' && xhr.responseType !== 'text') return;
-
-        if (xhr._modifiedAlready || xhr.readyState !== 4) return;
-        xhr._modifiedAlready = true;
-
-        let modifiedText = xhr.responseText;
-
-        for (let modifier of responseModifiers) {
-            try {
-                let modified = await modifier(xhr._url, modifiedText)
-                if (modified === undefined) continue;
-
-                modifiedText = modified;
-            } catch (err) {
-                console.error('an xhr response modifier failed', err)
-                continue;
-            }
-        }
-
-        Object.defineProperty(xhr, 'responseText', {
-            get() {
-                return modifiedText;
-            }
-        })
-
-        Object.defineProperty(xhr, 'response', {
-            get() {
-                return modifiedText;
-            }
-        })
-    }
-
-    Object.defineProperty(xhr, 'onreadystatechange', {
-        get() {
-            return readyStateHandler;
-        },
-        set(handler) {
-            readyStateHandler = async function () {
-                if (xhr.readyState === 4) {
-                    await modifyResponse()
+                        text = modified;
+                    } catch (err) {
+                        console.error('an xhr response modifier failed', err)
+                    }
                 }
 
-                handler.apply(xhr, arguments)
-            }
-
-            xhr.addEventListener('readystatechange', readyStateHandler)
+                modifiedText = text;
+            })()
         }
-    })
 
-    Object.defineProperty(xhr, 'onload', {
-        get() {
-            return loadHandler;
-        },
-        set(handler) {
-            loadHandler = async function () {
-                await modifyResponse()
-                handler.apply(xhr, arguments)
+        return modification;
+    }
+
+    function createWrapper(listener) {
+        return async function (event) {
+            if (xhr.readyState === 4) await modifyResponse()
+
+            if (typeof listener === 'function') {
+                listener.call(xhr, event)
+            } else {
+                listener.handleEvent(event)
             }
+        };
+    }
 
-            xhr.addEventListener('load', loadHandler)
-        }
-    })
+    const wrappers = Object.fromEntries(responseEvents.map((type) => [ type, new WeakMap() ]))
+    function wrap(type, listener) {
+        if (!wrappers[type].has(listener)) wrappers[type].set(listener, createWrapper(listener))
+        return wrappers[type].get(listener);
+    }
 
-    const originalAddEventListener = xhr.addEventListener;
-    xhr.addEventListener = function (type, listener) {
-        if (type === 'load') {
-            let wrapped = async function () {
-                await modifyResponse()
-                listener.apply(xhr, arguments)
-            }
-
-            return originalAddEventListener.call(this, type, wrapped);
+    xhr.addEventListener = function (type, listener, options) {
+        if (responseEvents.includes(type) && listener) {
+            return originalAddEventListener.call(this, type, wrap(type, listener), options);
         }
 
         return originalAddEventListener.apply(this, arguments);
     }
 
+    xhr.removeEventListener = function (type, listener, options) {
+        if (responseEvents.includes(type) && listener) {
+            return originalRemoveEventListener.call(this, type, wrappers[type].get(listener) ?? listener, options);
+        }
+
+        return originalRemoveEventListener.apply(this, arguments);
+    }
+
+    for (let type of responseEvents) {
+        let handler = null;
+        let wrapper = null;
+
+        Object.defineProperty(xhr, `on${type}`, {
+            configurable: true,
+            get() {
+                return handler;
+            },
+            set(value) {
+                if (wrapper) originalRemoveEventListener.call(xhr, type, wrapper)
+
+                handler = typeof value === 'function' ? value : null;
+                wrapper = handler ? createWrapper(handler) : null;
+
+                if (wrapper) originalAddEventListener.call(xhr, type, wrapper)
+            }
+        })
+    }
+
+    for (let [ property, nativeGetter ] of [ [ 'responseText', nativeResponseText ], [ 'response', nativeResponse ] ]) {
+        Object.defineProperty(xhr, property, {
+            configurable: true,
+            get() {
+                return modifiedText ?? nativeGetter.call(xhr);
+            }
+        })
+    }
+
+    xhr.open = function (method, requestUrl) {
+        url = String(requestUrl)
+        modification = null;
+        modifiedText = null;
+
+        return originalOpen.apply(this, arguments);
+    }
+
+    xhr.send = function (body) {
+        if (!blocked && requestModifiers.length === 0) return originalSend.call(this, body);
+
+        (async () => {
+            if (blocked) {
+                await functions.waitForCondition(() => !blocked)
+            }
+
+            for (let modifier of requestModifiers) {
+                try {
+                    body = await modifier(url, body)
+                } catch (err) {
+                    console.error('an xhr request modifier failed', err)
+                }
+            }
+
+            originalSend.call(xhr, body)
+        })().catch((err) => {
+            console.error('failed to send modified xhr request', err)
+        })
+    }
+
     return xhr;
 }
+
+XMLHttpRequest.prototype = OriginalXMLHttpRequest.prototype;
+for (let key of [ 'UNSENT', 'OPENED', 'HEADERS_RECEIVED', 'LOADING', 'DONE' ]) {
+    XMLHttpRequest[key] = OriginalXMLHttpRequest[key]
+}
+
+window.XMLHttpRequest = XMLHttpRequest;
 
 function addResponseModifier(func) {
     responseModifiers.push(func)

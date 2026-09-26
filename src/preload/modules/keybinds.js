@@ -31,14 +31,12 @@ module.exports = async () => {
         shiftEnterHeld = shiftHeld && enterHeld;
     }, true)
 
-    patchFunction(window, 'setTimeout', function (setTimeout, callback, delay) {
-        if (shiftEnterHeld && /^function\(\)\{[^.]+\.[^(]+\([^,]+,[^)]+\)\}$/.test(callback.toString())) { //very dumb, but it's "function(){x.x(x,x)}", this only is applied when shift and enter are held so it shouldn't cause any issues
+    patchFunction(window, 'setTimeout', function (setTimeout, callback, delay, ...args) {
+        if (shiftEnterHeld && typeof callback === 'function' && /^function\(\)\{[^.]+\.[^(]+\([^,]+,[^)]+\)\}$/.test(callback.toString())) { //very dumb, but it's "function(){x.x(x,x)}", this only is applied when shift and enter are held so it shouldn't cause any issues
             delay = 0;
         }
 
-        return setTimeout(function(...args) {
-            callback(...args)
-        }, delay);
+        return setTimeout(callback, delay, ...args);
     })
 
     //ctrl+shift+c to copy video url
