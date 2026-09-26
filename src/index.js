@@ -17,7 +17,8 @@ const commandLineOptions = {
     'debug-gpu': { type: 'boolean' },
     width: { type: 'string' },
     height: { type: 'string' },
-    portable: { type: 'string', short: 'p', optionalValue: true } //the path is optional
+    portable: { type: 'string', short: 'p', optionalValue: true }, //the path is optional
+    deeplink: { type: 'string' } //always takes the next argument, unlike a positional url
 }
 
 const argv = parseCommandLine(process.argv.slice(process.defaultApp ? 2 : 1))
@@ -502,7 +503,7 @@ function parseSwitches(args, options = {}) {
 }
 
 function getDeeplink() {
-    let deeplink = argv._[argv._.length - 1]
+    let deeplink = argv['deeplink'] || argv._[argv._.length - 1]
     if (!deeplink) return null;
 
     return normalizeDeeplink(String(deeplink));

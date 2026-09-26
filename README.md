@@ -158,22 +158,28 @@ The userstyles folder is located in the config folder mentioned below.
   - Opens VacuumTube with the Chromium developer tools open
 - `--debug-gpu`
   - Opens chrome://gpu in VacuumTube, helpful for debugging issues
-- `[url]`
+- `[url]` or `--deeplink [url]`
   - Opens a specific YouTube URL within Leanback. You'll be prompted to choose an account before the URL is opened.
+  - If VacuumTube is already open, the URL is opened in the existing instance instead
   - The `https://` part is optional
   - The `youtube.com/` also is optional
+  - `youtu.be` links work too
   - The smallest form is pure query parameters, like `v=Something` 
   - `vacuumtube 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' --fullscreen`
   - `vacuumtube --fullscreen 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'`
   - `vacuumtube --fullscreen 'youtube.com/watch?v=dQw4w9WgXcQ'`
   - `vacuumtube --fullscreen 'watch?v=dQw4w9WgXcQ'`
   - `vacuumtube --fullscreen 'v=dQw4w9WgXcQ'`
+  - `vacuumtube --deeplink 'https://youtu.be/dQw4w9WgXcQ'`
+  - **Note:** flags VacuumTube doesn't know about (like Chromium flags) take the argument right after them as their value. To make sure a URL is always picked up, use `--deeplink`, put it after `--` (e.g. `vacuumtube --fullscreen -- 'v=dQw4w9WgXcQ'`), or give other flags their value with `=` (e.g. `--ozone-platform=wayland`)
 
 ## Chromium Flags
 
 You can provide extra command line flags to Chromium via the `flags.txt` file located in the config folder.
 
 For example, putting `--disable-gpu` into the `flags.txt` file will cause VacuumTube to run with the GPU disabled. You can find more flags by searching for Chromium command line flags, but you likely won't need to mess with this.
+
+Flags that take a value can be written as either `--name=value` or `--name value` (e.g. `--ozone-platform=wayland` or `--ozone-platform wayland`).
 
 ## Config Folder
 
