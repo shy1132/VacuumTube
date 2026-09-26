@@ -311,7 +311,8 @@ async function main() {
 }
 
 async function createWindow() {
-    let fullscreen = argv['fullscreen'] || runningOnSteam || config.fullscreen || false;
+    let forcedFullscreen = argv['fullscreen'] || runningOnSteam;
+    let fullscreen = forcedFullscreen || config.fullscreen || false;
     let noWindowDecs = argv['no-window-decorations'] || config.no_window_decorations || false;
 
     let width = 1200;
@@ -339,7 +340,7 @@ async function createWindow() {
         fullscreenable: true, //explicitly enable fullscreen functionality on macOS
         titleBarStyle: noWindowDecs ? 'hidden' : 'default',
         frame: noWindowDecs ? false : true,
-        icon: './assets/icon.png',
+        icon: path.join(__dirname, '../assets/icon.png'),
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: false,
@@ -412,15 +413,23 @@ async function createWindow() {
 
     //remember fullscreen preference
     win.on('enter-full-screen', () => {
+        if (forcedFullscreen) return;
+
         configManager.update({ fullscreen: true })
         config = configManager.get()
         win.webContents.send('config-update', config)
     })
 
     win.on('leave-full-screen', () => {
+        if (forcedFullscreen) return;
+
         configManager.update({ fullscreen: false })
         config = configManager.get()
         win.webContents.send('config-update', config)
+    })
+
+    win.on('closed', () => {
+        win = null;
     })
 
     //for the controller support to know whether or not the window itself is in focus
