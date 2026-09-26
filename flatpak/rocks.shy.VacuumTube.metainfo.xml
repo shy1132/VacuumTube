@@ -43,6 +43,7 @@
           <li>Improved controller support</li>
           <li>Changed cast label to read better</li>
           <li>Fixed Ctrl+Shift+C</li>
+          <li>Fixed deeplinks not supporting share links</li>
           <li>Massive internal improvements</li>
         </ul>
       </description>

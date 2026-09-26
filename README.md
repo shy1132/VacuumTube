@@ -154,7 +154,7 @@ The userstyles folder is located in the config folder mentioned below.
   - Forces VacuumTube to open in fullscreen
 - `--no-window-decorations`
   - Opens VacuumTube with hidden window decorations
-- `enable-devtools`
+- `--enable-devtools`
   - Opens VacuumTube with the Chromium developer tools open
 - `--debug-gpu`
   - Opens chrome://gpu in VacuumTube, helpful for debugging issues

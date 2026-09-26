@@ -46,6 +46,31 @@ async function startDial() {
     }
 }
 
+function createOnDeepLink() {
+    let listeners = []
+    let pending = [] //deeplinks that arrived before leanback called addListener
+
+    ipcRenderer.on('deeplink', (event, deeplink) => {
+        if (listeners.length === 0) {
+            pending.push(deeplink)
+            return;
+        }
+
+        for (let listener of listeners) {
+            listener(deeplink)
+        }
+    })
+
+    return {
+        addListener: (listener) => {
+            listeners.push(listener)
+            while (pending.length > 0) {
+                listener(pending.shift())
+            }
+        }
+    };
+}
+
 module.exports = async () => {
     const initialDeepLink = await ipcRenderer.invoke('get-deeplink')
     const maxResolution = getMaxResolution()
@@ -53,7 +78,8 @@ module.exports = async () => {
     window.h5vcc = {
         dial: { DialServer },
         runtime: {
-            initialDeepLink
+            initialDeepLink,
+            onDeepLink: createOnDeepLink()
         },
         system: {
             getVideoContainerSizeOverride: () => { //unlock high res

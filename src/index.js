@@ -9,7 +9,9 @@ const package = require('../package.json')
 
 const appId = package.build.appId;
 
-const argv = minimist(process.argv)
+const argv = minimist(process.argv.slice(process.defaultApp ? 2 : 1), {
+    boolean: [ 'version', 'v', 'fullscreen', 'no-window-decorations', 'enable-devtools', 'debug-gpu' ] //otherwise a deeplink after one of these would be taken as its value
+})
 
 electron.app.setName('VacuumTube')
 
@@ -45,6 +47,22 @@ async function main() {
 
         return;
     }
+
+    if (!electron.app.requestSingleInstanceLock({ deeplink: getDeeplink() })) {
+        electron.app.quit()
+        return;
+    }
+
+    electron.app.on('second-instance', (event, commandLine, workingDirectory, additionalData) => {
+        if (!win) return;
+
+        if (win.isMinimized()) win.restore()
+        win.focus()
+
+        if (additionalData?.deeplink) {
+            win.webContents.send('deeplink', additionalData.deeplink)
+        }
+    })
 
     if (runningOnSteam) {
         electron.app.commandLine.appendSwitch('--no-sandbox') //won't run without this in game mode for me
@@ -261,12 +279,7 @@ async function main() {
     })
 
     electron.ipcMain.handle('get-deeplink', () => {
-        let deeplink = argv._[argv._.length - 1]
-        if (deeplink) {
-            return deeplink;
-        } else {
-            return null;
-        }
+        return getDeeplink();
     })
 
     electron.ipcMain.handle('relaunch-app', () => {
@@ -411,6 +424,37 @@ async function createWindow() {
     win.webContents.on('page-title-updated', () => {
         win.setTitle('VacuumTube')
     })
+}
+
+function getDeeplink() {
+    let deeplink = argv._[argv._.length - 1]
+    if (!deeplink) return null;
+
+    return normalizeDeeplink(String(deeplink));
+}
+
+function normalizeDeeplink(deeplink) {
+    let url;
+    try {
+        url = new URL(/^[a-z]+:\/\//i.test(deeplink) ? deeplink : `https://${deeplink}`) //scheme is optional
+    } catch {
+        return deeplink;
+    }
+
+    if (url.hostname !== 'youtu.be' && url.hostname !== 'www.youtu.be') return deeplink;
+
+    let videoId = url.pathname.split('/')[1]
+    if (!videoId) return deeplink;
+
+    let watchUrl = new URL('https://www.youtube.com/watch')
+    watchUrl.searchParams.set('v', videoId)
+
+    for (let [ key, value ] of url.searchParams) {
+        if (key === 'v') continue;
+        watchUrl.searchParams.append(key, value)
+    }
+
+    return watchUrl.toString();
 }
 
 function portable() {
