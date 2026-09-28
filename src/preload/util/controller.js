@@ -15,7 +15,7 @@ axes are read as virtual buttons past that:
 */
 
 const { ipcRenderer } = require('electron')
-const { EventEmitter } = require('tseep/lib/ee-safe') //youtube doesn't like eval
+const { EventEmitter } = require('events')
 
 const emitter = new EventEmitter()
 
