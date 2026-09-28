@@ -1,6 +1,5 @@
 //initialization
 const electron = require('electron')
-const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const fs = require('fs')
 const { parseArgs } = require('util')
@@ -151,13 +150,6 @@ async function main() {
     await permissions.resetAfterUpdate({ appId, userData })
 
     await electron.app.whenReady()
-
-    updater.setup({
-        electron,
-        autoUpdater,
-        getWindow: () => win,
-        isAutoUpdateEnabled: () => configManager.get().auto_update !== false
-    })
 
     permissions.setup({ appId })
 
@@ -311,6 +303,13 @@ async function main() {
     userstyles.setup({ userData, getWindow: () => win })
 
     await createWindow()
+
+    updater.setup({
+        electron,
+        autoUpdater: require('electron-updater').autoUpdater,
+        getWindow: () => win,
+        isAutoUpdateEnabled: () => configManager.get().auto_update !== false
+    })
 
     userstyles.startWatcher()
 
