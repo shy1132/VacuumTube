@@ -69,7 +69,7 @@ VacuumTube has some settings that you can change, which are located in the YouTu
 - Ad Block
   - Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers
 - SponsorBlock
-  - Automatically skips sponsored segments in videos based on a [community-contributed database](https://sponsor.ajay.app/)
+  - Automatically skips sponsored (and/or other) segments in videos based on a [community-contributed database](https://sponsor.ajay.app/)
 - DeArrow
   - Replaces titles and thumbnails with more accurate, less sensationalized versions from a public crowdsourced database
 - Return Dislikes
