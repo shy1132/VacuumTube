@@ -1,4 +1,3 @@
-const { SponsorBlock } = require('sponsorblock-api')
 const ui = require('../util/ui')
 const localeProvider = require('../util/localeProvider')
 const configManager = require('../config')
@@ -6,11 +5,22 @@ const config = configManager.get()
 
 const SPONSORBLOCK_CATEGORIES = [ 'sponsor', 'selfpromo', 'interaction', 'intro', 'outro', 'preview', 'hook', 'filler' ]
 
+//https://wiki.sponsor.ajay.app/w/API_Docs
+async function getSegments(videoId, categories) {
+    let params = new URLSearchParams({ videoID: videoId, service: 'YouTube', categories: JSON.stringify(categories) })
+
+    let res = await fetch(`https://sponsor.ajay.app/api/skipSegments?${params}`)
+    if (res.status === 404) return []; //the video has no segments
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+
+    let data = await res.json()
+    return data.map(({ segment, category }) => ({ startTime: segment[0], endTime: segment[1], category }));
+}
+
 module.exports = async () => {
     await localeProvider.waitUntilAvailable()
     let locale = localeProvider.getLocale()
 
-    let sponsorBlock = new SponsorBlock(config.sponsorblock_uuid)
     let sponsorBlockSegments = []
 
     let activeVideoId = 0;
@@ -67,16 +77,15 @@ module.exports = async () => {
             const categories = SPONSORBLOCK_CATEGORIES.filter(
                 category => config[`sponsorblock_skip_${category}`]
             )
+            if (categories.length === 0) return;
 
-            sponsorBlock.getSegments(videoId, categories).then((segments) => {
+            getSegments(videoId, categories).then((segments) => {
                 if (activeVideoId !== videoId) return; //navigated to another video before this one finished
 
                 sponsorBlockSegments = segments;
                 attachToVideo()
             }).catch((err) => {
-                if (err?.status !== 404) { //404 just means the video has no segments
-                    console.error('[SponsorBlock] Failed to get segments for', videoId, err)
-                }
+                console.error('[SponsorBlock] Failed to get segments for', videoId, err)
             })
         } else {
             activeVideo = null;
