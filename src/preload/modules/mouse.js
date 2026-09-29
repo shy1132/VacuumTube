@@ -6,6 +6,33 @@ module.exports = () => {
     let visible = true;
     let lastUse = 0;
 
+    const showCursor = () => {
+        document.documentElement.style.cursor = 'default'
+        visible = true;
+    }
+
+    const hideCursor = () => {
+        document.documentElement.style.cursor = 'none'
+        visible = false;
+    }
+
+    const mouseUsed = () => {
+        lastUse = Date.now()
+        showCursor()
+    }
+
+    const simulateKeyDown = (keyCode) => {
+        let event = new Event('keydown')
+        event.keyCode = keyCode;
+        document.dispatchEvent(event)
+    }
+
+    const simulateKeyUp = (keyCode) => {
+        let event = new Event('keyup')
+        event.keyCode = keyCode;
+        document.dispatchEvent(event)
+    }
+
     //block scroll events (enableTouchSupport in touch-support.js adds native scrollbars, which messes with scrollwheel)
     window.addEventListener('wheel', (e) => {
         e.preventDefault()
@@ -19,18 +46,6 @@ module.exports = () => {
         }
     })
 
-    function simulateKeyDown(keyCode) {
-        let event = new Event('keydown')
-        event.keyCode = keyCode;
-        document.dispatchEvent(event)
-    }
-
-    function simulateKeyUp(keyCode) {
-        let event = new Event('keyup')
-        event.keyCode = keyCode;
-        document.dispatchEvent(event)
-    }
-
     //make mouse disappear after a bit of no movement
     setInterval(() => {
         if (!visible) return;
@@ -39,23 +54,7 @@ module.exports = () => {
         }
     }, 20)
 
-    window.addEventListener('mousemove', () => {
-        lastUse = Date.now()
-        showCursor()
-    })
-
-    window.addEventListener('mousedown', () => {
-        lastUse = Date.now()
-        showCursor()
-    })
-
-    function showCursor() {
-        document.documentElement.style.cursor = 'default'
-        visible = true;
-    }
-
-    function hideCursor() {
-        document.documentElement.style.cursor = 'none'
-        visible = false;
-    }
+    window.addEventListener('pointermove', mouseUsed, true)
+    window.addEventListener('pointerdown', mouseUsed, true)
+    window.addEventListener('pointerup', mouseUsed, true)
 }
