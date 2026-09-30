@@ -49,6 +49,7 @@
           <li>Fixed deeplinks not supporting share links</li>
           <li>Fixed --no-window-decorations CLI flag</li>
           <li>Massive internal improvements</li>
+          <li>Updated to Electron v44.5.1</li>
         </ul>
       </description>
     </release>
