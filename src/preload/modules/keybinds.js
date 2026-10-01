@@ -5,7 +5,6 @@ const rcMod = require('../util/resolveCommandModifiers')
 const patchFunction = require('../util/patchFunction')
 const localeProvider = require('../util/localeProvider')
 const shortcuts = require('../util/shortcuts')
-const { clipboard } = require('electron')
 
 module.exports = async () => {
     await localeProvider.waitUntilAvailable()
@@ -68,7 +67,7 @@ module.exports = async () => {
 
             e.preventDefault()
             e.stopImmediatePropagation()
-            clipboard.writeText(url)
+            navigator.clipboard.writeText(url)
             ui.toast('VacuumTube', locale.general.video_copied)
         }
     }, true)
