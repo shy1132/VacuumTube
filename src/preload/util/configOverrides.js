@@ -1,10 +1,9 @@
-//helper functions for overriding internal youtube configs (env, ytcfg, window.environment, and tectonicConfig)
+//helper functions for overriding internal youtube configs (env, ytcfg, and window.environment which is the source of tectonicConfig)
 
 const functions = require('./functions')
 
 const ytcfgOverrides = []
 const environmentOverrides = []
-const tectonicConfigOverrides = []
 
 function overrideEnv(key, value) {
     let params = new URLSearchParams(window.location.search)
@@ -24,39 +23,50 @@ function overrideEnv(key, value) {
     history.replaceState(null, '', newUrl)
 }
 
-function applyWhenAvailable(queue, getTarget, apply) {
-    let interval = setInterval(() => {
-        let target = getTarget()
-        if (!target) return;
-
-        clearInterval(interval)
-
-        for (let override of queue) {
-            try {
-                apply(target, override)
-            } catch (err) {
-                console.error('a config override failed', err)
-            }
+function applyOverrides(target, overrides) {
+    for (let override of overrides) {
+        try {
+            functions.deepMerge(target, override)
+        } catch (err) {
+            console.error('a config override failed', err)
         }
-    })
+    }
 }
 
-applyWhenAvailable(ytcfgOverrides, () => window.ytcfg, (ytcfg, override) => {
-    functions.deepMerge(ytcfg.data_, override)
-    ytcfg.set(ytcfg.data_)
+let environment;
+Object.defineProperty(window, 'environment', {
+    configurable: true,
+    get() {
+        return environment;
+    },
+    set(value) {
+        applyOverrides(value, environmentOverrides)
+        environment = value;
+    }
 })
 
-applyWhenAvailable(environmentOverrides, () => window.environment, (environment, override) => {
-    functions.deepMerge(environment, override)
-})
+let ytcfg;
+Object.defineProperty(window, 'ytcfg', {
+    configurable: true,
+    get() {
+        return ytcfg;
+    },
+    set(value) {
+        ytcfg = value;
 
-applyWhenAvailable(tectonicConfigOverrides, () => window.tectonicConfig, (tectonicConfig, override) => {
-    functions.deepMerge(tectonicConfig, override)
+        let set = value?.set;
+        if (typeof set !== 'function') return;
+
+        value.set = function (...args) {
+            let result = set.apply(this, args)
+            if (value.data_) applyOverrides(value.data_, ytcfgOverrides)
+            return result;
+        }
+    }
 })
 
 module.exports = {
     overrideEnv,
     ytcfgOverrides,
-    environmentOverrides,
-    tectonicConfigOverrides
+    environmentOverrides
 }

@@ -5,9 +5,9 @@ const configManager = require('../config')
 const config = configManager.get()
 
 module.exports = () => {
-    configOverrides.tectonicConfigOverrides.push({
-        featureSwitches: {
-            enableTouchSupport: true //native scrollbars
+    configOverrides.environmentOverrides.push({
+        flags: {
+            enable_touch_support: true //native scrollbars
         }
     })
 

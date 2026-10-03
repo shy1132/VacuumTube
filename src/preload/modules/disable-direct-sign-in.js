@@ -3,9 +3,9 @@
 const configOverrides = require('../util/configOverrides')
 
 module.exports = async () => {
-    configOverrides.tectonicConfigOverrides.push({
-        featureSwitches: {
-            enableDirectSignIn: false
+    configOverrides.environmentOverrides.push({
+        flags: {
+            enable_direct_sign_in: false
         }
     })
 }
