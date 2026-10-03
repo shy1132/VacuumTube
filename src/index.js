@@ -357,7 +357,8 @@ async function createWindow() {
             contextIsolation: false,
             sandbox: false, //allows me to use node apis in preload, but doesn't allow youtube to do so (solely need node apis for requiring the modules)
             nodeIntegrationInSubFrames: true, //since nodeIntegration is already false, it doesn't actually enable nodeIntegration in frames, but it does enable the preload script in frames which is needed for some weird edgecases where youtube may place the entirety of leanback in a frame
-            preload: path.join(__dirname, 'preload/index.js')
+            preload: path.join(__dirname, 'preload/index.js'),
+            spellcheck: false //no use for this here, downloads a file in background on linux (hunspell)
         },
         title: 'VacuumTube'
     })
