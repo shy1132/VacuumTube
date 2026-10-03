@@ -129,24 +129,18 @@ function XMLHttpRequest() {
     }
 
     xhr.send = function (body) {
-        if (!blocked && requestModifiers.length === 0) return originalSend.call(this, body);
-
-        (async () => {
-            if (blocked) {
-                await functions.waitForCondition(() => !blocked)
+        for (let modifier of requestModifiers) {
+            try {
+                body = modifier(url, body)
+            } catch (err) {
+                console.error('an xhr request modifier failed', err)
             }
+        }
 
-            for (let modifier of requestModifiers) {
-                try {
-                    body = await modifier(url, body)
-                } catch (err) {
-                    console.error('an xhr request modifier failed', err)
-                }
-            }
+        if (!blocked) return originalSend.call(this, body); //synchronous like the real one, so errors are thrown to the caller
 
-            originalSend.call(xhr, body)
-        })().catch((err) => {
-            console.error('failed to send modified xhr request', err)
+        functions.waitForCondition(() => !blocked).then(() => originalSend.call(xhr, body)).catch((err) => {
+            console.error('failed to send xhr request', err)
         })
     }
 
@@ -164,6 +158,7 @@ function addResponseModifier(func) {
     responseModifiers.push(func)
 }
 
+//request modifiers are synchronous, so send() stays synchronous
 function addRequestModifier(func) {
     requestModifiers.push(func)
 }
