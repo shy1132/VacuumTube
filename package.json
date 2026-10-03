@@ -136,11 +136,11 @@
     },
     "devDependencies": {
         "electron": "^44.5.1",
-        "electron-builder": "^26.0.12"
+        "electron-builder": "^26.17.0"
     },
     "dependencies": {
         "chokidar": "^5.0.0",
-        "electron-updater": "^6.8.9",
+        "electron-updater": "^6.8.10",
         "string-argv": "^0.3.2"
     }
 }
