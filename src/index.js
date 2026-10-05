@@ -454,8 +454,8 @@ async function createWindow() {
     })
 
     //keep window title as VacuumTube
-    win.webContents.on('page-title-updated', () => {
-        win.setTitle('VacuumTube')
+    win.on('page-title-updated', (e) => {
+        e.preventDefault()
     })
 }
 
