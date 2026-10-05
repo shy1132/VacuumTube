@@ -31,7 +31,7 @@ module.exports = async () => {
     }, true)
 
     patchFunction(window, 'setTimeout', function (setTimeout, callback, delay, ...args) {
-        if (shiftEnterHeld && typeof callback === 'function' && /^function\(\)\{[^.]+\.[^(]+\([^,]+,[^)]+\)\}$/.test(callback.toString())) { //very dumb, but it's "function(){x.x(x,x)}", this only is applied when shift and enter are held so it shouldn't cause any issues
+        if (shiftEnterHeld && typeof callback === 'function' && /^\(\)=>\{\([\w$]+=[\w$]+\.call\([^)]*\)\)&&[\w$]+\(\);[\w$]+\(\)\}$/.test(callback.toString())) { //matches "()=>{(x=x.call(x,x,x))&&x();x()}", only applied while shift and enter are held
             delay = 0;
         }
 
