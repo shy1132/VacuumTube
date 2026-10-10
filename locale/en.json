@@ -195,6 +195,10 @@
                     "title": "Show Remaining Time",
                     "description": "Displays the remaining video runtime in the player overlay instead of the elapsed time. Takes current playback speed into account. Press R to toggle it for the current video."
                 },
+                "arrow_seek": {
+                    "title": "Arrow Key Seeking",
+                    "description": "While a video is playing and the player controls are hidden, Left and Right (arrow keys or D-pad) skip back or forward 10 seconds without opening the progress bar. Hold to skip in bigger steps. When the controls are shown, they work as usual."
+                },
                 "ultrawide": {
                     "title": "Ultrawide Support",
                     "description": "Expands the interface to fill ultrawide displays when in fullscreen. May look buggy and weird in some ways."

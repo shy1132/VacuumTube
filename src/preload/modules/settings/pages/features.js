@@ -20,6 +20,13 @@ module.exports = {
         },
         {
             type: 'toggle',
+            key: 'arrow_seek_feature',
+            title: locale.features.settings.arrow_seek.title,
+            description: locale.features.settings.arrow_seek.description,
+            dependsOn: 'features_enabled'
+        },
+        {
+            type: 'toggle',
             key: 'ultrawide_feature',
             title: locale.features.settings.ultrawide.title,
             description: locale.features.settings.ultrawide.description,
