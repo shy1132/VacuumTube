@@ -43,6 +43,7 @@
           <li>Added --width/--height CLI flags</li>
           <li>Added explicit --deeplink CLI flag</li>
           <li>Improved controller support</li>
+          <li>Improved playback reliability</li>
           <li>Improved cast reliability</li>
           <li>Changed cast label to read better</li>
           <li>Fixed Ctrl+Shift+C</li>
