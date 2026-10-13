@@ -49,7 +49,7 @@
             "content": "محتوا",
             "quality": "کیفیت و سازگاری",
             "interface": "رابط کاربری",
-            "userstyles": "CSS سفارشی",
+            "userstyles": "‏CSS سفارشی",
             "input": "ورودی",
             "devices": "دستگاه‌ها",
             "performance": "عملکرد",
@@ -112,7 +112,7 @@
         },
         "hide_shorts": {
             "title": "پنهان کردن Shorts",
-            "description": "YouTube Shorts را از صفحه اصلی پنهان می‌کند"
+            "description": "از صفحه اصلی، YouTube Shorts را پنهان می‌کند"
         },
         "guide_tabs": {
             "title": "برگه‌های راهنما",
@@ -202,7 +202,7 @@
             }
         },
         "userstyles": {
-            "title": "CSS سفارشی (Userstyles)",
+            "title": "‏CSS سفارشی (Userstyles)",
             "description": "برای شخصی‌سازی رابط کاربری، فایل‌های .css را در پوشه userstyles قرار دهید. تغییرات به‌طور خودکار اعمال می‌شوند",
             "warn_empty": "هیچ استایل کاربری یافت نشد",
             "open_folder": "باز کردن پوشه Userstyles",
@@ -235,9 +235,9 @@
             "relaunch_app": "راه‌اندازی مجدد VacuumTube",
             "restart_required": "تغییرات ایجادشده در macOS Settings نیازمند راه‌اندازی مجدد VacuumTube است.",
             "request_granted": "دسترسی به میکروفون مجاز است. نیازی به اعلان مجوز نیست.",
-            "request_not_determined": "macOS هنوز اعلان مجوزی نشان نداده است. از «بازنشانی اعلان مجوز» استفاده کنید و سپس دوباره امتحان نمایید.",
+            "request_not_determined": "هنوز macOS اعلان مجوزی نشان نداده است. از «بازنشانی اعلان مجوز» استفاده کنید و سپس دوباره امتحان نمایید.",
             "request_denied_help": "تا زمانی که دسترسی رد شده باشد، macOS اعلان مجوز را دوباره نشان نخواهد داد. آن را در macOS Settings فعال کنید و سپس VacuumTube را مجدداً راه‌اندازی نمایید.",
-            "request_failed": "VacuumTube نتوانست دسترسی به میکروفون را درخواست کند. macOS Settings را باز کنید و پس از تغییر دسترسی، برنامه را مجدداً راه‌اندازی نمایید.",
+            "request_failed": "دسترسی به میکروفون را VacuumTube نتوانست درخواست کند. macOS Settings را باز کنید و پس از تغییر دسترسی، برنامه را مجدداً راه‌اندازی نمایید.",
             "resetting_microphone": "در حال بازنشانی تصمیم ذخیره‌شده میکروفون در macOS...",
             "statuses": {
                 "not-determined": "درخواست‌نشده",
@@ -250,7 +250,7 @@
         },
         "about": {
             "title": "درباره",
-            "description": "YouTube برای تلویزیون، در رایانه شما",
+            "description": "‏YouTube برای تلویزیون، در رایانه شما",
             "version": "نسخه {version}",
             "platform_label": "پلتفرم",
             "installation_label": "نوع نصب",
@@ -292,7 +292,7 @@
                 "current_title": "برنامه به‌روز است",
                 "current_detail": "نسخه {version} برنامه VacuumTube جدیدترین نسخه موجود است.",
                 "check_again": "بررسی مجدد",
-                "available_title": "VacuumTube {version} موجود است",
+                "available_title": "‏VacuumTube {version} موجود است",
                 "available_automatic_detail": "به‌روزرسانی را اکنون دانلود کنید، سپس پس از آماده شدن، VacuumTube را مجدداً راه‌اندازی نمایید.",
                 "available_manual_detail": "جدیدترین نسخه را دانلود کرده و جایگزین نسخه فعلی خود کنید.",
                 "download_update": "دانلود به‌روزرسانی",
