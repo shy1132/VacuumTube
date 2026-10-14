@@ -5,7 +5,7 @@ const rcMod = require('../util/resolveCommandModifiers')
 const patchFunction = require('../util/patchFunction')
 const localeProvider = require('../util/localeProvider')
 const shortcuts = require('../util/shortcuts')
-const { clipboard } = require('electron')
+const { ipcRenderer } = require('electron')
 const { createCopyVideoHandler } = require('../util/copy-video-link')
 
 module.exports = async () => {
@@ -55,7 +55,7 @@ module.exports = async () => {
         document,
         getVideo: () => window.yt?.player?.utils?.videoElement_,
         getShortId: () => lastShortId,
-        writeText: (url) => clipboard.writeText(url),
+        writeText: (url) => ipcRenderer.invoke('copy-video-link', url),
         onCopied: () => ui.toast('VacuumTube', locale.general.video_copied)
     }), true)
 

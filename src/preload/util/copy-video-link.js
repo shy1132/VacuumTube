@@ -1,6 +1,6 @@
 //Kept independent of Electron so shortcut behavior can be tested without an app.
 function createCopyVideoHandler({ platform, document, getVideo, getShortId, writeText, onCopied }) {
-    return (event) => {
+    return async (event) => {
         if (event.key?.toLowerCase() !== 'c' || event.altKey) return;
 
         const commandCopy = platform === 'darwin' && event.metaKey && !event.ctrlKey;
@@ -42,7 +42,7 @@ function createCopyVideoHandler({ platform, document, getVideo, getShortId, writ
         if (event.repeat) return;
 
         try {
-            writeText(url);
+            await writeText(url);
         } catch (err) {
             console.error('[Clipboard] Failed to copy video link', err);
             return;
