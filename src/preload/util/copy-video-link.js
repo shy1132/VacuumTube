@@ -22,8 +22,9 @@ function createCopyVideoHandler({ platform, document, getVideo, getShortId, writ
             try {
                 const url = new URL(video?.baseURI);
                 if (url.hostname !== 'www.youtube.com' && url.hostname !== 'youtube.com') return;
-                if (url.pathname !== '/watch') return;
-                id = url.searchParams.get('v');
+                const route = url.pathname === '/tv' ? new URL(url.hash.slice(1), url) : url;
+                if (route.origin !== url.origin || route.pathname !== '/watch') return;
+                id = route.searchParams.get('v');
             } catch {
                 return;
             }
@@ -32,7 +33,9 @@ function createCopyVideoHandler({ platform, document, getVideo, getShortId, writ
 
         let url = isShort ? `https://youtube.com/shorts/${id}` : `https://youtu.be/${id}`;
         //Live timestamps are relative to the moving stream, not a stable share time.
-        if (commandCopy && event.shiftKey && !isShort && Number.isFinite(video?.duration) &&
+        if (commandCopy && event.shiftKey && !isShort &&
+            !document.querySelector('.html5-video-player')?.getVideoData?.()?.isLive &&
+            Number.isFinite(video?.duration) &&
             video.duration > 0 && Number.isFinite(video.currentTime) && video.currentTime >= 0) {
             url += `?t=${Math.floor(video.currentTime)}`;
         }

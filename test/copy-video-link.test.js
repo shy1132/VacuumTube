@@ -12,7 +12,7 @@ function harness(options = {}) {
         querySelector: () => null,
         ...options.document
     };
-    const video = { baseURI: `https://www.youtube.com/watch?v=${id}&list=example`, currentTime: 83.9, duration: 300, ...options.video };
+    const video = { baseURI: `https://www.youtube.com/tv?env_enableMediaStreams=true#/watch?v=${id}&list=example`, currentTime: 83.9, duration: 300, ...options.video };
     const handler = createCopyVideoHandler({
         platform: options.platform || 'darwin', document,
         getVideo: () => options.noVideo ? undefined : video,
@@ -159,4 +159,38 @@ test('success toast waits until clipboard completion', async () => {
     finish();
     await pending;
     assert.equal(h.notices(), 1);
+});
+
+
+test('regular watch URLs and TV hash routes identify the same video', async () => {
+    for (const baseURI of [
+        `https://www.youtube.com/watch?v=${id}`,
+        `https://www.youtube.com/tv#/watch?v=${id}`,
+        `https://www.youtube.com/tv?env_enableMediaStreams=true#/watch?list=playlist&v=${id}`
+    ]) {
+        const h = harness({ video: { baseURI } });
+        await h.press({ shiftKey: true });
+        assert.deepEqual(h.copied, [`https://youtu.be/${id}?t=83`]);
+    }
+});
+
+test('home/search routes and foreign hash URLs cannot copy a stale video', async () => {
+    for (const baseURI of [
+        `https://www.youtube.com/tv#/`,
+        `https://www.youtube.com/tv#/search?v=${id}`,
+        `https://www.youtube.com/tv#https://example.com/watch?v=${id}`
+    ]) {
+        const h = harness({ video: { baseURI } });
+        await h.press();
+        assert.deepEqual(h.copied, []);
+    }
+});
+
+test('live DVR with a finite duration still copies a plain link', async () => {
+    const h = harness({ document: {
+        querySelector: selector => selector === '.html5-video-player'
+            ? { getVideoData: () => ({ isLive: true }) } : null
+    } });
+    await h.press({ shiftKey: true });
+    assert.deepEqual(h.copied, [`https://youtu.be/${id}`]);
 });
