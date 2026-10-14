@@ -401,7 +401,7 @@ async function createWindow() {
 
     if (process.platform === 'darwin') {
         //Let the renderer choose between copying text and copying a video link.
-        //Do not prevent the input event: Chromium's normal text copy still works.
+        //The renderer requests native text copying when a field or selection is active.
         win.webContents.on('before-input-event', (event, input) => {
             win.webContents.setIgnoreMenuShortcuts(
                 input.meta && !input.control && !input.alt && input.key?.toLowerCase() === 'c'

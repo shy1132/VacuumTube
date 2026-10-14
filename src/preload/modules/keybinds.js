@@ -56,6 +56,7 @@ module.exports = async () => {
         getVideo: () => window.yt?.player?.utils?.videoElement_,
         getShortId: () => lastShortId,
         writeText: (url) => ipcRenderer.invoke('copy-video-link', url),
+        copySelection: () => ipcRenderer.invoke('copy-selection'),
         onCopied: () => ui.toast('VacuumTube', locale.general.video_copied)
     }), true)
 

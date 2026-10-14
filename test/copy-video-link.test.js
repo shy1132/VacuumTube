@@ -6,6 +6,7 @@ const id = 'dQw4w9WgXcQ';
 function harness(options = {}) {
     const copied = [];
     let notices = 0;
+    let selections = 0;
     const document = {
         activeElement: { matches: () => false },
         getSelection: () => '',
@@ -18,6 +19,7 @@ function harness(options = {}) {
         getVideo: () => options.noVideo ? undefined : video,
         getShortId: () => options.shortId || id,
         writeText: options.writeText || ((url) => copied.push(url)),
+        copySelection: () => selections++,
         onCopied: () => notices++
     });
     async function press(extra = {}) {
@@ -26,7 +28,7 @@ function harness(options = {}) {
         await handler(event);
         return event;
     }
-    return { copied, press, notices: () => notices };
+    return { copied, press, notices: () => notices, selections: () => selections };
 }
 
 test('Command-C copies a clean video link and consumes the shortcut', async () => {
@@ -48,10 +50,13 @@ test('normal Command-C preserves selected text and editable controls', async () 
     for (const document of [
         { getSelection: () => 'selected text' },
         { activeElement: { matches: () => true } },
-        { activeElement: { matches: () => false, isContentEditable: true } }
+        { activeElement: { matches: () => false, isContentEditable: true } },
+        { activeElement: { shadowRoot: { activeElement: { matches: () => true } } } }
     ]) {
         const h = harness({ document });
-        assert.equal((await h.press()).prevented, undefined);
+        assert.equal((await h.press()).prevented, true);
+        assert.equal(h.selections(), 1);
+        assert.equal(h.notices(), 0);
         assert.deepEqual(h.copied, []);
         await h.press({ shiftKey: true });
         assert.equal(h.copied.length, 1);
@@ -121,7 +126,7 @@ test('main process accepts only video URLs from the app YouTube renderer', () =>
     let handle;
     const copied = [];
     const webContents = {};
-    setup({ ipcMain: { handle: (name, callback) => { assert.equal(name, 'copy-video-link'); handle = callback; } },
+    setup({ ipcMain: { handle: (name, callback) => { if (name === 'copy-video-link') handle = callback; } },
         clipboard: { writeText: url => copied.push(url) } }, () => ({ webContents }));
     const event = { sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } };
     for (const url of [`https://youtu.be/${id}`, `https://youtu.be/${id}?t=83`, `https://youtube.com/shorts/${id}`]) {
@@ -143,7 +148,7 @@ test('main process returns clipboard completion so IPC can acknowledge success o
     let finish;
     const completion = new Promise(resolve => { finish = resolve; });
     const webContents = {};
-    setup({ ipcMain: { handle: (name, callback) => { handle = callback; } },
+    setup({ ipcMain: { handle: (name, callback) => { if (name === 'copy-video-link') handle = callback; } },
         clipboard: { writeText: () => completion } }, () => ({ webContents }));
     const result = handle({ sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } }, `https://youtu.be/${id}`);
     assert.equal(result, completion);
@@ -193,4 +198,24 @@ test('live DVR with a finite duration still copies a plain link', async () => {
     } });
     await h.press({ shiftKey: true });
     assert.deepEqual(h.copied, [`https://youtu.be/${id}`]);
+});
+
+
+test('native selection copying validates the sender and works without a video', async () => {
+    const h = harness({ noVideo: true, document: { activeElement: { matches: () => true } } });
+    await h.press();
+    assert.equal(h.selections(), 1);
+    assert.deepEqual(h.copied, []);
+
+    const { setup } = require('../src/video-link-clipboard');
+    const handlers = new Map();
+    let selections = 0;
+    const webContents = { copy: () => selections++ };
+    setup({ ipcMain: { handle: (name, callback) => handlers.set(name, callback) } }, () => ({ webContents }));
+    const copySelection = handlers.get('copy-selection');
+    copySelection({ sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } });
+    assert.equal(selections, 1);
+    assert.throws(() => copySelection({ sender: {}, senderFrame: { url: 'https://www.youtube.com/tv' } }), /Invalid clipboard/);
+    assert.throws(() => copySelection({ sender: webContents, senderFrame: { url: 'https://example.com' } }), /Invalid clipboard/);
+    assert.equal(selections, 1);
 });

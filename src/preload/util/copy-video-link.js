@@ -1,5 +1,5 @@
 //Kept independent of Electron so shortcut behavior can be tested without an app.
-function createCopyVideoHandler({ platform, document, getVideo, getShortId, writeText, onCopied }) {
+function createCopyVideoHandler({ platform, document, getVideo, getShortId, writeText, copySelection, onCopied }) {
     return async (event) => {
         if (event.key?.toLowerCase() !== 'c' || event.altKey) return;
 
@@ -8,9 +8,21 @@ function createCopyVideoHandler({ platform, document, getVideo, getShortId, writ
         if (!commandCopy && !legacyCopy) return;
 
         if (commandCopy && !event.shiftKey) {
-            const active = document.activeElement;
+            let active = document.activeElement;
+            while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
             if (active?.matches('input, textarea, select') || active?.isContentEditable ||
-                document.getSelection()?.toString()) return;
+                document.getSelection()?.toString()) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                if (event.repeat) return;
+                //The native Copy accelerator is suppressed for this chord on macOS.
+                try {
+                    await copySelection();
+                } catch (err) {
+                    console.error('[Clipboard] Failed to copy selection', err);
+                }
+                return;
+            }
         }
 
         const isShort = document.querySelector('ytlr-shorts-page')?.classList.contains('zylon-focus');
