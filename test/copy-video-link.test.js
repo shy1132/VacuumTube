@@ -136,3 +136,27 @@ test('main process accepts only video URLs from the app YouTube renderer', () =>
     ]) assert.throws(() => handle(source, url), /Invalid video link/);
     assert.equal(copied.length, 3);
 });
+
+test('main process returns clipboard completion so IPC can acknowledge success or failure', async () => {
+    const { setup } = require('../src/video-link-clipboard');
+    let handle;
+    let finish;
+    const completion = new Promise(resolve => { finish = resolve; });
+    const webContents = {};
+    setup({ ipcMain: { handle: (name, callback) => { handle = callback; } },
+        clipboard: { writeText: () => completion } }, () => ({ webContents }));
+    const result = handle({ sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } }, `https://youtu.be/${id}`);
+    assert.equal(result, completion);
+    finish();
+    await result;
+});
+
+test('success toast waits until clipboard completion', async () => {
+    let finish;
+    const h = harness({ writeText: () => new Promise(resolve => { finish = resolve; }) });
+    const pending = h.press();
+    assert.equal(h.notices(), 0);
+    finish();
+    await pending;
+    assert.equal(h.notices(), 1);
+});

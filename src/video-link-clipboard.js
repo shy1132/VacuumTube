@@ -7,7 +7,7 @@ function setup({ ipcMain, clipboard }, getWindow) {
             !/^https:\/\/(?:youtu\.be\/[\w-]{11}(?:\?t=\d+)?|youtube\.com\/shorts\/[\w-]{11})$/.test(url)) {
             throw new Error('Invalid video link clipboard request');
         }
-        clipboard.writeText(url);
+        return clipboard.writeText(url);
     });
 }
 
