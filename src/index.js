@@ -397,6 +397,17 @@ async function createWindow() {
         win.setAspectRatio(TARGET_RATIO)
     }
 
+    if (process.platform === 'darwin') {
+        //Let the renderer choose between copying text and copying a video link.
+        //Do not prevent the input event: Chromium's normal text copy still works.
+        win.webContents.on('before-input-event', (event, input) => {
+            win.webContents.setIgnoreMenuShortcuts(
+                input.meta && !input.control && !input.alt && input.key?.toLowerCase() === 'c'
+            )
+        })
+        win.webContents.on('blur', () => win.webContents.setIgnoreMenuShortcuts(false))
+    }
+
     win.setMenuBarVisibility(false)
     win.setAutoHideMenuBar(false)
 

@@ -1,0 +1,43 @@
+name: Test builds
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            name: macOS
+            args: --mac zip --x64 --arm64
+          - os: ubuntu-latest
+            name: Linux
+            args: --linux AppImage tar.gz --x64
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Build unsigned test packages
+        run: npx electron-builder ${{ matrix.args }} --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VacuumTube-test-${{ matrix.name }}
+          path: |
+            dist/*.zip
+            dist/*.AppImage
+            dist/*.tar.gz
+          if-no-files-found: error
+          retention-days: 14

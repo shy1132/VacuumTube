@@ -5,6 +5,8 @@ const rcMod = require('../util/resolveCommandModifiers')
 const patchFunction = require('../util/patchFunction')
 const localeProvider = require('../util/localeProvider')
 const shortcuts = require('../util/shortcuts')
+const { clipboard } = require('electron')
+const { createCopyVideoHandler } = require('../util/copy-video-link')
 
 module.exports = async () => {
     await localeProvider.waitUntilAvailable()
@@ -38,7 +40,7 @@ module.exports = async () => {
         return setTimeout(callback, delay, ...args);
     })
 
-    //ctrl+shift+c to copy video url
+    //copy the current video, including Shorts
     let lastShortId = null;
     rcMod.addInputModifier((c) => {
         if (c.reelWatchEndpoint) {
@@ -48,29 +50,14 @@ module.exports = async () => {
         return c;
     })
 
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.shiftKey && e.key?.toLowerCase() === 'c') {
-            let url;
-
-            let isShort = !!document.querySelector('ytlr-shorts-page')?.classList?.contains('zylon-focus')
-            if (isShort && lastShortId) {
-                url = `https://youtube.com/shorts/${lastShortId}`
-            } else {
-                let baseUri = window.yt?.player?.utils?.videoElement_?.baseURI;
-                if (!baseUri || !baseUri.includes('/watch?v=')) return;
-
-                let id = baseUri.split('/watch?v=')[1]?.slice(0, 11)
-                if (!id) return;
-
-                url = `https://youtu.be/${id}`
-            }
-
-            e.preventDefault()
-            e.stopImmediatePropagation()
-            navigator.clipboard.writeText(url)
-            ui.toast('VacuumTube', locale.general.video_copied)
-        }
-    }, true)
+    document.addEventListener('keydown', createCopyVideoHandler({
+        platform: process.platform,
+        document,
+        getVideo: () => window.yt?.player?.utils?.videoElement_,
+        getShortId: () => lastShortId,
+        writeText: (url) => clipboard.writeText(url),
+        onCopied: () => ui.toast('VacuumTube', locale.general.video_copied)
+    }), true)
 
     //c to toggle captions (like desktop)
     let captions = false;
