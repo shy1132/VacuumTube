@@ -8,3 +8,4 @@ StartupWMClass=VacuumTube
 Categories=AudioVideo;
 Keywords=YouTube;YT;
 Comment=Watch and explore videos on YouTube
+X-KDE-FormFactors=mediacenter,desktop,handset,tablet
