@@ -19,7 +19,8 @@
             "hint": "Use arrow keys to navigate",
             "option_count": "{count} options",
             "translate": "Help translate VacuumTube to {language}",
-            "ratio": "{on} of {total}"
+            "ratio": "{on} of {total}",
+            "contributed_by": "Contributed by"
         },
         "categories": {
             "general": {
@@ -316,6 +317,24 @@
                 "unsupported_detail": "Use the update method shown below to check for a newer version.",
                 "view_update_source": "View update source",
                 "view_releases": "View latest releases"
+            }
+        },
+        "feature_info": {
+            "original_contribution": "Original contribution",
+            "music": {
+                "label": "EXPERIMENTAL · AUDIO",
+                "summary": "Listen to audio without playing video.",
+                "sections": [
+                    {
+                        "title": "What it does",
+                        "text": "Switches to audio-only playback with artwork in place of video. Useful for music, podcasts, and listening in the background."
+                    },
+                    {
+                        "title": "How to use it",
+                        "text": "Enable Music Mode in Experimental options, then turn it on in the video settings menu. Turn it off there to restore video."
+                    }
+                ],
+                "note": "Uses YouTube’s audio-only playback. Availability may change."
             }
         }
     },

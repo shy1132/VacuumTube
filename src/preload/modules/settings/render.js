@@ -1,6 +1,7 @@
 //builds the dom for a category or a page, and is the only place that defines the row types
 //an interactive row has the vt-focusable class, a data-nav-id, and a vtActivate function
 
+const featureInfo = require('./feature-info')
 const configManager = require('../../config')
 const { el } = require('../../util/functions')
 
@@ -212,6 +213,16 @@ function sectionToggle(section, context) {
 //parentTitle is the view the back button returns to, shown in the breadcrumb
 function renderPage(page, sections, parentTitle, context) {
     const title = resolve(page.title, context.locale)
+    if (page.details) {
+        return el('div', { className: 'vt-view vt-view-page vt-rich-info' }, [
+            focusable('back', 'vt-back', [
+                el('span', { className: 'vt-chevron', textContent: '‹' }),
+                el('span', { textContent: parentTitle })
+            ], () => context.goBack()),
+            ...featureInfo(resolve(page.details, context.locale), context, focusable),
+            context.translation.complete ? null : translateLink(context)
+        ]);
+    }
 
     return el('div', { className: `vt-view vt-view-page${page.layout === 'wide' ? ' vt-view-wide' : ''}` }, [
         focusable('back', 'vt-back', [

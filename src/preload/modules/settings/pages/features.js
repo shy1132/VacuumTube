@@ -8,6 +8,7 @@ module.exports = {
         {
             type: 'toggle',
             key: 'music_mode_feature',
+            infoPage: 'music-info',
             title: locale.features.settings.music_mode.title,
             description: locale.features.settings.music_mode.description,
             dependsOn: 'features_enabled'

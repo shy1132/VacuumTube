@@ -61,7 +61,7 @@ async function render() {
     let view;
     if (state.page) {
         const page = pages[state.page.id]
-        const sections = page.sections ? await page.sections(config, locale) : [ { rows: await page.rows(config, locale) } ]
+        const sections = page.sections ? await page.sections(config, locale) : [ { rows: await page.rows?.(config, locale) } ]
 
         if (renderId !== renderCount) return; //a newer render replaced this one
 

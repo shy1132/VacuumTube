@@ -542,3 +542,123 @@ styles the frame and the generic row types from render.js only
     background: #666;
     transition: transform 0.15s ease-out;
 }
+
+/*Optional feature details*/
+.vt-rich-info .vt-back {
+    margin-bottom: 18px;
+}
+
+.vt-rich-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    margin-bottom: 22px;
+}
+
+.vt-rich-intro {
+    flex: 1;
+    min-width: 0;
+}
+
+.vt-rich-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: #aaa;
+}
+
+.vt-rich-intro h2 {
+    font-size: 34px;
+    line-height: 1.15;
+    margin: 8px 0;
+}
+
+.vt-rich-intro > p {
+    margin: 0;
+    font-size: 18px;
+    color: #c8c8c8;
+}
+
+.vt-rich-credit {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.vt-rich-credit strong {
+    color: #ddd;
+    font-weight: 500;
+}
+
+.vt-rich-symbol {
+    width: 112px;
+    height: 112px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.vt-rich-symbol img {
+    width: 72px;
+    height: 72px;
+}
+
+.vt-rich-explainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: #2a2a2a;
+}
+
+.vt-rich-info h3 {
+    margin: 0 0 7px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.vt-rich-explainer p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #bdbdbd;
+}
+
+.vt-rich-footer {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    color: #999;
+    font-size: 12px;
+}
+
+.vt-rich-source {
+    padding: 10px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #ddd;
+}
+
+@media (max-width: 800px) {
+    .vt-rich-explainer {
+        grid-template-columns: 1fr;
+    }
+
+    .vt-rich-hero {
+        gap: 16px;
+    }
+
+    .vt-rich-symbol {
+        width: 72px;
+        height: 72px;
+    }
+
+    .vt-rich-footer {
+        flex-wrap: wrap;
+    }
+}
