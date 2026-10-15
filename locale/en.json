@@ -12,6 +12,7 @@
     },
     "settings": {
         "generic": {
+            "more_info": "Learn more about {feature}",
             "title": "Settings",
             "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere by pressing Ctrl+O on your keyboard",
             "button_label": "Open VacuumTube Settings",
@@ -158,7 +159,7 @@
         },
         "low_memory_mode": {
             "title": "Low Memory Mode",
-            "description": "Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Relaunch after toggling"
+            "description": "Ask YouTube to reduce memory use and visual effects. Relaunch to apply."
         },
         "fullscreen": {
             "title": "Fullscreen",
@@ -192,15 +193,15 @@
             "settings": {
                 "music_mode": {
                     "title": "Music Mode",
-                    "description": "Adds a Music Mode toggle to the video settings menu for audio-only playback using YouTube's native music view."
+                    "description": "Add audio-only playback to the video settings menu."
                 },
                 "remaining_time": {
                     "title": "Show Remaining Time",
-                    "description": "Displays the remaining video runtime in the player overlay instead of the elapsed time. Takes current playback speed into account. Press R to toggle it for the current video."
+                    "description": "Show time left, adjusted for playback speed. Press R to toggle."
                 },
                 "ultrawide": {
                     "title": "Ultrawide Support",
-                    "description": "Expands the interface to fill ultrawide displays when in fullscreen. May look buggy and weird in some ways."
+                    "description": "Fill ultrawide displays in fullscreen. Some layouts may look unusual."
                 }
             }
         },

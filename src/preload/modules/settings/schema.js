@@ -122,6 +122,7 @@ module.exports = (locale) => [
     },
     {
         id: 'advanced',
+        layout: 'wide',
         showCount: false,
         sections: [
             {

@@ -1,5 +1,6 @@
 module.exports = {
     id: 'features',
+    layout: 'wide',
 
     title: (locale) => locale.features.options_title,
 

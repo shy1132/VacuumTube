@@ -29,7 +29,7 @@ let markOpened = () => {}
 const state = {
     open: false,
     category: 0,
-    page: null //{ id, fromHeader, returnFocus } while a page is open
+    page: null //{ id, fromHeader, returnFocus, parent } while a page is open
 }
 
 let renderCount = 0;
@@ -65,7 +65,10 @@ async function render() {
 
         if (renderId !== renderCount) return; //a newer render replaced this one
 
-        const parent = state.page.fromHeader ? locale.generic.title : locale.categories[currentCategory().id]?.title;
+        const parentPage = state.page.parent && pages[state.page.parent.id];
+        const parent = parentPage
+            ? (typeof parentPage.title === 'function' ? parentPage.title(locale) : parentPage.title)
+            : state.page.fromHeader ? locale.generic.title : locale.categories[currentCategory().id]?.title;
         view = renderPage(page, sections, parent, context)
     } else {
         view = renderCategory(currentCategory(), context)
@@ -91,10 +94,10 @@ function openCategory(index) {
     return render();
 }
 
-async function openPage(id, { fromHeader = false } = {}) {
+async function openPage(id, { fromHeader = false, fromPage = false } = {}) {
     const page = pages[id]
 
-    state.page = { id, fromHeader, returnFocus: focus.id() }
+    state.page = { id, fromHeader, returnFocus: focus.id(), parent: fromPage ? state.page : null }
     focus.want()
     await render()
 
@@ -111,7 +114,7 @@ function goBack() {
     if (!state.page) return close();
 
     const returnFocus = state.page.returnFocus;
-    state.page = null;
+    state.page = state.page.parent || null;
     render().then(() => focus.restore(returnFocus))
 }
 
