@@ -1,5 +1,5 @@
 //Kept independent of Electron so shortcut behavior can be tested without an app.
-function createCopyVideoHandler({ platform, document, getVideo, getShortId, writeText, copySelection, onCopied }) {
+function createCopyVideoHandler({ platform, document, getShortId, writeText, copySelection, onCopied }) {
     return async (event) => {
         if (event.key?.toLowerCase() !== 'c' || event.altKey) return;
 
@@ -26,7 +26,8 @@ function createCopyVideoHandler({ platform, document, getVideo, getShortId, writ
         }
 
         const isShort = document.querySelector('ytlr-shorts-page')?.classList.contains('zylon-focus');
-        const video = getVideo();
+        //YouTube's videoElement_ can be a detached, unloaded template.
+        const video = document.querySelector('.html5-video-player video');
         let id;
         if (isShort) {
             id = getShortId();

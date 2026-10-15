@@ -53,7 +53,6 @@ module.exports = async () => {
     document.addEventListener('keydown', createCopyVideoHandler({
         platform: process.platform,
         document,
-        getVideo: () => window.yt?.player?.utils?.videoElement_,
         getShortId: () => lastShortId,
         writeText: (url) => ipcRenderer.invoke('copy-video-link', url),
         copySelection: () => ipcRenderer.invoke('copy-selection'),

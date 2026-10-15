@@ -10,13 +10,14 @@ function harness(options = {}) {
     const document = {
         activeElement: { matches: () => false },
         getSelection: () => '',
-        querySelector: () => null,
-        ...options.document
+        ...options.document,
+        querySelector: selector => selector === '.html5-video-player video'
+            ? (options.noVideo ? null : video)
+            : options.document?.querySelector?.(selector) ?? null
     };
     const video = { baseURI: `https://www.youtube.com/tv?env_enableMediaStreams=true#/watch?v=${id}&list=example`, currentTime: 83.9, duration: 300, ...options.video };
     const handler = createCopyVideoHandler({
         platform: options.platform || 'darwin', document,
-        getVideo: () => options.noVideo ? undefined : video,
         getShortId: () => options.shortId || id,
         writeText: options.writeText || ((url) => copied.push(url)),
         copySelection: () => selections++,
