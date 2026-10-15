@@ -240,9 +240,9 @@ async function main() {
         })
     })
 
-    //config management on the web side
     require('./video-link-clipboard').setup(electron, () => win)
 
+    //config management on the web side
     electron.ipcMain.on('get-config', (event) => {
         event.returnValue = config;
     })

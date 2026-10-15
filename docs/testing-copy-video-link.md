@@ -1,64 +1,43 @@
 # Testing video-link copying
 
-Run `npm ci` and `npm test` for automated shortcut, URL, selection, timestamp,
-Shorts, live-stream fallback and clipboard-failure coverage. Then run `npm start`
-or use a package from the manually dispatched **Test builds** workflow.
-The workflow never publishes a release; downloadable artifacts expire after 14 days.
+Run `npm ci`, `npm test`, then `npm start`, or download an artifact from the
+manually dispatched **Test builds** workflow. Artifacts expire after 14 days.
+Unit tests use mocked interfaces; check native shortcuts and clipboard behavior below.
 
 ## macOS
 
-Extract the downloaded artifact, then the ZIP matching your Mac (arm64 for Apple
-Silicon, x64 for Intel). The artifact includes `SHA256SUMS`; run
-`shasum -a 256 -c SHA256SUMS` from its extracted directory to check the packages.
-Replace the previous test app with the freshly extracted VacuumTube.app in
-Applications.
+Extract the artifact and run `shasum -a 256 -c SHA256SUMS` in its directory.
+Extract the ZIP for your Mac (arm64: Apple Silicon; x64: Intel) and replace
+`/Applications/VacuumTube.app`.
 
-Mac test builds are ad-hoc signed, and CI verifies both ZIPs after extraction.
-They are **not Developer ID signed or notarized**. macOS may still block a
-browser download. Try opening the app, then use **System Settings → Privacy &
-Security → Open Anyway** if available. See [Apple's instructions](https://support.apple.com/en-us/102445).
-
-If macOS still reports the app as damaged, use the following only for this trusted
-test artifact. The first command checks the bundle signature; only if that passes
-does the second remove the download quarantine from this app:
+Test builds are ad-hoc signed and verified in CI, **not Developer ID signed or
+notarized**. If macOS blocks opening, use **System Settings → Privacy & Security →
+Open Anyway** ([Apple's instructions](https://support.apple.com/en-us/102445)).
+If it still reports damage, only for a trusted artifact linked from the draft PR:
 
 ```sh
 codesign --verify --deep --strict --verbose=2 /Applications/VacuumTube.app &&
   xattr -dr com.apple.quarantine /Applications/VacuumTube.app
 ```
 
-Then open the app normally. If signature verification fails, stop and download a
-fresh build. Ad-hoc signatures and checksums detect changes but do not authenticate
-the developer; use the artifact linked from the draft PR. Opening without a
-security override requires Developer ID signing and Apple notarization.
+This removes download quarantine only if signature verification passes. If it
+fails, download a fresh build. Checksums and ad-hoc signatures do not authenticate
+the developer; opening without an override requires Developer ID signing and notarization.
 
-1. Play a normal video. Press Command-C, paste into TextEdit, and confirm a
-   `https://youtu.be/VIDEO_ID` link. The clipboard must contain the link, not just
-   show a success toast.
-2. Pause at 1:23. Press Command-Shift-C and paste. Confirm `?t=83`, then open the
-   link in a browser and verify the same video starts around 1:23. Repeat at zero.
-3. Focus the search field and select text. Command-C must copy the selection.
-   Repeat with selected page text and a contenteditable field if available.
-   Command-Shift-C explicitly copies the video even when text is selected.
-4. Repeat link copying in fullscreen, with Music Mode enabled, and after moving
-   to another video. Confirm the current video's ID and time, not the previous one.
-5. On Shorts, both shortcuts must copy the current Short without a timestamp.
-   On live streams with an infinite or unknown duration, copy a plain video link.
-6. Copy some text, navigate home without a current player, and press both shortcuts.
-   Without a valid current video, the clipboard must retain the previous content.
-7. Confirm C still toggles captions. Confirm Command-V, Command-A, Command-Q and
-   the Edit menu's ordinary Copy action still work. Hold Command-C: only the first
-   keydown should copy/notify. Switch away while holding Command and test again.
-8. Confirm Ctrl-Shift-C still copies a plain link.
+1. Play a video, press Command-C and paste into TextEdit: `https://youtu.be/VIDEO_ID`.
+2. Pause at 1:23; Command-Shift-C should paste a link ending in `?t=83`.
+   Open it in a browser to verify playback starts at 1:23. Repeat at zero (`?t=0`).
+3. Command-C should copy selected search-field, page and contenteditable text.
+   Command-Shift-C should still copy the video link with its timestamp.
+4. Repeat in fullscreen, Music Mode and after changing videos; verify the current ID/time.
+5. Shorts and live streams (including DVR) should copy plain links with either shortcut.
+6. On the home screen without a player, both shortcuts should leave the clipboard unchanged.
+7. Check captions (C), Command-V, Command-A, Command-Q and Edit → Copy.
+   Holding Command-C should copy/notify once; check again after switching away and back.
+8. Ctrl-Shift-C should still copy a plain link.
 
 ## Linux
 
-Extract the tarball and launch `./vacuumtube`, or make the AppImage executable and
-launch it. Ctrl-Shift-C copies a plain video link; repeat with normal videos,
-Shorts and Music Mode. Ctrl-C retains its ordinary behavior. Timestamp copying
-is intentionally macOS-only in this fix.
-
-Automated tests exercise the renderer handler with injected DOM/player/clipboard
-interfaces. They do not establish macOS menu routing or native clipboard behavior;
-those require the manual macOS checks above. Linux smoke tests likewise do not
-establish live YouTube compatibility on macOS.
+Extract the tarball and run `./vacuumtube`, or make the AppImage executable and
+launch it. Test Ctrl-Shift-C on videos, Shorts and Music Mode: it copies a plain
+link. Ctrl-C should retain normal behavior. Timestamp copying is macOS-only.

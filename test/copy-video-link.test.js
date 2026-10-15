@@ -1,5 +1,6 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
+const { setup } = require('../src/video-link-clipboard');
 const { createCopyVideoHandler } = require('../src/preload/util/copy-video-link');
 
 const id = 'dQw4w9WgXcQ';
@@ -30,6 +31,13 @@ function harness(options = {}) {
         return event;
     }
     return { copied, press, notices: () => notices, selections: () => selections };
+}
+
+function clipboardHarness(writeText, webContents = {}) {
+    const handlers = new Map();
+    setup({ ipcMain: { handle: (name, callback) => handlers.set(name, callback) },
+        clipboard: { writeText } }, () => ({ webContents }));
+    return { handlers, event: { sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } } };
 }
 
 test('Command-C copies a clean video link and consumes the shortcut', async () => {
@@ -107,29 +115,21 @@ test('live, unknown and invalid playback times fall back to plain links', async 
         assert.deepEqual(h.copied, [`https://youtu.be/${id}`]);
     }
 });
-test('failed clipboard writes do not announce success', async (t) => {
+for (const [failure, writeText] of [
+    ['throw', () => { throw new Error('clipboard unavailable'); }],
+    ['rejection', async () => { throw new Error('IPC failed'); }]
+]) test(`clipboard ${failure} does not announce success`, async (t) => {
     t.mock.method(console, 'error', () => {});
-    const h = harness({ writeText: () => { throw new Error('clipboard unavailable'); } });
+    const h = harness({ writeText });
     await h.press();
     assert.equal(h.notices(), 0);
     assert.equal(console.error.mock.callCount(), 1);
 });
 
-test('clipboard rejection is awaited and does not announce success', async (t) => {
-    t.mock.method(console, 'error', () => {});
-    const h = harness({ writeText: async () => { throw new Error('IPC failed'); } });
-    await h.press();
-    assert.equal(h.notices(), 0);
-});
-
 test('main process accepts only video URLs from the app YouTube renderer', () => {
-    const { setup } = require('../src/video-link-clipboard');
-    let handle;
     const copied = [];
-    const webContents = {};
-    setup({ ipcMain: { handle: (name, callback) => { if (name === 'copy-video-link') handle = callback; } },
-        clipboard: { writeText: url => copied.push(url) } }, () => ({ webContents }));
-    const event = { sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } };
+    const { handlers, event } = clipboardHarness(url => copied.push(url));
+    const handle = handlers.get('copy-video-link');
     for (const url of [`https://youtu.be/${id}`, `https://youtu.be/${id}?t=83`, `https://youtube.com/shorts/${id}`]) {
         handle(event, url);
         assert.equal(copied.at(-1), url);
@@ -144,14 +144,10 @@ test('main process accepts only video URLs from the app YouTube renderer', () =>
 });
 
 test('main process returns clipboard completion so IPC can acknowledge success or failure', async () => {
-    const { setup } = require('../src/video-link-clipboard');
-    let handle;
     let finish;
     const completion = new Promise(resolve => { finish = resolve; });
-    const webContents = {};
-    setup({ ipcMain: { handle: (name, callback) => { if (name === 'copy-video-link') handle = callback; } },
-        clipboard: { writeText: () => completion } }, () => ({ webContents }));
-    const result = handle({ sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } }, `https://youtu.be/${id}`);
+    const { handlers, event } = clipboardHarness(() => completion);
+    const result = handlers.get('copy-video-link')(event, `https://youtu.be/${id}`);
     assert.equal(result, completion);
     finish();
     await result;
@@ -166,7 +162,6 @@ test('success toast waits until clipboard completion', async () => {
     await pending;
     assert.equal(h.notices(), 1);
 });
-
 
 test('regular watch URLs and TV hash routes identify the same video', async () => {
     for (const baseURI of [
@@ -201,22 +196,18 @@ test('live DVR with a finite duration still copies a plain link', async () => {
     assert.deepEqual(h.copied, [`https://youtu.be/${id}`]);
 });
 
-
 test('native selection copying validates the sender and works without a video', async () => {
     const h = harness({ noVideo: true, document: { activeElement: { matches: () => true } } });
     await h.press();
     assert.equal(h.selections(), 1);
     assert.deepEqual(h.copied, []);
 
-    const { setup } = require('../src/video-link-clipboard');
-    const handlers = new Map();
     let selections = 0;
-    const webContents = { copy: () => selections++ };
-    setup({ ipcMain: { handle: (name, callback) => handlers.set(name, callback) } }, () => ({ webContents }));
+    const { handlers, event } = clipboardHarness(undefined, { copy: () => selections++ });
     const copySelection = handlers.get('copy-selection');
-    copySelection({ sender: webContents, senderFrame: { url: 'https://www.youtube.com/tv' } });
+    copySelection(event);
     assert.equal(selections, 1);
-    assert.throws(() => copySelection({ sender: {}, senderFrame: { url: 'https://www.youtube.com/tv' } }), /Invalid clipboard/);
-    assert.throws(() => copySelection({ sender: webContents, senderFrame: { url: 'https://example.com' } }), /Invalid clipboard/);
+    assert.throws(() => copySelection({ ...event, sender: {} }), /Invalid clipboard/);
+    assert.throws(() => copySelection({ ...event, senderFrame: { url: 'https://example.com' } }), /Invalid clipboard/);
     assert.equal(selections, 1);
 });
