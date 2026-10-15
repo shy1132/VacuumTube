@@ -122,6 +122,7 @@ module.exports = (locale) => [
     },
     {
         id: 'advanced',
+        showCount: false,
         sections: [
             {
                 id: 'performance',
@@ -131,9 +132,9 @@ module.exports = (locale) => [
             },
             {
                 id: 'experimental',
+                toggle: { key: 'features_enabled', description: locale.features.section_description },
                 rows: [
-                    { type: 'notice', tone: 'warning', title: locale.features.notice_title, text: locale.features.notice_description },
-                    { type: 'toggle', key: 'features_enabled', page: 'features', title: locale.features.enable_title, description: locale.features.enable_description }
+                    { type: 'link', page: 'features', title: locale.features.options_title, description: locale.features.options_description, dependsOn: 'features_enabled' }
                 ]
             }
         ]

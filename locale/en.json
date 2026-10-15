@@ -181,6 +181,9 @@
             "description": "Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)"
         },
         "features": {
+            "section_description": "Optional features that may change or break.",
+            "options_title": "Experimental options",
+            "options_description": "Music Mode, remaining time, and ultrawide support.",
             "title": "Features",
             "notice_title": "Not part of the default experience",
             "notice_description": "These optional features extend VacuumTube beyond the standard TV YouTube experience. Enable them below to acknowledge that they rely on internal YouTube behavior and may change or stop working without notice.",

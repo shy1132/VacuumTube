@@ -1,7 +1,7 @@
 module.exports = {
     id: 'features',
 
-    title: (locale) => locale.features.title,
+    title: (locale) => locale.features.options_title,
 
     rows: (config, locale) => [
         {

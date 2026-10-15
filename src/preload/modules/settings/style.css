@@ -235,6 +235,18 @@ styles the frame and the generic row types from render.js only
     border-radius: var(--vt-radius);
 }
 
+.vt-section-toggle {
+    margin-bottom: 10px;
+    border-radius: var(--vt-radius);
+}
+
+.vt-section-toggle .vt-row-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .vt-view-page .vt-card {
     max-width: 760px;
 }

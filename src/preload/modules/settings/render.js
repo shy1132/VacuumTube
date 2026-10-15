@@ -163,16 +163,25 @@ function renderCategory(category, context) {
         viewHeader({
             title: meta.title,
             description: meta.description,
-            count: context.locale.generic.option_count.replace('{count}', count)
+            count: category.showCount === false ? null : context.locale.generic.option_count.replace('{count}', count)
         }),
         el('div', { className: 'vt-section-grid' }, sections.map((section) =>
             el('section', { className: 'vt-section' }, [
-                el('h3', { className: 'vt-section-title', textContent: context.locale.sections[section.id] || '' }),
+                section.toggle ? sectionToggle(section, context) : el('h3', { className: 'vt-section-title', textContent: context.locale.sections[section.id] || '' }),
                 card(section.rows, context)
             ])
         )),
         context.translation.complete ? null : translateLink(context)
     ]);
+}
+
+function sectionToggle(section, context) {
+    const node = rowTypes.toggle({ ...section.toggle, title: context.locale.sections[section.id] }, context)
+    node.classList.add('vt-section-toggle')
+    node.setAttribute('role', 'switch')
+    node.setAttribute('aria-checked', String(!!context.config[section.toggle.key]))
+    node.setAttribute('aria-label', context.locale.sections[section.id])
+    return node;
 }
 
 //sections comes from page.sections(), or from page.rows() wrapped as a single section
