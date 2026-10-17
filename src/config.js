@@ -46,6 +46,7 @@ const defaults = { //mess
     music_mode: false, //whether or not music mode *itself* is enabled
     ultrawide_feature: false, //whether or not to expand the interface via css to fill ultrawide displays
     remaining_time_feature: false, //whether or not to show videos remaining playback time
+    arrow_seek_feature: false, //whether or not left/right skip 10 seconds while the player controls are hidden, instead of opening the progress bar
     no_window_decorations: false, //whether or not to disable window decorations
     keep_on_top: false, //whether or not to keep window on top
     pause_on_blur: false, //whether or not to pause video when out of focus (such as tabbing out)
