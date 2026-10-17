@@ -12,7 +12,8 @@ module.exports = async () => {
     const customKeyCodes = { //custom VacuumTube mappings
         32776: 16001,  //select -> vt volume down
         32777: 16002,  //start  -> vt volume up
-        32778: 16000   //l3     -> vt mute
+        32778: 16000,   //l3     -> vt mute
+        32779: 'vt-settings' // r3 -> open settings (Ctrl+O)
     }
 
     let hasPressedAnyButton = false;
@@ -42,6 +43,20 @@ module.exports = async () => {
     function simulateKeyDown(keyCode) {
         if (!config.controller_support) return;
 
+        // special handling for "open settings" shortcut using Controller Right Thumbstick:
+        // dispatch a KeyboardEvent with ctrlKey and key 'o' so settings input handler picks it up
+        if (keyCode === 'vt-settings') {
+            const ev = new KeyboardEvent('keydown', {
+                key: 'o',
+                code: 'KeyO',
+                ctrlKey: true,
+                bubbles: true,
+                cancelable: true
+            })
+            document.dispatchEvent(ev)
+            return;
+        }
+
         let event = new Event('keydown')
         event.keyCode = keyCode;
         document.dispatchEvent(event)
@@ -49,6 +64,18 @@ module.exports = async () => {
 
     function simulateKeyUp(keyCode) {
         if (!config.controller_support) return;
+
+        if (keyCode === 'vt-settings') {
+            const ev = new KeyboardEvent('keyup', {
+                key: 'o',
+                code: 'KeyO',
+                ctrlKey: true,
+                bubbles: true,
+                cancelable: true
+            })
+            document.dispatchEvent(ev)
+            return;
+        }
 
         let event = new Event('keyup')
         event.keyCode = keyCode;
