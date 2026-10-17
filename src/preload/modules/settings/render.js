@@ -1,6 +1,7 @@
 //builds the dom for a category or a page, and is the only place that defines the row types
 //an interactive row has the vt-focusable class, a data-nav-id, and a vtActivate function
 
+const featureInfo = require('./feature-info')
 const configManager = require('../../config')
 const { el } = require('../../util/functions')
 
@@ -40,6 +41,7 @@ and the fields any row takes:
     disabled  - greys the row out the same way
     hide      - leaves the row out, for platform specific settings
     onChange  - toggles only, runs after the value changes
+    infoPage - toggles only, optional page id for a separate info button before the switch
     title, description - override the text taken from the locale
 */
 const rowTypes = {
@@ -47,7 +49,7 @@ const rowTypes = {
         const on = row.get ? !!row.get(context.config) : !!context.config[row.key]
         const strings = context.locale[row.key] //a toggle's title and description default to the locale entry for its config key
 
-        return focusable(`row:${rowId(row)}`, 'vt-row', [
+        const node = focusable(`row:${rowId(row)}`, 'vt-row', [
             info(row.title ?? strings?.title, row.description ?? strings?.description),
             el('div', { className: `vt-toggle${on ? ' vt-toggle-on' : ''}` }, [
                 el('div', { className: 'vt-toggle-thumb' })
@@ -61,6 +63,25 @@ const rowTypes = {
 
             row.onChange?.(!on)
         });
+
+        if (row.infoPage && context.pages[row.infoPage]) {
+            const title = row.title ?? strings?.title ?? '';
+            const toggle = focusable(`row:${rowId(row)}`, 'vt-toggle-control', [node.lastElementChild], node.vtActivate)
+            toggle.setAttribute('role', 'switch')
+            toggle.setAttribute('aria-label', title)
+            toggle.setAttribute('aria-checked', String(on))
+            const help = focusable(`info:${rowId(row)}`, 'vt-info-button', [
+                el('span', { textContent: 'i', 'aria-hidden': 'true' })
+            ], () => context.openPage(row.infoPage, { fromPage: true }))
+            help.setAttribute('role', 'button')
+            help.setAttribute('aria-label', context.locale.generic.more_info.replace('{feature}', title))
+            node.classList.remove('vt-focusable')
+            node.removeAttribute('data-nav-id')
+            node.vtActivate = null;
+            node.classList.add('vt-row-with-info')
+            node.append(help, toggle)
+        }
+        return node;
     },
 
     link(row, context) {
@@ -110,6 +131,10 @@ function renderRow(row, context) {
     if (!active) {
         node.classList.add('vt-inactive')
         node.vtActivate = null;
+        for (const toggle of node.querySelectorAll('.vt-toggle-control')) {
+            toggle.vtActivate = null;
+            toggle.setAttribute('aria-disabled', 'true')
+        }
     }
 
     if (row.type === 'toggle' && row.page && active && context.config[row.key]) {
@@ -159,15 +184,15 @@ function renderCategory(category, context) {
     const count = sections.reduce((n, section) => n + countFocusable(section.rows), 0)
     const meta = context.locale.categories[category.id] || {}
 
-    return el('div', { className: 'vt-view' }, [
+    return el('div', { className: `vt-view${category.layout === 'wide' ? ' vt-view-wide' : ''}` }, [
         viewHeader({
             title: meta.title,
             description: meta.description,
-            count: context.locale.generic.option_count.replace('{count}', count)
+            count: category.showCount === false ? null : context.locale.generic.option_count.replace('{count}', count)
         }),
         el('div', { className: 'vt-section-grid' }, sections.map((section) =>
             el('section', { className: 'vt-section' }, [
-                el('h3', { className: 'vt-section-title', textContent: context.locale.sections[section.id] || '' }),
+                section.toggle ? sectionToggle(section, context) : el('h3', { className: 'vt-section-title', textContent: context.locale.sections[section.id] || '' }),
                 card(section.rows, context)
             ])
         )),
@@ -175,12 +200,31 @@ function renderCategory(category, context) {
     ]);
 }
 
+function sectionToggle(section, context) {
+    const node = rowTypes.toggle({ ...section.toggle, title: context.locale.sections[section.id] }, context)
+    node.classList.add('vt-section-toggle')
+    node.setAttribute('role', 'switch')
+    node.setAttribute('aria-checked', String(!!context.config[section.toggle.key]))
+    node.setAttribute('aria-label', context.locale.sections[section.id])
+    return node;
+}
+
 //sections comes from page.sections(), or from page.rows() wrapped as a single section
 //parentTitle is the view the back button returns to, shown in the breadcrumb
 function renderPage(page, sections, parentTitle, context) {
     const title = resolve(page.title, context.locale)
+    if (page.details) {
+        return el('div', { className: 'vt-view vt-view-page vt-rich-info' }, [
+            focusable('back', 'vt-back', [
+                el('span', { className: 'vt-chevron', textContent: '‹' }),
+                el('span', { textContent: parentTitle })
+            ], () => context.goBack()),
+            ...featureInfo(resolve(page.details, context.locale), context, focusable),
+            context.translation.complete ? null : translateLink(context)
+        ]);
+    }
 
-    return el('div', { className: 'vt-view vt-view-page' }, [
+    return el('div', { className: `vt-view vt-view-page${page.layout === 'wide' ? ' vt-view-wide' : ''}` }, [
         focusable('back', 'vt-back', [
             el('span', { className: 'vt-chevron', textContent: '‹' }),
             el('span', { textContent: `${parentTitle} / ${resolve(page.crumb, context.locale) || title}` })

@@ -2,6 +2,7 @@
 //a page is:
 //    id
 //    title(locale)                   - a string, or a function of the locale. the same applies to the optional fields below
+//    details(locale)                - optional feature overview; replaces rows (see docs/feature-info-pages.md)
 //    rows(config, locale)            - the page's rows, may be async
 //    sections(config, locale)        - used instead of rows for several cards: [{ title?, rows }]
 //    description?, badge?, icon?     - extra header content (icon is an image url)
@@ -15,6 +16,7 @@ const pages = [
     require('./guide-tabs'),
     require('./userstyles'),
     require('./features'),
+    require('./music-info'),
     require('./mac-permissions')
 ]
 

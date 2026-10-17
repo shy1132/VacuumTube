@@ -235,8 +235,58 @@ styles the frame and the generic row types from render.js only
     border-radius: var(--vt-radius);
 }
 
+.vt-section-toggle {
+    margin-bottom: 10px;
+    border-radius: var(--vt-radius);
+}
+
+.vt-section-toggle .vt-row-title {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
 .vt-view-page .vt-card {
     max-width: 760px;
+}
+
+.vt-view-wide .vt-section-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+}
+
+.vt-view-wide .vt-card {
+    max-width: none;
+}
+
+.vt-row.vt-row-with-info {
+    cursor: default;
+}
+
+.vt-info-button, .vt-toggle-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.vt-info-button span {
+    width: 22px;
+    height: 22px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    text-align: center;
+    font: 600 16px/22px Georgia, serif;
+    color: var(--vt-muted);
+}
+
+.vt-toggle-control {
+    padding: 0;
 }
 
 /*rows*/
@@ -491,4 +541,124 @@ styles the frame and the generic row types from render.js only
     border-radius: 2px;
     background: #666;
     transition: transform 0.15s ease-out;
+}
+
+/*Optional feature details*/
+.vt-rich-info .vt-back {
+    margin-bottom: 18px;
+}
+
+.vt-rich-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    margin-bottom: 22px;
+}
+
+.vt-rich-intro {
+    flex: 1;
+    min-width: 0;
+}
+
+.vt-rich-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: #aaa;
+}
+
+.vt-rich-intro h2 {
+    font-size: 34px;
+    line-height: 1.15;
+    margin: 8px 0;
+}
+
+.vt-rich-intro > p {
+    margin: 0;
+    font-size: 18px;
+    color: #c8c8c8;
+}
+
+.vt-rich-credit {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.vt-rich-credit strong {
+    color: #ddd;
+    font-weight: 500;
+}
+
+.vt-rich-symbol {
+    width: 112px;
+    height: 112px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.vt-rich-symbol img {
+    width: 72px;
+    height: 72px;
+}
+
+.vt-rich-explainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: #2a2a2a;
+}
+
+.vt-rich-info h3 {
+    margin: 0 0 7px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.vt-rich-explainer p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #bdbdbd;
+}
+
+.vt-rich-footer {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    color: #999;
+    font-size: 12px;
+}
+
+.vt-rich-source {
+    padding: 10px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+    color: #ddd;
+}
+
+@media (max-width: 800px) {
+    .vt-rich-explainer {
+        grid-template-columns: 1fr;
+    }
+
+    .vt-rich-hero {
+        gap: 16px;
+    }
+
+    .vt-rich-symbol {
+        width: 72px;
+        height: 72px;
+    }
+
+    .vt-rich-footer {
+        flex-wrap: wrap;
+    }
 }
