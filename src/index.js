@@ -240,6 +240,8 @@ async function main() {
         })
     })
 
+    require('./video-link-clipboard').setup(electron, () => win)
+
     //config management on the web side
     electron.ipcMain.on('get-config', (event) => {
         event.returnValue = config;
@@ -395,6 +397,17 @@ async function createWindow() {
     } else {
         // Built-in electron aspect ratio lock works fine elsewhere.
         win.setAspectRatio(TARGET_RATIO)
+    }
+
+    if (process.platform === 'darwin') {
+        //Let the renderer choose between copying text and copying a video link.
+        //The renderer requests native text copying when a field or selection is active.
+        win.webContents.on('before-input-event', (event, input) => {
+            win.webContents.setIgnoreMenuShortcuts(
+                input.meta && !input.control && !input.alt && input.key?.toLowerCase() === 'c'
+            )
+        })
+        win.webContents.on('blur', () => win.webContents.setIgnoreMenuShortcuts(false))
     }
 
     win.setMenuBarVisibility(false)
