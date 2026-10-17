@@ -56,7 +56,7 @@
             "experimental": "Experimental"
         },
         "adblock": {
-            "title": "Ad Block",
+            "title": "Block Ads",
             "description": "Seamlessly blocks video and feed ads, not subject to YouTube's methods of preventing blockers"
         },
         "sponsorblock": {
