@@ -90,11 +90,12 @@ function attach(viewportElement, listElement, thumbElement) {
     viewport.addEventListener('touchend', endDrag, { passive: true })
     viewport.addEventListener('touchcancel', endDrag, { passive: true })
 
-    viewport.addEventListener('wheel', (e) => {
+    window.addEventListener('wheel', (e) => {
+        if (!viewport.contains(e.target)) return;
+
         e.preventDefault()
-        e.stopPropagation()
         apply(offset + e.deltaY)
-    }, { passive: false })
+    }, { passive: false, capture: true })
 }
 
 module.exports = {

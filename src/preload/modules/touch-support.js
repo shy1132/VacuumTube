@@ -1,6 +1,7 @@
 //onscreen touch controls + native scrollbars
 
 const configOverrides = require('../util/configOverrides')
+const css = require('../util/css')
 const configManager = require('../config')
 const config = configManager.get()
 
@@ -10,6 +11,23 @@ module.exports = () => {
             enable_touch_support: true //native scrollbars
         }
     })
+
+    css.inject('touch-support', `
+        html:not(.vt-touch-input) yt-virtual-list,
+        html:not(.vt-touch-input) .ogHbMc {
+            overflow: hidden !important;
+        }
+    `)
+
+    window.addEventListener('pointerdown', (e) => {
+        document.documentElement.classList.toggle('vt-touch-input', e.pointerType === 'touch')
+    }, true)
+
+    window.addEventListener('keydown', (e) => {
+        if (e.isTrusted) { //simulated keys can't scroll anything
+            document.documentElement.classList.remove('vt-touch-input')
+        }
+    }, true)
 
     //fix native scrollbars causing space to jump the page down and break everything
     window.addEventListener('keydown', (e) => {
@@ -115,6 +133,7 @@ module.exports = () => {
 
         let visible = true;
         let lastTouch = 0;
+        let revealingTouch = false;
 
         function hide() {
             controls.style.display = 'none'
@@ -135,15 +154,31 @@ module.exports = () => {
             }
         }, 20)
 
-        window.addEventListener('touchstart', (e) => {
-            if (!config.touch_overlay) return;
+        window.addEventListener('pointerdown', (e) => {
+            if (e.pointerType !== 'touch' || !config.touch_overlay) return;
 
             lastTouch = Date.now()
 
             if (!visible) {
-                e.preventDefault()
+                revealingTouch = true;
                 show()
             }
-        })
+        }, true)
+
+        //leanback turns every pointer press into an enter press
+        for (let type of [ 'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'mousedown', 'mouseup', 'click' ]) {
+            window.addEventListener(type, (e) => {
+                if (revealingTouch || controls.contains(e.target)) e.stopPropagation()
+            }, true)
+        }
+
+        for (let type of [ 'touchend', 'touchcancel' ]) {
+            window.addEventListener(type, (e) => {
+                if (!revealingTouch || e.touches.length) return;
+
+                e.preventDefault()
+                revealingTouch = false;
+            })
+        }
     })
 }
