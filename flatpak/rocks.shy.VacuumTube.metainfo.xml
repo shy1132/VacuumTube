@@ -28,31 +28,14 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="2.0.0" date="2026-10-10" type="stable">
+    <release version="2.0.1" date="2026-10-17" type="stable">
       <description>
-        <p>v2.0.0</p>
+        <p>v2.0.1</p>
         <ul>
-          <li>VacuumTube now gets the latest YouTube UI</li>
-          <li>Overhauled settings menu with categories and About page</li>
-          <li>Added SponsorBlock bar highlights and configurable categories</li>
-          <li>Added "Block Continue Watching" setting</li>
-          <li>Added "Show Remaining Time" feature</li>
-          <li>Added experimental "Ultrawide Support" feature</li>
-          <li>Added "Automatic Updates" setting</li>
-          <li>Added playback speed control keybinds (A + D)</li>
-          <li>Added --width/--height CLI flags</li>
-          <li>Added explicit --deeplink CLI flag</li>
-          <li>Improved controller support</li>
-          <li>Improved playback reliability</li>
-          <li>Improved cast reliability</li>
-          <li>Changed cast label to read better</li>
-          <li>Fixed Ctrl+Shift+C</li>
-          <li>Fixed Shift+Enter</li>
-          <li>Fixed SponsorBlock sometimes skipping in random places</li>
-          <li>Fixed deeplinks not supporting share links</li>
-          <li>Fixed --no-window-decorations CLI flag</li>
-          <li>Massive internal improvements</li>
-          <li>Updated to Electron v44.5.1</li>
+          <li>Added complete Persian translation</li>
+          <li>Added complete Russian translation</li>
+          <li>Fixed touch support</li>
+          <li>Fixed mouse navigation</li>
         </ul>
       </description>
     </release>
