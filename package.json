@@ -128,6 +128,14 @@
                 }
             ]
         },
+        "toolsets": {
+            "appimage": "1.0.3"
+        },
+        "appImage": {
+            "executableArgs": [
+                "--no-sandbox"
+            ]
+        },
         "publish": {
             "provider": "github",
             "owner": "shy1132",
