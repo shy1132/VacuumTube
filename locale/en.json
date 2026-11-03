@@ -180,6 +180,10 @@
             "title": "Pause on Blur",
             "description": "Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)"
         },
+        "default_guest_mode": {
+            "title": "Default Guest Mode",
+            "description": "Automatically enter guest mode on launch"
+        },
         "features": {
             "title": "Features",
             "notice_title": "Not part of the default experience",

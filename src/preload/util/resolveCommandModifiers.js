@@ -1,5 +1,7 @@
 //overriding youtube's resolveCommand so we can have unlimited power (mainly for hooking into settings and ui)
 
+const functions = require('./functions')
+
 const inputModifiers = []
 const outputModifiers = []
 
@@ -44,10 +46,9 @@ function addOutputModifier(func) {
 
 module.exports = {
     resolveCommand: (command) => {
-        if (globalResolveCommand) {
-            return globalResolveCommand(command);
-        } else {
-            throw new Error('resolveCommand doesn\'t exist yet, probably called too early');
+        if (!globalResolveCommand) {
+            functions.waitForCondition(() => globalResolveCommand)
+            .then(() => globalResolveCommand(command))
         }
     },
     addInputModifier,
