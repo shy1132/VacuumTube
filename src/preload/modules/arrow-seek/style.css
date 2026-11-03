@@ -1,0 +1,51 @@
+#vt-seek-indicator {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    z-index: 999999;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+}
+
+#vt-seek-indicator.visible {
+    opacity: 1;
+}
+
+.vt-seek-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 16px;
+    font-size: 24px;
+    font-family: 'YouTube Icons Outlined';
+}
+
+.vt-seek-icon::before {
+    content: '\e01f'; /*fast forward, there's no rewind icon so it's flipped for that*/
+}
+
+.vt-seek-icon.vt-seek-back {
+    transform: rotate(180deg);
+}
+
+.vt-seek-text {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.vt-seek-time {
+    font-size: 18px;
+    margin-left: 16px;
+    opacity: 0.7;
+}
+
+.vt-seek-time:empty {
+    display: none;
+}

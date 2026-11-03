@@ -101,7 +101,7 @@ VacuumTube has some settings that you can change, which are located in the YouTu
 - Pause on Blur
   - Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)
 - Features
-  - Contains extra experimental features that add extra functionality: **Music Mode**, **Show Remaining Time**, **Ultrawide Support**
+  - Contains extra experimental features that add extra functionality: **Music Mode**, **Show Remaining Time**, **Arrow Key Seeking**, **Ultrawide Support**
 - Custom CSS (Userstyles)
   - Enables injection of custom CSS styles. See the section below for more information
 - Touch Overlay
