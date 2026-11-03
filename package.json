@@ -147,8 +147,8 @@
         "electron-builder": "^26.17.0"
     },
     "dependencies": {
-        "chokidar": "^5.0.0",
-        "electron-updater": "^6.8.10",
-        "string-argv": "^0.3.2"
+        "chokidar": "^6.0.0",
+        "electron-updater": "^6.8.11",
+        "string-argv": "^0.4.0"
     }
 }
