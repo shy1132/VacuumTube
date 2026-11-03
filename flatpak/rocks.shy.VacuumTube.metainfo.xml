@@ -28,15 +28,12 @@
     </screenshot>
   </screenshots>
   <releases>
-    <release version="2.0.1" date="2026-10-17" type="stable">
+    <release version="2.0.2" date="2026-11-xx" type="stable">
       <description>
-        <p>v2.0.1</p>
+        <p>v2.0.2</p>
         <ul>
-          <li>Added complete Persian translation</li>
-          <li>Added complete Russian translation</li>
-          <li>Fixed controller working out of focus sometimes</li>
-          <li>Fixed touch support</li>
-          <li>Fixed mouse navigation</li>
+          <li>Added 'Default Guest Mode' setting</li>
+          <li>Updated German translation</li>
         </ul>
       </description>
     </release>
