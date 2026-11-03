@@ -171,7 +171,8 @@ The userstyles folder is located in the config folder mentioned below.
   - `vacuumtube --fullscreen 'watch?v=dQw4w9WgXcQ'`
   - `vacuumtube --fullscreen 'v=dQw4w9WgXcQ'`
   - `vacuumtube --deeplink 'https://youtu.be/dQw4w9WgXcQ'`
-  - **Note:** flags VacuumTube doesn't know about (like Chromium flags) take the argument right after them as their value. To make sure a URL is always picked up, use `--deeplink`, put it after `--` (e.g. `vacuumtube --fullscreen -- 'v=dQw4w9WgXcQ'`), or give other flags their value with `=` (e.g. `--ozone-platform=wayland`)
+  - If using the Flatpak, you should swap `vacuumtube (args)` for `flatpak run rocks.shy.VacuumTube -- (args)`.
+  - Flags VacuumTube doesn't know about (like Chromium flags) take the argument right after them as their value. To make sure a URL is always picked up, use `--deeplink`, put it after `--` (e.g. `vacuumtube --fullscreen -- 'v=dQw4w9WgXcQ'`), or give other flags their value with `=` (e.g. `--ozone-platform=wayland`)
 
 ## Chromium Flags
 
