@@ -34,6 +34,7 @@
         <ul>
           <li>Added 'Default Guest Mode' setting</li>
           <li>Updated German translation</li>
+          <li>Fixed changing playback speed limiting quality to 480p</li>
           <li>Changed default speed control toggle key from S to P</li>
         </ul>
       </description>

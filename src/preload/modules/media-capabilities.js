@@ -6,7 +6,7 @@
 const checks = {
     width: (value) => Number(value) > 0 && Number(value) <= 7680, //8k width
     height: (value) => Number(value) > 0 && Number(value) <= 4320, //8k height
-    framerate: (value) => Number(value) > 0 && Number(value) <= 60, //60fps
+    framerate: (value) => Number(value) > 0 && Number(value) <= 120, //120fps. youtube only does 60 at most, but for some reason returning 60 causes changing the playback speed to limit you to 480p on 60fps videos
     bitrate: (value) => Number(value) > 0 && Number(value) <= 200000000, //almost double avg bitrate of 8k video
     eotf: (value) => value === 'bt709' || ((value === 'smpte2084' || value === 'arib-std-b67') && isHdrDisplay()),
     channels: (value) => Number(value) > 0 && Number(value) <= 8, //audio channels
