@@ -13,7 +13,7 @@
     "settings": {
         "generic": {
             "title": "Settings",
-            "description": "Opens the VacuumTube settings overlay. You can access this overlay anywhere by pressing Ctrl+O on your keyboard",
+            "description": "Opens the VacuumTube settings overlay. Press Ctrl+O to open it by default, or choose another shortcut in Buttons & Keys.",
             "button_label": "Open VacuumTube Settings",
             "hint": "Use arrow keys to navigate",
             "option_count": "{count} options",
@@ -37,9 +37,40 @@
                 "title": "Controls & Devices",
                 "description": "Input methods and connected devices."
             },
+            "keybinds": {
+                "title": "Buttons & Keys",
+                "description": "Customize keyboard shortcuts and controller buttons."
+            },
             "advanced": {
                 "title": "Advanced",
                 "description": "Performance tweaks and optional features."
+            }
+        },
+        "keybinds": {
+            "title": "Buttons & Keys",
+            "description": "Choose the keyboard shortcuts and controller buttons used for VacuumTube actions.",
+            "open_title": "Remap Buttons & Keys",
+            "open_description": "Customize keyboard shortcuts and controller button assignments.",
+            "keyboard": "Keyboard shortcuts",
+            "controller": "Controller buttons",
+            "press_key": "Press a key to assign, or Backspace to clear",
+            "press_button": "Press a controller button to assign, or Backspace to clear",
+            "reset": "Restore default bindings",
+            "actions": {
+                "volume_up": "Volume up",
+                "volume_down": "Volume down",
+                "mute": "Mute",
+                "speed_toggle": "Toggle playback speed",
+                "speed_down": "Decrease playback speed",
+                "speed_up": "Increase playback speed",
+                "previous_video": "Previous video",
+                "next_video": "Next video",
+                "seek_backward": "Seek backward",
+                "seek_forward": "Seek forward",
+                "captions": "Toggle captions",
+                "remaining_time": "Toggle remaining time",
+                "copy_video_url": "Copy video link",
+                "open_settings": "Open Settings Menu"
             }
         },
         "sections": {

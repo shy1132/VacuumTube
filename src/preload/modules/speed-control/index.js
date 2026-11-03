@@ -5,6 +5,7 @@ const css = require('../../util/css')
 const functions = require('../../util/functions')
 const configManager = require('../../config')
 const shortcuts = require('../../util/shortcuts')
+const keybindings = require('../../util/keybindings')
 
 const config = configManager.get()
 
@@ -87,17 +88,16 @@ module.exports = async () => {
 
     //speed controls
     document.addEventListener('keydown', (e) => {
-        const key = e.key || e.keyCode; 
-        if (!key || !isWatching() || !shortcuts.isShortcutKey(e))
+        if (!isWatching() || shortcuts.isSettingsOpen())
             return;
 
         const speedStep = 0.25;
 
-        if (key === 's' || key === 'S') {
+        if (keybindings.keyboardMatches(e, 'speed_toggle') || keybindings.controllerMatches(e, 'speed_toggle')) {
             setPlaybackRate(0) // toggle
-        } else if (key === 'a' || key === 'A') {
+        } else if (keybindings.keyboardMatches(e, 'speed_down') || keybindings.controllerMatches(e, 'speed_down')) {
             setPlaybackRate(-speedStep)
-        } else if (key === 'd' || key === 'D') {
+        } else if (keybindings.keyboardMatches(e, 'speed_up') || keybindings.controllerMatches(e, 'speed_up')) {
             setPlaybackRate(speedStep)
         } else {
             return;

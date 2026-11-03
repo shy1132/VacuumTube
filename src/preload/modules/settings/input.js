@@ -1,6 +1,7 @@
 //maps keyboard, controller and mouse events to overlay actions
 
 const controller = require('../../util/controller')
+const keybindings = require('../../util/keybindings')
 
 const directions = {
     'ArrowUp': 'up',
@@ -44,7 +45,7 @@ function listen(actions) {
     }
 
     document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key.toLowerCase() === 'o') {
+        if (keybindings.keyboardMatches(e, 'open_settings')) {
             e.preventDefault()
             e.stopPropagation()
             actions.toggle()
@@ -52,7 +53,7 @@ function listen(actions) {
     }, true)
 
     //while the overlay is open every key is swallowed, otherwise leanback acts on it too
-    for (const type of [ 'keydown', 'keyup' ]) {
+    for (const type of ['keydown', 'keyup']) {
         document.addEventListener(type, (e) => {
             if (!actions.isOpen()) return;
 
@@ -77,7 +78,7 @@ function listen(actions) {
     }, true)
 
     controller.on('down', (e) => {
-        if (!actions.isOpen() || justOpened()) return;
+        if (e.capturedByKeybindings || keybindings.isCapturing() || !actions.isOpen() || justOpened()) return;
 
         const key = gamepadKeys[e.code]
         if (key) handleKey(key)

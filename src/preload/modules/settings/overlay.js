@@ -73,9 +73,22 @@ function hide() {
 
 //highlights the open category, or no tab when a page was opened from the header
 function markSelectedTab(index) {
-    root().querySelectorAll('.vt-tab').forEach((tab) => {
+    const tabs = root().querySelectorAll('.vt-tab')
+    tabs.forEach((tab) => {
         tab.classList.toggle('vt-tab-selected', Number(tab.dataset.index) === index)
     })
+
+    const selected = tabs[index]
+    const bar = root().querySelector('.vt-tabbar')
+    if (!selected || !bar) return;
+
+    const tabBounds = selected.getBoundingClientRect()
+    const barBounds = bar.getBoundingClientRect()
+    if (tabBounds.left < barBounds.left) {
+        bar.scrollLeft -= barBounds.left - tabBounds.left;
+    } else if (tabBounds.right > barBounds.right) {
+        bar.scrollLeft += tabBounds.right - barBounds.right;
+    }
 }
 
 module.exports = {

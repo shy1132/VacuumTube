@@ -6,6 +6,12 @@ const { parseArgs } = require('util')
 const stringArgv = require('string-argv')
 const package = require('../package.json')
 
+for (const stream of [ process.stdout, process.stderr ]) {
+    stream.on('error', (err) => {
+        if (err.code !== 'EPIPE') throw err;
+    })
+}
+
 const { appId } = require('./constants.js')
 
 const commandLineOptions = {

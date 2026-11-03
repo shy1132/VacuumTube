@@ -2,6 +2,7 @@
 
 const configManager = require('../config')
 const shortcuts = require('../util/shortcuts')
+const keybindings = require('../util/keybindings')
 
 function isEnabled(config) {
     return config.features_enabled === true && config.remaining_time_feature === true;
@@ -97,8 +98,8 @@ module.exports = () => {
     }, 250)
 
     document.addEventListener('keydown', (e) => {
-        if (e.key !== 'r' && e.key !== 'R') return;
-        if (!shortcuts.isShortcutKey(e)) return;
+        if (!keybindings.keyboardMatches(e, 'remaining_time') && !keybindings.controllerMatches(e, 'remaining_time')) return;
+        if (shortcuts.isSettingsOpen()) return;
         if (!isEnabled(config) || !isWatchPage()) return;
 
         showRemaining = !showRemaining;

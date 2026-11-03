@@ -86,12 +86,17 @@ async function render() {
 //actions
 
 function openCategory(index) {
+    if (state.page) pages[state.page.id].onClose?.()
     state.category = index;
     state.page = null;
     return render();
 }
 
 async function openPage(id, { fromHeader = false } = {}) {
+    if (state.page && state.page.id !== id) {
+        pages[state.page.id].onClose?.()
+    }
+
     const page = pages[id]
 
     state.page = { id, fromHeader, returnFocus: focus.id() }
@@ -110,6 +115,7 @@ async function openPage(id, { fromHeader = false } = {}) {
 function goBack() {
     if (!state.page) return close();
 
+    pages[state.page.id].onClose?.()
     const returnFocus = state.page.returnFocus;
     state.page = null;
     render().then(() => focus.restore(returnFocus))
@@ -147,6 +153,7 @@ function open() {
 }
 
 function close() {
+    if (state.page) pages[state.page.id].onClose?.()
     state.open = false;
     overlay.hide()
 }

@@ -5,6 +5,7 @@ const rcMod = require('../util/resolveCommandModifiers')
 const patchFunction = require('../util/patchFunction')
 const localeProvider = require('../util/localeProvider')
 const shortcuts = require('../util/shortcuts')
+const keybindings = require('../util/keybindings')
 
 module.exports = async () => {
     await localeProvider.waitUntilAvailable()
@@ -49,7 +50,10 @@ module.exports = async () => {
     })
 
     document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.shiftKey && e.key?.toLowerCase() === 'c') {
+        if (!shortcuts.isSettingsOpen() && (
+            keybindings.keyboardMatches(e, 'copy_video_url') ||
+            keybindings.controllerMatches(e, 'copy_video_url')
+        )) {
             let url;
 
             let isShort = !!document.querySelector('ytlr-shorts-page')?.classList?.contains('zylon-focus')
@@ -113,7 +117,10 @@ module.exports = async () => {
 
     document.addEventListener('keydown', (e) => {
         if (!document.body.classList.contains('WEB_PAGE_TYPE_WATCH') && !document.body.classList.contains('WEB_PAGE_TYPE_SHORTS')) return;
-        if (!e.shiftKey && shortcuts.isShortcutKey(e) && e.key?.toLowerCase() === 'c') {
+        if (!shortcuts.isSettingsOpen() && (
+            keybindings.keyboardMatches(e, 'captions') ||
+            keybindings.controllerMatches(e, 'captions')
+        )) {
             e.stopImmediatePropagation()
             e.stopPropagation()
             toggleCaptions()

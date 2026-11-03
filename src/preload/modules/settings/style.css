@@ -119,7 +119,13 @@ styles the frame and the generic row types from render.js only
     padding: 12px 28px;
     border-top: 1px solid var(--vt-line);
     border-bottom: 1px solid var(--vt-line);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
+.vt-tabbar::-webkit-scrollbar {
+    display: none;
 }
 
 .vt-tab {

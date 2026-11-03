@@ -7,6 +7,7 @@
 //    description?, badge?, icon?     - extra header content (icon is an image url)
 //    crumb?                          - breadcrumb label, if it should differ from the title
 //    onOpen?({ refresh })            - called when the page opens, may be async. store `refresh` to redraw later
+//    onClose?()                      - called before leaving the page or closing the overlay
 
 const pages = [
     require('./about'),
@@ -15,7 +16,8 @@ const pages = [
     require('./guide-tabs'),
     require('./userstyles'),
     require('./features'),
-    require('./mac-permissions')
+    require('./mac-permissions'),
+    require('./keybinds')
 ]
 
 module.exports = Object.fromEntries(pages.map((page) => [ page.id, page ]))

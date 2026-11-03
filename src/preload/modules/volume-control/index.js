@@ -5,6 +5,7 @@ const css = require('../../util/css')
 const functions = require('../../util/functions')
 const configManager = require('../../config')
 const shortcuts = require('../../util/shortcuts')
+const keybindings = require('../../util/keybindings')
 
 const config = configManager.get()
 
@@ -98,17 +99,15 @@ module.exports = async () => {
 
     //volume controls
     document.addEventListener('keydown', (e) => {
-        const key = e.key || e.keyCode; 
-        if (!key || !isWatching() || !shortcuts.isShortcutKey(e)) return;
+        if (!isWatching() || shortcuts.isSettingsOpen()) return;
 
         const volumeStep = 5;
 
-        //the 16xxx ones are custom VacuumTube keycodes used by controller-support.js
-        if (key === '+' || key === '=' || key === 187 || key === 16002) {
+        if (keybindings.keyboardMatches(e, 'volume_up') || keybindings.controllerMatches(e, 'volume_up')) {
             volume = Math.min(100, volume + volumeStep)
-        } else if (key === '-' || key === 189 || key === 16001) {
+        } else if (keybindings.keyboardMatches(e, 'volume_down') || keybindings.controllerMatches(e, 'volume_down')) {
             volume = Math.max(0, volume - volumeStep)
-        } else if (key === 'm' || key === 'M' || key === 77 || key === 16000) {
+        } else if (keybindings.keyboardMatches(e, 'mute') || keybindings.controllerMatches(e, 'mute')) {
             muted = !muted;
         } else {
             return;

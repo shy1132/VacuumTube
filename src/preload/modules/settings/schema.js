@@ -121,6 +121,22 @@ module.exports = (locale) => [
         ]
     },
     {
+        id: 'keybinds',
+        sections: [
+            {
+                id: 'input',
+                rows: [
+                    {
+                        type: 'link',
+                        page: 'keybinds',
+                        title: locale.keybinds.open_title,
+                        description: locale.keybinds.open_description
+                    }
+                ]
+            }
+        ]
+    },
+    {
         id: 'advanced',
         sections: [
             {
