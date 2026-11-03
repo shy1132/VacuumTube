@@ -93,7 +93,7 @@ module.exports = async () => {
 
         const speedStep = 0.25;
 
-        if (key === 's' || key === 'S') {
+        if (key === 'p' || key === 'P') {
             setPlaybackRate(0) // toggle
         } else if (key === 'a' || key === 'A') {
             setPlaybackRate(-speedStep)

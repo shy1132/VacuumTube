@@ -131,6 +131,8 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
   - Decrease volume
 - `M` or `L3`
   - Toggle mute
+- `P`
+  - Toggle playback speed modification
 - `D`
   - Increase playback speed
 - `A`
