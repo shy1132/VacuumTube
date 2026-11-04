@@ -30,7 +30,7 @@ function want(navId = null) {
 
 function first() {
     const list = overlay.list()
-    const node = list.querySelector('.vt-row.vt-focusable') || list.querySelector('.vt-focusable')
+    const node = list.querySelector('.vt-row.vt-focusable, .vt-row .vt-focusable') || list.querySelector('.vt-focusable')
     if (node) set(node)
 }
 

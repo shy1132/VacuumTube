@@ -1,0 +1,5 @@
+Lucide audio-lines icon
+https://lucide.dev/icons/audio-lines
+Source commit: 7b0196e249ca09ca27c584c497aca9a8cab8a7f5
+Source repository: https://github.com/lucide-icons/lucide
+License retained in LICENSE-lucide.

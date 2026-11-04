@@ -1,12 +1,14 @@
 module.exports = {
     id: 'features',
+    layout: 'wide',
 
-    title: (locale) => locale.features.title,
+    title: (locale) => locale.features.options_title,
 
     rows: (config, locale) => [
         {
             type: 'toggle',
             key: 'music_mode_feature',
+            infoPage: 'music-info',
             title: locale.features.settings.music_mode.title,
             description: locale.features.settings.music_mode.description,
             dependsOn: 'features_enabled'
