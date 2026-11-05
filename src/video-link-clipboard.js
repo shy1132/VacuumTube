@@ -3,11 +3,6 @@ function setup({ ipcMain, clipboard }, getWindow) {
     const isAppFrame = (event) => event.sender === getWindow()?.webContents &&
         event.senderFrame?.url?.startsWith('https://www.youtube.com/');
 
-    ipcMain.handle('copy-selection', (event) => {
-        if (!isAppFrame(event)) throw new Error('Invalid clipboard request');
-        event.sender.copy();
-    });
-
     ipcMain.handle('copy-video-link', (event, url) => {
         if (!isAppFrame(event) ||
             typeof url !== 'string' ||

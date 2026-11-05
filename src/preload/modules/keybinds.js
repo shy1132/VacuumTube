@@ -55,7 +55,6 @@ module.exports = async () => {
         document,
         getShortId: () => lastShortId,
         writeText: (url) => ipcRenderer.invoke('copy-video-link', url),
-        copySelection: () => ipcRenderer.invoke('copy-selection'),
         onCopied: () => ui.toast('VacuumTube', locale.general.video_copied)
     }), true)
 

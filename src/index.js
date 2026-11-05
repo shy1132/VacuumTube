@@ -400,8 +400,7 @@ async function createWindow() {
     }
 
     if (process.platform === 'darwin') {
-        //Let the renderer choose between copying text and copying a video link.
-        //The renderer requests native text copying when a field or selection is active.
+        //Let the renderer handle Command-C and Command-Shift-C for video links.
         win.webContents.on('before-input-event', (event, input) => {
             win.webContents.setIgnoreMenuShortcuts(
                 input.meta && !input.control && !input.alt && input.key?.toLowerCase() === 'c'
