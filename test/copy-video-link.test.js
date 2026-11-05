@@ -51,23 +51,17 @@ test('Command-Shift-C floors playback time, including zero', async () => {
         assert.deepEqual(h.copied, [`https://youtu.be/${id}?t=${second}`]);
     }
 });
-test('legacy Ctrl-Shift-C works on every platform without adding a timestamp', async () => {
+test('Ctrl-C and Ctrl-Shift-C copy plain and timestamped links on every platform', async () => {
     for (const platform of ['darwin', 'linux', 'win32']) {
         const h = harness({ platform });
+        await h.press({ metaKey: false, ctrlKey: true });
         await h.press({ metaKey: false, ctrlKey: true, shiftKey: true });
-        assert.deepEqual(h.copied, [`https://youtu.be/${id}`]);
-    }
-});
-test('Ctrl-Alt-C copies a timestamp on every platform', async () => {
-    for (const platform of ['darwin', 'linux', 'win32']) {
-        const h = harness({ platform });
-        await h.press({ key: 'ç', code: 'KeyC', metaKey: false, ctrlKey: true, shiftKey: false, altKey: true });
-        assert.deepEqual(h.copied, [`https://youtu.be/${id}?t=83`]);
+        assert.deepEqual(h.copied, [`https://youtu.be/${id}`, `https://youtu.be/${id}?t=83`]);
     }
 });
 test('unrelated shortcuts, modifiers and held keys do not write the clipboard', async () => {
     for (const extra of [{ metaKey: false }, { altKey: true }, { ctrlKey: true },
-        { key: 'x' }, { metaKey: false, ctrlKey: true }, { repeat: true },
+        { key: 'x' }, { metaKey: false, ctrlKey: true, altKey: true }, { repeat: true },
         { shiftKey: true, altKey: true },
         { metaKey: false, ctrlKey: true, shiftKey: true, altKey: true }]) {
         const h = harness();
@@ -94,7 +88,7 @@ test('Shorts use their own ID and omit timestamps', async () => {
         querySelector: () => ({ classList: { contains: () => true } })
     } });
     await h.press({ shiftKey: true });
-    await h.press({ metaKey: false, ctrlKey: true, shiftKey: false, altKey: true });
+    await h.press({ metaKey: false, ctrlKey: true, shiftKey: true });
     assert.deepEqual(h.copied, [`https://youtube.com/shorts/${id}`, `https://youtube.com/shorts/${id}`]);
 });
 test('live, unknown and invalid playback times fall back to plain links', async () => {
@@ -182,6 +176,6 @@ test('live DVR with a finite duration still copies a plain link', async () => {
         querySelector: selector => selector === '.html5-video-player'
             ? { getVideoData: () => ({ isLive: true }) } : null
     } });
-    await h.press({ metaKey: false, ctrlKey: true, shiftKey: false, altKey: true });
+    await h.press({ metaKey: false, ctrlKey: true, shiftKey: true });
     assert.deepEqual(h.copied, [`https://youtu.be/${id}`]);
 });

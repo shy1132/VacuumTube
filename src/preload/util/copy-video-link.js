@@ -1,12 +1,11 @@
 //Kept independent of Electron so shortcut behavior can be tested without an app.
 function createCopyVideoHandler({ platform, document, getShortId, writeText, onCopied }) {
     return async (event) => {
-        //Option can change the character produced by C (for example, to ç on macOS).
-        if (event.key?.toLowerCase() !== 'c' && !(event.altKey && event.code === 'KeyC')) return;
+        if (event.key?.toLowerCase() !== 'c' || event.altKey) return;
 
         const commandCopy = platform === 'darwin' && event.metaKey && !event.ctrlKey;
-        const controlCopy = event.ctrlKey && !event.metaKey && (event.shiftKey !== event.altKey);
-        if ((!commandCopy || event.altKey) && !controlCopy) return;
+        const controlCopy = event.ctrlKey && !event.metaKey;
+        if (!commandCopy && !controlCopy) return;
 
         const isShort = document.querySelector('ytlr-shorts-page')?.classList.contains('zylon-focus');
         //YouTube's videoElement_ can be a detached, unloaded template.
@@ -29,7 +28,7 @@ function createCopyVideoHandler({ platform, document, getShortId, writeText, onC
 
         let url = isShort ? `https://youtube.com/shorts/${id}` : `https://youtu.be/${id}`;
         //Live timestamps are relative to the moving stream, not a stable share time.
-        if ((event.altKey || (commandCopy && event.shiftKey)) && !isShort &&
+        if (event.shiftKey && !isShort &&
             !document.querySelector('.html5-video-player')?.getVideoData?.()?.isLive &&
             Number.isFinite(video?.duration) &&
             video.duration > 0 && Number.isFinite(video.currentTime) && video.currentTime >= 0) {

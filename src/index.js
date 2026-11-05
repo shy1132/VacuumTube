@@ -399,15 +399,14 @@ async function createWindow() {
         win.setAspectRatio(TARGET_RATIO)
     }
 
-    if (process.platform === 'darwin') {
-        //Let the renderer handle Command-C and Command-Shift-C for video links.
-        win.webContents.on('before-input-event', (event, input) => {
-            win.webContents.setIgnoreMenuShortcuts(
-                input.meta && !input.control && !input.alt && input.key?.toLowerCase() === 'c'
-            )
-        })
-        win.webContents.on('blur', () => win.webContents.setIgnoreMenuShortcuts(false))
-    }
+    //Let the renderer handle copy shortcuts instead of the native Edit menu.
+    win.webContents.on('before-input-event', (event, input) => {
+        win.webContents.setIgnoreMenuShortcuts(
+            !input.alt && input.key?.toLowerCase() === 'c' &&
+            ((input.control && !input.meta) || (process.platform === 'darwin' && input.meta && !input.control))
+        )
+    })
+    win.webContents.on('blur', () => win.webContents.setIgnoreMenuShortcuts(false))
 
     win.setMenuBarVisibility(false)
     win.setAutoHideMenuBar(false)

@@ -119,9 +119,9 @@ VacuumTube exposes a few extra input mappings for actions that may be desired on
 
 - `Ctrl+O`
   - Open VacuumTube Settings
-- `Ctrl+Shift+C` (all platforms), or `Command+C` (macOS)
+- `Ctrl+C` (all platforms), or `Command+C` (macOS)
   - Copy current video URL to clipboard.
-- `Ctrl+Alt+C` (all platforms), or `Command+Shift+C` (macOS)
+- `Ctrl+Shift+C` (all platforms), or `Command+Shift+C` (macOS)
   - Copy current video URL at the current playback second. Shorts and live streams copy a plain link.
 - `Shift+Enter`
   - Simulate long-press of the Enter key
