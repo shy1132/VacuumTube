@@ -1,5 +1,8 @@
 /*css patches*/
 
+/*youtube's caption font system internally expects cobalt/leanback to bundle these fonts with it*/
+@import url('https://fonts.googleapis.com/css2?family=Carrois+Gothic+SC&family=Cutive+Mono&family=Dancing+Script:wght@400;700&family=Handlee&family=Marcellus+SC&family=PT+Mono&family=PT+Sans+Caption:wght@400;700&family=PT+Serif+Caption:ital@0;1&display=swap');
+
 ::-webkit-scrollbar { /*hide native scrollbars from enableTouchSupport in touch-support.js*/
     display: none;
 }

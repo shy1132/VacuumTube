@@ -1,48 +1,335 @@
 {
     "general": {
         "video_copied": "Videolink in die Zwischenablage kopiert",
-        "dislikes": "Abneigungsknöpfe"
+        "dislikes": "Dislikes",
+        "steam_controller_notice": "Externer Controller wird nicht erkannt? Probiere das steamdeck-input-disabler-Plugin von Decky aus.",
+        "encryption_error": {
+            "title": "Etwas ist schiefgelaufen",
+            "text": "Dieses Video konnte nicht dekodiert werden. Filme werden in VacuumTube wegen Verschlüsselung nicht unterstützt. Tritt das auch bei anderen Videos auf, versuche dich anzumelden oder das Konto zu wechseln.",
+            "switch_accounts": "Konto wechseln",
+            "okay": "Okay"
+        }
     },
     "settings": {
+        "generic": {
+            "title": "Einstellungen",
+            "description": "Öffnet das VacuumTube-Einstellungsfenster. Du kannst es überall mit Strg+O öffnen",
+            "button_label": "VacuumTube-Einstellungen öffnen",
+            "hint": "Mit den Pfeiltasten navigieren",
+            "option_count": "{count} Optionen",
+            "translate": "Hilf mit, VacuumTube auf {language} zu übersetzen",
+            "ratio": "{on} von {total}"
+        },
+        "categories": {
+            "general": {
+                "title": "Allgemein",
+                "description": "Wie sich das VacuumTube-Fenster verhält."
+            },
+            "playback": {
+                "title": "Wiedergabe",
+                "description": "Steuere, was abgespielt wird und wie Videos dargestellt werden."
+            },
+            "appearance": {
+                "title": "Darstellung",
+                "description": "Ändere, was die Oberfläche zeigt und wie sie aussieht."
+            },
+            "controls": {
+                "title": "Steuerung & Geräte",
+                "description": "Eingabemethoden und verbundene Geräte."
+            },
+            "advanced": {
+                "title": "Erweitert",
+                "description": "Leistungsoptimierungen und optionale Funktionen."
+            }
+        },
+        "sections": {
+            "window": "Fenster",
+            "behavior": "Verhalten",
+            "updates": "Updates",
+            "content": "Inhalte",
+            "quality": "Qualität & Kompatibilität",
+            "interface": "Oberfläche",
+            "userstyles": "Benutzerdefiniertes CSS",
+            "input": "Eingabe",
+            "devices": "Geräte",
+            "performance": "Leistung",
+            "experimental": "Experimentell"
+        },
         "adblock": {
-            "title": "Anzeigenblocker",
-            "description": "Blockiert nahtlos Video- und Feed-Werbung und unterliegt nicht den Methoden von YouTube zur Verhinderung von Blockern"
+            "title": "Werbung blockieren",
+            "description": "Blockiert nahtlos Video- und Feed-Werbung und ist nicht von YouTubes Methoden zur Blockerverhinderung betroffen"
+        },
+        "sponsorblock": {
+            "title": "SponsorBlock",
+            "description": "Überspringt Sponsorensegmente in YouTube-Videos mithilfe einer Crowdsourcing-Datenbank",
+            "categories_link": "Zu überspringende Segmente",
+            "categories": {
+                "sponsor": {
+                    "name": "Sponsor",
+                    "description": "Bezahlte Werbung, bezahlte Verweise und direkte Anzeigen. Nicht für Eigenwerbung oder kostenlose Erwähnungen von Anliegen/Creatorinnen/Creatorn/Websites/Produkten, die man mag."
+                },
+                "selfpromo": {
+                    "name": "Unbezahlte Eigenwerbung",
+                    "description": "Ähnlich wie „Sponsor“, jedoch für unbezahlte Werbung oder Eigenwerbung. Dazu gehören Abschnitte über Merchandise, Spenden oder Informationen darüber, mit wem zusammengearbeitet wurde."
+                },
+                "interaction": {
+                    "name": "Interaktionserinnerung (Abonnieren)",
+                    "description": "Wenn mitten im Inhalt kurz daran erinnert wird, zu liken, zu abonnieren oder zu folgen. Ist sie lang oder betrifft sie etwas Bestimmtes, gehört sie eher unter Eigenwerbung."
+                },
+                "intro": {
+                    "name": "Pausen-/Intro-Animation",
+                    "description": "Ein Abschnitt ohne eigentlichen Inhalt. Kann eine Pause, ein Standbild oder eine wiederholte Animation sein. Nicht für Übergänge mit Informationen verwenden."
+                },
+                "outro": {
+                    "name": "Endkarten/Abspann",
+                    "description": "Abspann oder wenn die YouTube-Endkarten erscheinen. Nicht für Fazits mit Informationen."
+                },
+                "preview": {
+                    "name": "Vorschau/Zusammenfassung",
+                    "description": "Sammlung von Ausschnitten, die zeigen, was in diesem oder in anderen Videos einer Reihe kommt, wobei alle Informationen später wiederholt werden."
+                },
+                "hook": {
+                    "name": "Einstieg/Begrüßungen",
+                    "description": "Erzählte Trailer für das kommende Video, Begrüßungen und Verabschiedungen. Sollte keine Fazits mit Informationen überspringen."
+                },
+                "filler": {
+                    "name": "Abschweifungen/Witze",
+                    "description": "Abschweifende Szenen oder Witze, die zum Verständnis des Hauptinhalts nicht nötig sind. Sollte keine Abschnitte mit Kontext- oder Hintergrunddetails umfassen. Eine sehr aggressive Kategorie für Momente, in denen dir nicht nach „Spaß“ ist."
+                }
+            }
         },
         "dearrow": {
             "title": "DeArrow",
-            "description": "Ersetzt Titel und Vorschaubilder durch genauere, weniger sensationslüsterne Versionen aus einer öffentlichen Crowdsourced-Datenbank. Verlangsamt das Laden, da es Informationen vom Server abrufen muss"
+            "description": "Ersetzt Titel und Vorschaubilder durch genauere, weniger reißerische Versionen aus einer öffentlichen Crowdsourcing-Datenbank. Verlangsamt das Laden, da Informationen vom Server abgerufen werden müssen"
         },
         "dislikes": {
-            "title": "Abneigungen zurückgeben",
-            "description": "Verwendet die YouTube Abneigungen zurückgeben API (returnyoutubedislike.com), um Abneigungsknöpfe wieder zu YouTube hinzuzufügen. Verlangsamt das Laden von Videos, da Informationen vom Server abgerufen werden müssen"
+            "title": "Dislikes zurückbringen",
+            "description": "Nutzt Community-Daten der Return YouTube Dislike API (returnyoutubedislike.com), um ungefähre Dislike-Zahlen anzuzeigen. Verlangsamt das Laden von Videos, da Informationen vom Server abgerufen werden müssen"
+        },
+        "remove_super_resolution": {
+            "title": "Super Resolution entfernen",
+            "description": "Entfernt „Super Resolution“-Qualitäten (KI-hochskaliert) aus Videos niedriger Qualität"
+        },
+        "hide_shorts": {
+            "title": "Shorts ausblenden",
+            "description": "Blendet YouTube Shorts auf der Startseite aus"
+        },
+        "guide_tabs": {
+            "title": "Seitenleisten-Tabs",
+            "description": "Wähle, welche Tabs in der Seitenleiste angezeigt werden. Schalte einen Tab aus, um ihn auszublenden. Nach Änderung neu starten",
+            "tabs": {
+                "search": "Suche",
+                "shorts": "Shorts",
+                "subscriptions": "Abos",
+                "library": "Mediathek",
+                "gaming": "Gaming",
+                "music": "Musik",
+                "news": "Nachrichten",
+                "podcasts": "Podcasts",
+                "movies_and_tv": "Filme & TV",
+                "live": "Live",
+                "sports": "Sport"
+            }
+        },
+        "unlock_resolution": {
+            "title": "Auflösung freischalten",
+            "description": "Hebt die Auflösungsbegrenzung des Monitors auf und erlaubt Videos in jeder Auflösung. Nach Umschalten neu starten"
+        },
+        "h264ify": {
+            "title": "Video-Codecs filtern",
+            "description": "Optionen zur Codec-Filterung. Nach dem Umschalten einer beliebigen Option neu starten.",
+            "enable_title": "Codec-Filter aktivieren (h264ify)",
+            "enable_description": "Aktiviert den Codec-Filter. Kann Leistung und Akkulaufzeit auf langsameren Geräten verbessern, aber die verfügbaren Auflösungen reduzieren.",
+            "disable_codec_title": "{codec} deaktivieren",
+            "disable_codec_description": "{codec}-Streams blockieren.",
+            "codecs_link": "Blockierte Codecs"
+        },
+        "block_continue_watching": {
+            "title": "„Weiterschauen“ blockieren",
+            "description": "Blockiert die Aufforderung „Video pausiert. Weiterschauen?“, die nach einer Weile Inaktivität erscheint"
         },
         "hardware_decoding": {
             "title": "Hardware-Dekodierung",
-            "description": "Verwendet Ihren Grafikprozessor zur Dekodierung von Videos, wenn möglich. Die Deaktivierung dieser Funktion kann Wiedergabeprobleme beheben, kann aber je nach CPU zu Verzögerungen führen. Starten Sie nach dem Umschalten neu."
+            "description": "Nutzt nach Möglichkeit deine GPU zum Dekodieren von Videos. Das Deaktivieren kann Wiedergabeprobleme beheben, je nach CPU aber Verzögerungen verursachen. Nach Umschalten neu starten"
+        },
+        "wayland_hdr": {
+            "title": "Wayland HDR",
+            "description": "Aktiviert HDR unter Wayland, kann auf nicht unterstützten Plattformen aber blasse Farben verursachen. Nach Umschalten neu starten"
         },
         "low_memory_mode": {
-            "title": "Wenigspeichermodus",
-            "description": "Weist YouTube an, den Modus für geringen Speicherbedarf zu aktivieren, was die Leistung auf langsameren Geräten auf Kosten einiger visueller Effekte verbessern kann. Starten Sie nach dem Umschalten neu."
+            "title": "Speichersparmodus",
+            "description": "Weist YouTube an, den Modus für geringen Speicherbedarf zu aktivieren, was die Leistung auf langsameren Geräten auf Kosten einiger visueller Effekte verbessern kann. Nach Umschalten neu starten"
         },
         "fullscreen": {
-            "title": "Vollbildschirm",
-            "description": "Aktiviert den Vollbildmodus und lässt VacuumTube immer im Vollbildmodus starten."
+            "title": "Vollbild",
+            "description": "Aktiviert den Vollbildmodus und lässt VacuumTube immer im Vollbild starten"
+        },
+        "no_window_decorations": {
+            "title": "Ohne Fensterdekoration",
+            "description": "Deaktiviert Fensterdekorationen einschließlich Titelleiste und Fensterrahmen. Nach Umschalten neu starten"
         },
         "keep_on_top": {
-            "title": "Oben halten",
-            "description": "Aktiviert „Oben halten“ und sorgt dafür, dass VacuumTube so gestartet wird, dass das Fenster über allen anderen Fenstern angeheftet ist."
+            "title": "Im Vordergrund halten",
+            "description": "Aktiviert „Im Vordergrund halten“ und lässt VacuumTube mit dem Fenster über allen anderen Fenstern angeheftet starten"
         },
-        "userstyles": {
-            "title": "Benutzerdefinierte CSS (Benutzerstile)",
-            "description": "Ermöglicht das Einfügen von benutzerdefinierten CSS-Stilen. Legen Sie Ihre .css-Dateien im Ordner „Benutzerstile“ ab."
+        "auto_update": {
+            "title": "Automatische Updates",
+            "description": "Lädt neue Versionen im Hintergrund herunter und installiert sie beim Schließen von VacuumTube. Wenn aus, kannst du auf der Info-Seite weiterhin nach Updates suchen"
+        },
+        "pause_on_blur": {
+            "title": "Bei Fokusverlust pausieren",
+            "description": "Pausiert das aktuelle Video, wenn VacuumTube den Fokus verliert (z. B. beim Wegschalten oder Minimieren des Fensters)"
         },
         "features": {
+            "title": "Funktionen",
+            "notice_title": "Nicht Teil der Standarderfahrung",
+            "notice_description": "Diese optionalen Funktionen erweitern VacuumTube über die normale TV-YouTube-Erfahrung hinaus. Aktiviere sie unten, um zu bestätigen, dass sie auf internem YouTube-Verhalten beruhen und sich ohne Vorankündigung ändern oder aufhören können zu funktionieren.",
+            "enable_title": "Optionale Funktionen aktivieren",
+            "enable_description": "Ich verstehe, dass diese Funktionen außerhalb der Standarderfahrung von VacuumTube liegen und sich ändern oder kaputtgehen können.",
             "settings": {
+                "music_mode": {
+                    "title": "Musikmodus",
+                    "description": "Fügt dem Video-Einstellungsmenü einen Musikmodus-Schalter für reine Audiowiedergabe über YouTubes native Musikansicht hinzu."
+                },
                 "remaining_time": {
                     "title": "Verbleibende Zeit anzeigen",
-                    "description": "Zeigt die verbleibende Abspielzeit eines Videos anstatt der Gesamtlänge. Berücksichtigt die aktuelle Wiedergabegeschwindigkeit."
+                    "description": "Zeigt im Player-Overlay die verbleibende Laufzeit des Videos statt der verstrichenen Zeit an. Berücksichtigt die aktuelle Wiedergabegeschwindigkeit. Mit R für das aktuelle Video umschalten."
+                },
+                "ultrawide": {
+                    "title": "Ultrawide-Unterstützung",
+                    "description": "Erweitert die Oberfläche im Vollbild auf Ultrabreitbildschirme. Kann in mancher Hinsicht fehlerhaft und seltsam aussehen."
                 }
             }
+        },
+        "userstyles": {
+            "title": "Benutzerdefiniertes CSS (Benutzerstile)",
+            "description": "Lege .css-Dateien im Benutzerstile-Ordner ab, um die Oberfläche anzupassen. Änderungen werden automatisch übernommen",
+            "warn_empty": "Keine Benutzerstile gefunden",
+            "open_folder": "Benutzerstile-Ordner öffnen",
+            "enable": "Benutzerstile aktivieren",
+            "failed_to_load": "Benutzerstile konnten nicht geladen werden",
+            "manage_link": "Benutzerstile verwalten"
+        },
+        "touch_overlay": {
+            "title": "Touch-Overlay",
+            "description": "Aktiviert Bildschirm-Touchsteuerung für einfachere Navigation, wenn Touch-Eingabe erkannt wird"
+        },
+        "controller_support": {
+            "title": "Controller-Unterstützung",
+            "description": "Aktiviert die Unterstützung für Gamecontroller, inklusive Navigation und Wiedergabesteuerung. Erfordert einen externen Controller, etwa einen Xbox-Controller"
+        },
+        "device_discoverability": {
+            "title": "Geräteauffindbarkeit",
+            "description": "Ermöglicht, dass VacuumTube von der YouTube-App auf Geräten im selben lokalen Netzwerk gefunden wird. Nach Umschalten neu starten"
+        },
+        "mac_permissions": {
+            "title": "Berechtigungen",
+            "description": "Verwalte die von VacuumTube genutzten macOS-Berechtigungen.",
+            "microphone_title": "Mikrofon",
+            "microphone_description": "Wird nur verwendet, wenn du die YouTube-Sprachsuche startest.",
+            "status_label": "Status",
+            "status_loading": "Mikrofonberechtigung wird geprüft…",
+            "request_microphone": "Mikrofonzugriff anfordern",
+            "open_microphone_settings": "macOS-Mikrofoneinstellungen öffnen",
+            "reset_microphone": "Fehlerbehebung: Berechtigungsabfrage zurücksetzen",
+            "relaunch_app": "VacuumTube neu starten",
+            "restart_required": "In den macOS-Einstellungen vorgenommene Änderungen erfordern einen Neustart von VacuumTube.",
+            "request_granted": "Mikrofonzugriff ist erlaubt. Es ist keine Berechtigungsabfrage nötig.",
+            "request_not_determined": "macOS hat noch keine Berechtigungsabfrage angezeigt. Nutze „Berechtigungsabfrage zurücksetzen“ und versuche es erneut.",
+            "request_denied_help": "macOS zeigt die Berechtigungsabfrage nicht erneut an, solange der Zugriff verweigert wird. Aktiviere ihn in den macOS-Einstellungen und starte VacuumTube neu.",
+            "request_failed": "VacuumTube konnte keinen Mikrofonzugriff anfordern. Öffne die macOS-Einstellungen und starte die App nach dem Ändern des Zugriffs neu.",
+            "resetting_microphone": "Gespeicherte macOS-Mikrofonentscheidung wird zurückgesetzt…",
+            "statuses": {
+                "not-determined": "Nicht angefragt",
+                "granted": "Erlaubt",
+                "denied": "Verweigert",
+                "restricted": "Eingeschränkt",
+                "unknown": "Unbekannt",
+                "unsupported": "Nicht unterstützt"
+            }
+        },
+        "about": {
+            "title": "Über",
+            "description": "YouTube fürs TV, auf deinem PC",
+            "version": "Version {version}",
+            "platform_label": "Plattform",
+            "installation_label": "Installation",
+            "update_method_label": "Update-Methode",
+            "view_github": "Auf GitHub ansehen",
+            "latest_releases": "Neueste Versionen",
+            "platforms": {
+                "darwin": "macOS",
+                "win32": "Windows",
+                "linux": "Linux"
+            },
+            "architectures": {
+                "arm64": "arm64",
+                "x64": "x64",
+                "ia32": "x86"
+            },
+            "installations": {
+                "application": "Anwendung",
+                "installer": "Installierte Anwendung",
+                "portable": "Portable Anwendung",
+                "flatpak": "Flatpak",
+                "appimage": "AppImage",
+                "package": "Systempaket",
+                "development": "Entwicklungsbuild",
+                "unknown": "Unbekannt"
+            },
+            "update_methods": {
+                "automatic": "Automatischer Installer",
+                "manual": "Manueller Download",
+                "flatpak": "Flatpak"
+            },
+            "updates": {
+                "idle_title": "Updates",
+                "idle_detail": "Prüfen, ob eine neuere Version von VacuumTube verfügbar ist.",
+                "check_now": "Nach Updates suchen",
+                "checking_title": "Suche nach Updates…",
+                "checking_detail": "Neueste VacuumTube-Version wird gesucht.",
+                "checking_button": "Wird geprüft…",
+                "current_title": "Du bist auf dem neuesten Stand",
+                "current_detail": "VacuumTube {version} ist die neueste verfügbare Version.",
+                "check_again": "Erneut prüfen",
+                "available_title": "VacuumTube {version} ist verfügbar",
+                "available_automatic_detail": "Lade das Update jetzt herunter und starte VacuumTube neu, wenn es bereit ist.",
+                "available_manual_detail": "Lade die neueste Version herunter und ersetze deine aktuelle Kopie.",
+                "download_update": "Update herunterladen",
+                "download_latest": "Neueste Version herunterladen",
+                "downloading_title": "Update wird heruntergeladen…",
+                "downloading_detail": "Das Update ist zu {percent} % heruntergeladen.",
+                "downloading_button": "Wird heruntergeladen… {percent} %",
+                "ready_title": "Update bereit zur Installation",
+                "ready_detail": "Starte VacuumTube neu, um Version {version} zu installieren.",
+                "install_update": "Neu starten und installieren",
+                "error_title": "Updates konnten nicht geprüft werden",
+                "error_detail": "Prüfe deine Verbindung und versuche es erneut oder öffne die Releases-Seite.",
+                "try_again": "Erneut versuchen",
+                "development_title": "Entwicklungsbuild",
+                "development_detail": "Automatische Update-Prüfungen sind in paketierten Builds verfügbar.",
+                "unsupported_title": "Update-Prüfung nicht verfügbar",
+                "unsupported_detail": "Nutze die unten angezeigte Update-Methode, um nach einer neueren Version zu suchen.",
+                "view_update_source": "Update-Quelle ansehen",
+                "view_releases": "Neueste Releases ansehen"
+            }
+        }
+    },
+    "sponsorblock": {
+        "sponsor_skipped": "Sponsor übersprungen",
+        "selfpromo_skipped": "Eigenwerbung übersprungen",
+        "interaction_skipped": "Interaktion übersprungen",
+        "intro_skipped": "Intro übersprungen",
+        "outro_skipped": "Outro übersprungen",
+        "preview_skipped": "Vorschau übersprungen",
+        "hook_skipped": "Einstieg/Begrüßung übersprungen",
+        "filler_skipped": "Abschweifungen/Witze übersprungen"
+    },
+    "donate_unused": {
+        "setting": {
+            "title": "Spenden",
+            "description": "Unterstütze die Entwicklung von VacuumTube mit einer Spende! Du kannst über shy.rocks/donate spenden oder unten auf die Schaltfläche drücken, um die Spendenseite im Browser zu öffnen",
+            "button_label": "Spenden"
         }
     }
 }

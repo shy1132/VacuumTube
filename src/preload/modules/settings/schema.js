@@ -36,7 +36,8 @@ module.exports = (locale) => [
             {
                 id: 'behavior',
                 rows: [
-                    { type: 'toggle', key: 'pause_on_blur' }
+                    { type: 'toggle', key: 'pause_on_blur' },
+                    { type: 'toggle', key: 'default_guest_mode' }
                 ]
             },
             {

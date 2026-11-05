@@ -147,6 +147,7 @@ function buttonDown(code) {
 }
 
 function buttonUp(code) {
+    if (!focused) return;
     emitter.emit('up', { code })
 }
 
