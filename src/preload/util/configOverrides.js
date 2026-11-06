@@ -6,21 +6,15 @@ const ytcfgOverrides = []
 const environmentOverrides = []
 
 function overrideEnv(key, value) {
-    let params = new URLSearchParams(window.location.search)
+    let url = new URL(window.location.href)
 
     key = String(key)
     value = String(value)
 
-    let existing = params.has(key)
-    if (existing) {
-        if (value === existing) return;
-        params.delete(key)
-    }
+    if (url.searchParams.get(key) === value) return;
 
-    params.set(key, value)
-
-    let newUrl = window.location.pathname + '?' + params.toString()
-    history.replaceState(null, '', newUrl)
+    url.searchParams.set(key, value)
+    history.replaceState(null, '', url)
 }
 
 function applyOverrides(target, overrides) {
