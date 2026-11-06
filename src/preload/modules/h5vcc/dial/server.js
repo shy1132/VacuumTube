@@ -52,6 +52,8 @@ http.route('GET', '/', (req, res) => {
     res.end(buildDeviceDesc(base))
 })
 
+const stopRequests = new Set()
+
 async function handle(basePath, callback, req, res) {
     let body = ''
     if (req.method === 'POST' || req.method === 'DELETE') {
@@ -68,6 +70,17 @@ async function handle(basePath, callback, req, res) {
         res.statusCode = 400;
         res.end()
         return;
+    }
+
+    let remote = req.socket.remoteAddress
+    if (basePath === '/apps/YouTube') {
+        if (req.method === 'DELETE') {
+            stopRequests.add(remote)
+        } else if (req.method === 'POST') {
+            stopRequests.delete(remote)
+        } else if (req.method === 'GET' && typeof data.body === 'string' && stopRequests.has(remote)) {
+            data.body = data.body.replace('<state>running</state>', '<state>stopped</state>')
+        }
     }
 
     if (data.mimeType) headers.append('Content-Type', data.mimeType)
