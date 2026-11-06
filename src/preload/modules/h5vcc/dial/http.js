@@ -36,17 +36,31 @@ function baseFor(req) {
     return `http://${req.socket.localAddress}:${req.socket.localPort}`;
 }
 
-function listen() {
-    return new Promise((resolve, reject) => {
-        server.once('error', reject)
+const PORT_STORAGE_KEY = 'vt-dial-port'
 
-        server.listen(0, '0.0.0.0', () => { //ipv4 only
-            server.off('error', reject)
+function listen(port = Number(localStorage.getItem(PORT_STORAGE_KEY)) || 0) {
+    return new Promise((resolve, reject) => {
+        const onError = (err) => {
+            if (port && err.code === 'EADDRINUSE') {
+                console.warn(`[h5vcc] DIAL: Port ${port} in use, falling back to a random port`)
+                resolve(listen(0))
+            } else {
+                reject(err)
+            }
+        }
+        server.once('error', onError)
+
+        server.listen(port, '0.0.0.0', () => { //ipv4 only
+            server.off('error', onError)
             module.exports.port = server.address().port;
+            localStorage.setItem(PORT_STORAGE_KEY, String(module.exports.port))
             resolve()
         })
     });
 }
+
+//free the port for the next page
+window.addEventListener('pagehide', () => server.close())
 
 module.exports = {
     server,
