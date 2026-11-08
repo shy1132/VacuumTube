@@ -40,6 +40,7 @@ const defaults = { //mess
     hardware_decoding: true, //use hardware gpu video decoding
     wayland_hdr: false, //whether or not to enable wayland color management, which allows hdr but sometimes has issues on non-hdr systems
     low_memory_mode: false, //enables env_isLimitedMemory
+    fullscreen_display: null, //Windows display ID; null uses the current display
     fullscreen: false, //whether or not to launch in fullscreen, changes automatically if user enters/exits fullscreen
     features_enabled: false, //whether or not VacuumTube extended features are enabled
     music_mode_feature: false, //whether or not the music mode *feature* is enabled

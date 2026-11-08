@@ -160,6 +160,13 @@
             "title": "Low Memory Mode",
             "description": "Tells YouTube to enable low memory mode, which may improve performance on slower devices at the cost of some visual effects. Relaunch after toggling"
         },
+        "fullscreen_display": {
+            "title": "Fullscreen display",
+            "description": "Choose a display for the next time you enter fullscreen. Reopen this page after connecting or disconnecting a display.",
+            "current": "Current display",
+            "display": "Display {number}",
+            "selected": "Selected"
+        },
         "fullscreen": {
             "title": "Fullscreen",
             "description": "Enables fullscreen, and makes VacuumTube always launch in fullscreen"
