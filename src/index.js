@@ -47,6 +47,11 @@ const runningOnSteam = process.env.SteamOS === '1' && process.env.SteamGamepadUI
 
 let win;
 let config;
+const fullscreenDisplay = require('./fullscreen-display').createFullscreenDisplay({
+    screen: electron.screen,
+    getWindow: () => win,
+    getDisplayId: () => config.fullscreen_display
+})
 let windowDeeplink = null;
 
 async function main() {
@@ -279,10 +284,12 @@ async function main() {
         }
     })
 
+    electron.ipcMain.handle('get-fullscreen-displays', () => {
+        return process.platform === 'win32' ? electron.screen.getAllDisplays().map(({ id, label, size }) => ({ id, label, size })) : [];
+    })
+
     electron.ipcMain.handle('set-fullscreen', (e, value) => {
-        if (win) {
-            win.setFullScreen(value)
-        }
+        fullscreenDisplay.setFullscreen(value)
     })
 
     electron.ipcMain.handle('set-on-top', (e, value) => {
@@ -343,11 +350,13 @@ async function createWindow() {
         height = Math.floor(parsed)
     }
 
+    const fullscreenTarget = fullscreen && fullscreenDisplay.target()
     win = new electron.BrowserWindow({
+        ...(fullscreenTarget ? { x: fullscreenTarget.workArea.x, y: fullscreenTarget.workArea.y } : {}),
         width,
         height,
         backgroundColor: '#282828',
-        fullscreen, //this sometimes doesn't work for people, so it's repeated below
+        fullscreen: fullscreenTarget ? false : fullscreen, //position selected displays before fullscreen
         fullscreenable: true, //explicitly enable fullscreen functionality on macOS
         titleBarStyle: noWindowDecs ? 'hidden' : 'default',
         frame: noWindowDecs ? false : true,
@@ -397,11 +406,13 @@ async function createWindow() {
         win.setAspectRatio(TARGET_RATIO)
     }
 
+    win.webContents.on('before-input-event', fullscreenDisplay.onInput)
+
     win.setMenuBarVisibility(false)
     win.setAutoHideMenuBar(false)
 
     win.once('ready-to-show', () => {
-        win.setFullScreen(fullscreen)
+        fullscreenDisplay.setFullscreen(fullscreen)
         win.setAlwaysOnTop(config.keep_on_top)
         win.show()
     })

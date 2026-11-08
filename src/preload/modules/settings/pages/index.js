@@ -10,6 +10,7 @@
 
 const pages = [
     require('./about'),
+    require('./fullscreen-display'),
     require('./sponsorblock'),
     require('./h264ify'),
     require('./guide-tabs'),

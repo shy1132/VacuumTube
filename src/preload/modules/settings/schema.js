@@ -29,6 +29,7 @@ module.exports = (locale) => [
                 id: 'window',
                 rows: [
                     { type: 'toggle', key: 'fullscreen', onChange: (value) => ipcRenderer.invoke('set-fullscreen', value) },
+                    { type: 'link', page: 'fullscreen_display', title: locale.fullscreen_display.title, hide: process.platform !== 'win32' },
                     { type: 'toggle', key: 'no_window_decorations' },
                     { type: 'toggle', key: 'keep_on_top', onChange: (value) => ipcRenderer.invoke('set-on-top', value) }
                 ]
