@@ -3,27 +3,31 @@ const fs = require('node:fs')
 const path = require('node:path')
 const vm = require('node:vm')
 const test = require('node:test')
+const { EventEmitter } = require('node:events')
 const { createFullscreenDisplay } = require('../src/fullscreen-display')
 
 function setup({ id = 2, platform = 'win32', maximized = false } = {}) {
     const calls = []
     let fullscreen = false;
     const display = { id: 2, workArea: { x: -800, y: -600, width: 800, height: 600 } }
-    const win = {
+    let bounds = { x: 0, y: 0, width: 1200, height: 700 };
+    const win = Object.assign(new EventEmitter(), {
         isFullScreen: () => fullscreen,
         isMaximized: () => maximized,
-        unmaximize: () => calls.push('unmaximize'),
-        getBounds: () => ({ x: 0, y: 0, width: 1200, height: 700 }),
+        unmaximize: () => { calls.push('unmaximize'); maximized = false },
+        maximize: () => { calls.push('maximize'); maximized = true },
+        getBounds: () => ({ ...bounds }),
+        getNormalBounds: () => ({ ...bounds }),
         getContentSize: () => [1184, 661],
-        setBounds: (bounds) => calls.push(bounds),
+        setBounds: (value) => { calls.push(value); bounds = { ...value } },
         setFullScreen: (value) => { calls.push(value); fullscreen = value }
-    }
+    })
     let enumerations = 0;
     const controller = createFullscreenDisplay({
         platform, getDisplayId: () => id, getWindow: () => win,
         screen: { getAllDisplays: () => { enumerations++; return [display] } }
     })
-    return { controller, calls, display, enumerations: () => enumerations };
+    return { controller, calls, display, win, enumerations: () => enumerations };
 }
 
 test('moves within a small negative-coordinate display before entering fullscreen', () => {
@@ -87,4 +91,36 @@ test('display page uses buttons and saves only the chosen preference', async () 
     rows[0].run()
     rows[1].run()
     assert.deepEqual(writes, [null, 2])
+})
+
+
+test('restores bounds and maximization only after fullscreen has exited', () => {
+    for (const maximized of [false, true]) {
+        const { controller, win } = setup({ maximized })
+        const originalBounds = win.getNormalBounds()
+        controller.setFullscreen(true)
+        assert.equal(win.isMaximized(), false)
+        assert.notDeepEqual(win.getBounds(), originalBounds)
+        controller.setFullscreen(false)
+        assert.notDeepEqual(win.getBounds(), originalBounds)
+        win.emit('leave-full-screen')
+        assert.deepEqual(win.getBounds(), originalBounds)
+        assert.equal(win.isMaximized(), maximized)
+        assert.equal(win.listenerCount('leave-full-screen'), 0)
+    }
+})
+
+test('native fullscreen exit restores state and later entries capture fresh bounds', () => {
+    const { controller, win } = setup()
+    for (const x of [100, 250]) {
+        const originalBounds = { x, y: 50, width: 900, height: 536 }
+        win.setBounds(originalBounds)
+        controller.setFullscreen(true)
+        controller.setFullscreen(true) //Repeated entry must not replace the saved bounds.
+        assert.equal(win.listenerCount('leave-full-screen'), 1)
+        win.setFullScreen(false) //Exit without calling the controller (e.g. native F11).
+        win.emit('leave-full-screen')
+        assert.deepEqual(win.getBounds(), originalBounds)
+        assert.equal(win.isMaximized(), false)
+    }
 })

@@ -10,7 +10,14 @@ function createFullscreenDisplay({ screen, getWindow, getDisplayId, platform = p
         if (!win) return;
         const display = value && !win.isFullScreen() ? target() : null;
         if (display) {
-            if (win.isMaximized()) win.unmaximize()
+            const wasMaximized = win.isMaximized()
+            const previousBounds = win.getNormalBounds()
+            //Restore after native fullscreen exits, including exits outside this controller.
+            win.once('leave-full-screen', () => {
+                win.setBounds(previousBounds)
+                if (wasMaximized) win.maximize()
+            })
+            if (wasMaximized) win.unmaximize()
             const bounds = win.getBounds()
             const [contentWidth, contentHeight] = win.getContentSize()
             const chromeWidth = bounds.width - contentWidth;
