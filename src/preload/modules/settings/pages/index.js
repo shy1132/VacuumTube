@@ -15,7 +15,8 @@ const pages = [
     require('./guide-tabs'),
     require('./userstyles'),
     require('./features'),
-    require('./mac-permissions')
+    require('./mac-permissions'),
+    require('./screensaver')
 ]
 
 module.exports = Object.fromEntries(pages.map((page) => [ page.id, page ]))
