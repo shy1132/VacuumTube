@@ -55,7 +55,10 @@ const defaults = { //mess
     touch_overlay: true, //whether or not to enable the touch overlay interface when touch is detected
     controller_support: true, //whether or not to enable game controller support
     device_discoverability: true, //whether or not to enable DIAL support
-    auto_update: true //whether or not to download and install updates automatically (only on installs that support it)
+    auto_update: true, //whether or not to download and install updates automatically (only on installs that support it)
+    screensaver_enabled: false, //whether or not to enable the inactivity dimmer screensaver
+    screensaver_timeout: 5, //inactivity time in minutes before dimming
+    screensaver_dim_percentage: 75 //percentage to dim the screen (e.g. 75 = 75% dark)
 }
 
 function init(overrides = {}) {
