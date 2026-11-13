@@ -11,7 +11,7 @@ let interval = setInterval(() => { //try over and over again to find it (shouldn
     for (let key in window._yttv) {
         if (window._yttv[key]?.instance?.resolveCommand) {
             let resolveCommand = window._yttv[key].instance.resolveCommand;
-            globalResolveCommand = (command) => { //for some reason, this function doesn't work unless i do it like this (instead of just setting it directly to the actual function)
+            globalResolveCommand = (...args) => { //for some reason, this function doesn't work unless i do it like this (instead of just setting it directly to the actual function)
                 return window._yttv[key].instance.resolveCommand(...args);
             }
 
