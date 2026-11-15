@@ -29,7 +29,7 @@ let markOpened = () => {}
 const state = {
     open: false,
     category: 0,
-    page: null //{ id, fromHeader, returnFocus } while a page is open
+    page: null //{ page, fromHeader, returnFocus, parent } while a page is open, parent is the page it was opened from
 }
 
 let renderCount = 0;
@@ -53,6 +53,7 @@ async function render() {
         locale,
         pages,
         openPage,
+        openChoice,
         goBack,
         translation: localeProvider.getTranslation(),
         openTranslation: () => shell.openExternal('https://github.com/shy1132/VacuumTube/blob/main/locale/README.md')
@@ -60,13 +61,12 @@ async function render() {
 
     let view;
     if (state.page) {
-        const page = pages[state.page.id]
+        const page = state.page.page;
         const sections = page.sections ? await page.sections(config, locale) : [ { rows: await page.rows(config, locale) } ]
 
         if (renderId !== renderCount) return; //a newer render replaced this one
 
-        const parent = state.page.fromHeader ? locale.generic.title : locale.categories[currentCategory().id]?.title;
-        view = renderPage(page, sections, parent, context)
+        view = renderPage(page, sections, parentTitle(), context)
     } else {
         view = renderCategory(currentCategory(), context)
     }
@@ -74,13 +74,20 @@ async function render() {
     overlay.list().replaceChildren(view)
     overlay.markSelectedTab(categoryTabIndex())
 
-    const viewId = `${currentCategory().id}/${state.page?.id}`
+    const viewId = `${currentCategory().id}/${state.page?.page.id}`
     if (viewId !== renderedView) {
         renderedView = viewId;
         scroll.reset()
     }
 
     focus.restore()
+}
+
+function parentTitle() {
+    const parent = state.page.parent?.page;
+    if (parent) return typeof parent.title === 'function' ? parent.title(locale) : parent.title;
+
+    return state.page.fromHeader ? locale.generic.title : locale.categories[currentCategory().id]?.title;
 }
 
 //actions
@@ -91,28 +98,49 @@ function openCategory(index) {
     return render();
 }
 
-async function openPage(id, { fromHeader = false } = {}) {
-    const page = pages[id]
+async function openPage(id, { fromHeader = false, focusId = null } = {}) {
+    const page = typeof id === 'string' ? pages[id] : id;
 
-    state.page = { id, fromHeader, returnFocus: focus.id() }
-    focus.want()
+    state.page = { page, fromHeader: fromHeader || !!state.page?.fromHeader, returnFocus: focus.id(), parent: state.page }
+    focus.want(focusId)
     await render()
 
     if (page.onOpen) {
-        const refresh = () => state.open && state.page?.id === id ? render() : Promise.resolve()
+        const refresh = () => state.open && state.page?.page === page ? render() : Promise.resolve()
 
         await page.onOpen({ refresh })
         await render()
     }
 }
 
+function openChoice(row) {
+    const strings = locale[row.key]
+    const format = row.format || String;
+
+    return openPage({
+        id: `choice:${row.key}`,
+        title: row.title ?? strings?.title,
+        description: row.description ?? strings?.description,
+        rows: (config) => row.options.map((value) => ({
+            type: 'option',
+            id: `option:${value}`,
+            title: format(value),
+            selected: config[row.key] === value,
+            select: () => {
+                configManager.set({ [row.key]: value })
+                goBack()
+            }
+        }))
+    }, { focusId: `row:option:${configManager.get()[row.key]}` });
+}
+
 //closes the open page, or the overlay if no page is open
 function goBack() {
     if (!state.page) return close();
 
-    const returnFocus = state.page.returnFocus;
-    state.page = null;
-    render().then(() => focus.restore(returnFocus))
+    focus.want(state.page.returnFocus)
+    state.page = state.page.parent;
+    return render();
 }
 
 async function activate(node = focus.current()) {

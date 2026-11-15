@@ -383,6 +383,13 @@ styles the frame and the generic row types from render.js only
     background: var(--vt-bg);
 }
 
+/*a choice's selected option*/
+
+.vt-check {
+    font-size: 20px;
+    line-height: 1;
+}
+
 /*notice and text*/
 
 .vt-notice {

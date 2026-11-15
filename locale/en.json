@@ -188,11 +188,13 @@
             "title": "Screensaver Dimmer",
             "description": "Dims the screen after a period of inactivity when menus are idle or video is paused"
         },
-        "screensaver": {
-            "options_link": "Screensaver Options",
-            "options_description": "Configure inactivity timeout and dimming level.",
-            "timeout_section": "Inactivity Timeout",
-            "dim_section": "Dimming Level"
+        "screensaver_timeout": {
+            "title": "Dim After",
+            "description": "How long VacuumTube waits without any input before dimming"
+        },
+        "screensaver_dim_percentage": {
+            "title": "Dimming Level",
+            "description": "How dark the screen gets. 100% turns it fully black"
         },
         "features": {
             "title": "Features",

@@ -29,8 +29,11 @@ function info(title, description) {
 the row types a schema or page can use:
     toggle  - { key } for a config key, or { id, title, get(config), set(value, config) } for anything else
               also takes { page, summary?(config) }, which adds a link to a page of extra options below it while the toggle is on
+    choice  - { key, options, format?(value) } picks one of options (config values) for a config key, on a page of its own
+              shows the current value formatted with format, and takes its title and description from the locale like a toggle
     link    - { page, title, summary?(config) } opens a page that has no on/off of its own
     button  - { title, run() } runs an action, which may be async
+    option  - { title, selected, select() } one of a choice's options, used by its page
     notice  - { text, title?, tone? } a callout, tone is info (default), success, warning or error
     info    - { title, value } a label with a read-only value
     text    - { text } a line of text, either a string or (config) => string
@@ -61,6 +64,24 @@ const rowTypes = {
 
             row.onChange?.(!on)
         });
+    },
+
+    choice(row, context) {
+        const strings = context.locale[row.key]
+        const value = context.config[row.key]
+
+        return focusable(`row:${rowId(row)}`, 'vt-row vt-row-link', [
+            info(row.title ?? strings?.title, row.description ?? strings?.description),
+            el('span', { className: 'vt-row-value', textContent: row.format ? row.format(value) : String(value ?? '') }),
+            el('span', { className: 'vt-chevron', textContent: '›' })
+        ], () => context.openChoice(row));
+    },
+
+    option(row) {
+        return focusable(`row:${rowId(row)}`, 'vt-row', [
+            info(row.title, row.description),
+            row.selected ? el('span', { className: 'vt-check', textContent: '✓' }) : null
+        ], () => row.select());
     },
 
     link(row, context) {
@@ -141,7 +162,7 @@ function viewHeader({ title, description, count, badge, icon }) {
 }
 
 function countFocusable(rows) {
-    return visibleRows(rows).filter((row) => [ 'toggle', 'link', 'button' ].includes(row.type)).length;
+    return visibleRows(rows).filter((row) => [ 'toggle', 'choice', 'link', 'button' ].includes(row.type)).length;
 }
 
 //shown under every category if the language file is missing strings

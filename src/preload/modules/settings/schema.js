@@ -21,6 +21,11 @@ function countOn(config, keys) {
     return keys.filter((key) => config[key]).length;
 }
 
+function formatUnit(unit, unitDisplay = 'long') {
+    const format = new Intl.NumberFormat(window.ytcfg.data_.HL, { style: 'unit', unit, unitDisplay })
+    return (value) => format.format(value);
+}
+
 module.exports = (locale) => [
     {
         id: 'general',
@@ -38,12 +43,9 @@ module.exports = (locale) => [
                 rows: [
                     { type: 'toggle', key: 'pause_on_blur' },
                     { type: 'toggle', key: 'default_guest_mode' },
-                    {
-                      type: 'toggle',
-                      key: 'screensaver_enabled',
-                      page: 'screensaver',
-                      summary: (config) => `${config.screensaver_timeout ?? 5} min · ${config.screensaver_dim_percentage ?? 75}%`
-                    }
+                    { type: 'toggle', key: 'screensaver_enabled' },
+                    { type: 'choice', key: 'screensaver_timeout', options: [ 1, 2, 5, 10, 15, 30 ], format: formatUnit('minute'), dependsOn: 'screensaver_enabled' },
+                    { type: 'choice', key: 'screensaver_dim_percentage', options: [ 50, 75, 90, 100 ], format: formatUnit('percent', 'short'), dependsOn: 'screensaver_enabled' }
                 ]
             },
             {

@@ -33,6 +33,7 @@
         <p>v2.0.2</p>
         <ul>
           <li>Added 'Default Guest Mode' setting</li>
+          <li>Added built-in screensaver and settings</li>
           <li>Updated German translation</li>
           <li>Fixed hang on adding video to playlist</li>
           <li>Fixed changing playback speed limiting quality to 480p</li>
