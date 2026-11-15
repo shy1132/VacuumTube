@@ -37,7 +37,7 @@
           <li>Added built-in screensaver and settings</li>
           <li>Updated German translation</li>
           <li>Updated to Electron v45.3.2</li>
-          <li>Fixed hang on adding video to playlist</li>
+          <li>Fixed hang when adding video to playlist</li>
           <li>Fixed changing playback speed limiting quality to 480p</li>
           <li>Fixed caption fonts being incorrect or missing</li>
           <li>Changed default speed control toggle key from S to P</li>
