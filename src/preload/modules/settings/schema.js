@@ -37,7 +37,13 @@ module.exports = (locale) => [
                 id: 'behavior',
                 rows: [
                     { type: 'toggle', key: 'pause_on_blur' },
-                    { type: 'toggle', key: 'default_guest_mode' }
+                    { type: 'toggle', key: 'default_guest_mode' },
+                    {
+                      type: 'toggle',
+                      key: 'screensaver_enabled',
+                      page: 'screensaver',
+                      summary: (config) => `${config.screensaver_timeout ?? 5} min · ${config.screensaver_dim_percentage ?? 75}%`
+                    }
                 ]
             },
             {

@@ -184,6 +184,16 @@
             "title": "Default Guest Mode",
             "description": "Automatically enter guest mode on launch"
         },
+        "screensaver_enabled": {
+            "title": "Screensaver Dimmer",
+            "description": "Dims the screen after a period of inactivity when menus are idle or video is paused"
+        },
+        "screensaver": {
+            "options_link": "Screensaver Options",
+            "options_description": "Configure inactivity timeout and dimming level.",
+            "timeout_section": "Inactivity Timeout",
+            "dim_section": "Dimming Level"
+        },
         "features": {
             "title": "Features",
             "notice_title": "Not part of the default experience",
