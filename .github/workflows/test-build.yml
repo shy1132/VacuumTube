@@ -28,4 +28,6 @@ jobs:
       - run: npm run mac:build -- --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          # Ad-hoc signing uses no certificate or secret, including on fork PRs.
+          CSC_FOR_PULL_REQUEST: 'true'
       - run: bash scripts/verify-macos-packages.sh
