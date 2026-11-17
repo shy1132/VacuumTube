@@ -46,10 +46,10 @@ function addOutputModifier(func) {
 
 module.exports = {
     resolveCommand: (command) => {
-        if (!globalResolveCommand) {
-            functions.waitForCondition(() => globalResolveCommand)
-            .then(() => globalResolveCommand(command))
-        }
+        if (globalResolveCommand) return globalResolveCommand(command);
+
+        functions.waitForCondition(() => globalResolveCommand)
+        .then(() => globalResolveCommand(command))
     },
     addInputModifier,
     addOutputModifier

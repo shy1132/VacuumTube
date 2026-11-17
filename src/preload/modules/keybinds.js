@@ -76,13 +76,24 @@ module.exports = async () => {
     let captions = false;
     let captionSettings = { useDefaultTrack: true }
 
+    function handleSelectSubtitlesTrackCommand(command) {
+        if (Object.keys(command.selectSubtitlesTrackCommand).length === 0) {
+            captions = false;
+        } else {
+            captions = true;
+            captionSettings = command.selectSubtitlesTrackCommand;
+        }
+    }
+
     rcMod.addInputModifier((c) => {
+        //TODO: rcMod should probably have a `.onCommand` that also includes commandExecutorCommands. i'm just lazy right now
         if (c.selectSubtitlesTrackCommand) {
-            if (Object.keys(c.selectSubtitlesTrackCommand).length === 0) {
-                captions = false;
-            } else {
-                captions = true;
-                captionSettings = c.selectSubtitlesTrackCommand;
+            handleSelectSubtitlesTrackCommand(c)
+        } else if (c.commandExecutorCommand) {
+            for (let command of c.commandExecutorCommand.commands) {
+                if (command.selectSubtitlesTrackCommand) {
+                    handleSelectSubtitlesTrackCommand(command)
+                }
             }
         }
 
@@ -113,7 +124,7 @@ module.exports = async () => {
 
     document.addEventListener('keydown', (e) => {
         if (!document.body.classList.contains('WEB_PAGE_TYPE_WATCH') && !document.body.classList.contains('WEB_PAGE_TYPE_SHORTS')) return;
-        if (!e.shiftKey && shortcuts.isShortcutKey(e) && e.key?.toLowerCase() === 'c') {
+        if (!e.ctrlKey && !e.shiftKey && shortcuts.isShortcutKey(e) && e.key?.toLowerCase() === 'c') {
             e.stopImmediatePropagation()
             e.stopPropagation()
             toggleCaptions()
