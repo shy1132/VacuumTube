@@ -100,6 +100,10 @@ VacuumTube has some settings that you can change, which are located in the YouTu
   - Enables Keep on Top, and makes VacuumTube launch with the window pinned on top of every other window
 - Pause on Blur
   - Pause current video when VacuumTube loses focus (e.g. tabbing out or minimizing the window)
+- Default Guest Mode
+  - Automatically enter guest mode on launch
+- Screensaver Dimmer
+  - Dims the screen after a period of inactivity when menus are idle or video is paused
 - Features
   - Contains extra experimental features that add extra functionality: **Music Mode**, **Show Remaining Time**, **Ultrawide Support**
 - Custom CSS (Userstyles)
