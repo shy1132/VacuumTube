@@ -105,7 +105,7 @@ VacuumTube has some settings that you can change, which are located in the YouTu
 - Screensaver Dimmer
   - Dims the screen after a period of inactivity when menus are idle or video is paused
 - Features
-  - Contains extra experimental features that add extra functionality: **Music Mode**, **Show Remaining Time**, **Ultrawide Support**
+  - Contains extra experimental features that add extra functionality: **Music Mode**, **Show Remaining Time**, **Arrow Key Seeking**, **Ultrawide Support**
 - Custom CSS (Userstyles)
   - Enables injection of custom CSS styles. See the section below for more information
 - Touch Overlay
