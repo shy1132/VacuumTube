@@ -41,7 +41,9 @@ If you don't know the difference, pick the Installer.
 
 ### macOS
 
-Note that macOS builds are not yet signed, so they do not auto-update. For now, please periodically check for updates.
+macOS builds are ad-hoc signed to verify bundle integrity, but are not Developer ID signed or notarized by Apple. macOS may still block a downloaded app as unverified. They do not auto-update; please periodically check for updates.
+
+If macOS reports that the app is damaged, download a fresh copy from the release links below. To check an installed copy, run `codesign --verify --deep --strict --verbose=2 /Applications/VacuumTube.app` in Terminal. A failed check means the bundle is unsigned or its signature is invalid; report the release version and command output. A passing check verifies integrity, not developer identity or notarization. See [Apple’s instructions for opening downloaded apps](https://support.apple.com/102445) for an unverified-developer warning.
 
 - [Apple Silicon / M-series](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-arm64.dmg)
 - [Intel](https://github.com/shy1132/VacuumTube/releases/latest/download/VacuumTube-x64.dmg)

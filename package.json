@@ -104,6 +104,7 @@
                 "locale/*.json",
                 "assets/icon.png"
             ],
+            "identity": "-",
             "entitlements": "build/entitlements.mac.plist",
             "entitlementsInherit": "build/entitlements.mac.inherit.plist",
             "extendInfo": {

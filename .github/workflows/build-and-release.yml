@@ -40,9 +40,13 @@ jobs:
         run: npm ci
 
       - name: Build ${{ matrix.platform }} app
-        run: npm run ${{ matrix.build_script }}
+        run: npm run ${{ matrix.build_script }} -- --publish never
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+
+      - name: Verify macOS distributables
+        if: matrix.platform == 'mac'
+        run: bash scripts/verify-macos-packages.sh
 
       - name: Upload Windows artifacts to release
         if: matrix.platform == 'windows'
