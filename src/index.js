@@ -240,6 +240,8 @@ async function main() {
         })
     })
 
+    require('./video-link-clipboard').setup(electron, () => win)
+
     //config management on the web side
     electron.ipcMain.on('get-config', (event) => {
         event.returnValue = config;
@@ -396,6 +398,15 @@ async function createWindow() {
         // Built-in electron aspect ratio lock works fine elsewhere.
         win.setAspectRatio(TARGET_RATIO)
     }
+
+    //Let the renderer handle copy shortcuts instead of the native Edit menu.
+    win.webContents.on('before-input-event', (event, input) => {
+        win.webContents.setIgnoreMenuShortcuts(
+            !input.alt && input.key?.toLowerCase() === 'c' &&
+            ((input.control && !input.meta) || (process.platform === 'darwin' && input.meta && !input.control))
+        )
+    })
+    win.webContents.on('blur', () => win.webContents.setIgnoreMenuShortcuts(false))
 
     win.setMenuBarVisibility(false)
     win.setAutoHideMenuBar(false)
